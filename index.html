@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Mandato — Gabinete Zé Luiz</title>
 <style>
 @font-face {
@@ -5310,9 +5311,11 @@ function tick(){ const n=new Date();
 tick(); setInterval(tick,1000);
 
 /* ===== PWA: SERVICE WORKER + INSTALAÇÃO ===== */
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-}
+/* O registro do service worker saiu daqui: o sistema virou UM arquivo só,
+   então não existe sw.js nenhum para buscar, e o navegador registrava um
+   erro 404 no console a cada abertura. O botão "instalar" também nunca
+   aparece sem manifest. Para transformar em aplicativo de tela inicial,
+   seriam necessários sw.js + manifest.json hospedados ao lado do site. */
 let deferredPrompt=null;
 const installBtn=document.getElementById('installBtn');
 window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredPrompt=e; installBtn.hidden=false; });
