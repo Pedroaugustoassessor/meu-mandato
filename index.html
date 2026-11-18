@@ -1353,6 +1353,11 @@ i[data-i]{width:20px;height:20px;display:inline-block;flex:0 0 auto;background:c
 .det__edit{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0 6px;padding-top:18px;border-top:1px solid var(--line)}
 .det__field{display:flex;flex-direction:column;gap:6px}
 .det__field label{font-family:'Sora';font-size:12.5px;font-weight:600;color:var(--ink)}
+.det__resposta{margin-top:16px;padding:14px 16px;background:#f3f8f4;border:1px solid var(--line);
+  border-left:3px solid var(--green);border-radius:12px}
+.det__resposta h5{font-family:'Sora';font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--green-700);margin-bottom:6px}
+.det__resposta p{font-size:13.5px;color:var(--ink);line-height:1.5}
 .det__actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px}
 .det__actions-right{display:flex;gap:10px}
 .det__del{color:var(--red);border-color:var(--line)}
@@ -2011,7 +2016,7 @@ body.is-locked{overflow:hidden}
           </div>
           <label class="field" id="campoNome" hidden>
             <span>Seu nome completo</span>
-            <input type="text" name="nome" autocomplete="name" placeholder="Ana Beatriz Costa">
+            <input type="text" name="nome" autocomplete="name" placeholder="Seu nome completo">
           </label>
           <label class="field">
             <span>E-mail</span>
@@ -2078,8 +2083,8 @@ body.is-locked{overflow:hidden}
     <a class="menu__item" data-view="legis" href="#"><i data-i="search"></i>Inteligência Legislativa</a>
 
     <span class="menu__label">Rotina</span>
-    <a class="menu__item" data-view="agenda" href="#"><i data-i="calendar"></i>Agenda<span class="menu__badge">1</span></a>
-    <a class="menu__item" data-view="aniversarios" href="#"><i data-i="cake"></i>Aniversários<span class="menu__badge">1</span></a>
+    <a class="menu__item" data-view="agenda" href="#"><i data-i="calendar"></i>Agenda<span class="menu__badge" id="badgeAgenda" hidden>0</span></a>
+    <a class="menu__item" data-view="aniversarios" href="#"><i data-i="cake"></i>Aniversários<span class="menu__badge" id="badgeBday" hidden>0</span></a>
     <a class="menu__item" data-view="mapa" href="#"><i data-i="map"></i>Mapa</a>
     <a class="menu__item" data-view="relatorios" href="#"><i data-i="chart"></i>Relatórios</a>
     <a class="menu__item" data-view="acessos" href="#" id="menuAcessos" hidden><i data-i="users"></i>Acessos<span class="menu__badge" id="badgeAcessos" hidden>0</span></a>
@@ -2092,7 +2097,7 @@ body.is-locked{overflow:hidden}
     <div><strong>Zé Luiz</strong><span>Vereador</span></div>
     <a href="#" class="sidebar__logout" title="Sair"><i data-i="exit"></i></a>
   </div>
-  <div class="app-ver" id="appVer">Login e banco online · v13</div>
+  <div class="app-ver" id="appVer">Login e banco online · v14</div>
 </aside>
 <div class="scrim" id="scrim"></div>
 
@@ -2134,8 +2139,8 @@ body.is-locked{overflow:hidden}
           <div class="banner__ico"><i data-i="cake"></i></div>
           <div class="banner__body">
             <h2>Aniversariantes de hoje</h2>
-            <p>1 pessoa faz aniversário — não deixe de parabenizar.</p>
-            <span class="chip chip--dark">Dona Marta · Liderança · Bairro Cruzeiro</span>
+            <p id="bannerBdayTexto">—</p>
+            <span class="chip chip--dark" id="bannerBdayChip" hidden></span>
           </div>
           <a href="#" class="banner__cta" data-go="aniversarios">Ver todos</a>
         </article>
@@ -2144,16 +2149,16 @@ body.is-locked{overflow:hidden}
           <div class="banner__ico"><i data-i="calendar"></i></div>
           <div class="banner__body">
             <h2>Eventos de hoje</h2>
-            <p>1 compromisso agendado para hoje.</p>
-            <span class="chip chip--light">Audiência pública — Saúde · 07:00 · Ginásio Esportivo</span>
+            <p id="bannerAgTexto">—</p>
+            <span class="chip chip--light" id="bannerAgChip" hidden></span>
           </div>
           <a href="#" class="banner__cta banner__cta--light" data-go="agenda">Ver agenda</a>
         </article>
       </div>
 
       <div class="stats">
-        <article class="stat"><div class="stat__ico stat__ico--green"><i data-i="file"></i></div><div class="stat__info"><span>Total de demandas</span><strong id="kpiDemandas">0</strong></div><em class="stat__trend up">+4 esta semana</em></article>
-        <article class="stat"><div class="stat__ico stat__ico--gold"><i data-i="heart"></i></div><div class="stat__info"><span>Total de apoiadores</span><strong id="kpiApoiadores">0</strong></div><em class="stat__trend up">+12 este mês</em></article>
+        <article class="stat"><div class="stat__ico stat__ico--green"><i data-i="file"></i></div><div class="stat__info"><span>Total de demandas</span><strong id="kpiDemandas">0</strong></div><em class="stat__trend" id="kpiDemandasSub">registradas no gabinete</em></article>
+        <article class="stat"><div class="stat__ico stat__ico--gold"><i data-i="heart"></i></div><div class="stat__info"><span>Total de apoiadores</span><strong id="kpiApoiadores">0</strong></div><em class="stat__trend" id="kpiApoiadoresSub">na sua base de contatos</em></article>
         <article class="stat"><div class="stat__ico stat__ico--blue"><i data-i="target"></i></div><div class="stat__info"><span>Projetos ativos</span><strong id="kpiProjetos">0</strong></div><em class="stat__trend" id="kpiProjetosSub">no funil do mandato</em></article>
         <article class="stat"><div class="stat__ico stat__ico--green"><i data-i="users"></i></div><div class="stat__info"><span>Assessores</span><strong id="kpiAssessores">0</strong></div><em class="stat__trend">equipe do gabinete</em></article>
       </div>
@@ -2218,6 +2223,7 @@ body.is-locked{overflow:hidden}
             <option value="media">Média</option>
             <option value="baixa">Baixa</option>
           </select>
+          <select class="select" id="fDemandaTema"><option value="">Todos os temas</option></select>
           <button class="btn-text" id="fDemandaLimpar" hidden>Limpar filtros</button>
         </div>
         <span class="mat-count" id="demCount"></span>
@@ -2389,6 +2395,7 @@ body.is-locked{overflow:hidden}
             <option value="media">Média</option>
             <option value="baixa">Baixa</option>
           </select>
+          <select class="select mapa-fdem" id="fMapaAno"><option value="">Todos os anos</option></select>
           <select class="select mapa-fdem" id="fMapaStatus">
             <option value="">Todos os status</option>
             <option value="pendente">Pendente</option>
@@ -2677,9 +2684,13 @@ body.is-locked{overflow:hidden}
     <header class="modal__head"><h3>Nova demanda</h3><button class="modal__x" data-close><i data-i="close"></i></button></header>
     <form class="form" id="formDemanda">
       <label class="field field--full">Título da demanda<input name="titulo" required placeholder="Ex.: Solicitação de tapa-buraco"></label>
-      <label class="field">Solicitante<input name="solicitante" required placeholder="Nome do cidadão"></label>
-      <label class="field">Bairro<input name="bairro" list="bairrosList" required placeholder="Digite ou escolha o bairro" autocomplete="off"><datalist id="bairrosList"></datalist></label>
-      <label class="field field--full">Endereço<input name="endereco" required placeholder="Rua, número"></label>
+      <label class="field">Solicitante<input name="solicitante" placeholder="Nome de quem pediu"></label>
+      <label class="field">Telefone<input name="telefone" placeholder="(34) 00000-0000"></label>
+      <label class="field">Bairro<input name="bairro" list="bairrosList" placeholder="Digite ou escolha o bairro" autocomplete="off"><datalist id="bairrosList"></datalist></label>
+      <label class="field">Tema<input name="categoria" list="temasList" placeholder="Ex.: Iluminação" autocomplete="off"><datalist id="temasList"></datalist></label>
+      <label class="field field--full">Endereço<input name="endereco" placeholder="Rua, número (opcional — ajuda a achar no mapa)"></label>
+      <label class="field">Encaminhada a<input name="canal" list="canaisList" placeholder="Ex.: Sec obras, Conecta Patos" autocomplete="off"><datalist id="canaisList"></datalist></label>
+      <label class="field">Protocolo<input name="protocolo" placeholder="Número do processo"></label>
       <label class="field">Prioridade<select name="prioridade"><option value="urgente">Urgente</option><option value="alta">Alta</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select></label>
       <label class="field">Status<select name="status"><option value="pendente" selected>Pendente</option><option value="andamento">Em andamento</option><option value="concluida">Concluída</option></select></label>
       <div class="form__actions"><button type="button" class="btn btn--ghost" data-close>Cancelar</button><button type="submit" class="btn btn--primary">Salvar demanda</button></div>
@@ -2728,7 +2739,14 @@ body.is-locked{overflow:hidden}
       <div class="det__tags" id="detTags"></div>
       <div class="det__row"><i data-i="users"></i><span id="detSolic"></span></div>
       <div class="det__row"><i data-i="pin"></i><span id="detLocal"></span></div>
+      <div class="det__row" id="detTelRow"><i data-i="phone"></i><span id="detTel"></span>
+        <a class="btn-text" id="detWhats" href="#" target="_blank" rel="noopener" hidden>Chamar no WhatsApp</a></div>
       <div class="det__row"><i data-i="calendar"></i><span id="detData"></span></div>
+      <div class="det__row" id="detEncRow"><i data-i="external"></i><span id="detEnc"></span></div>
+      <div class="det__row" id="detProtRow"><i data-i="file"></i><span id="detProt"></span></div>
+      <div class="det__row" id="detRetRow"><i data-i="bell"></i><span id="detRet"></span></div>
+      <div class="det__resposta" id="detRespostaBox" hidden>
+        <h5>Resposta recebida</h5><p id="detResposta"></p></div>
 
       <div class="det__edit">
         <div class="det__field"><label>Status</label>
@@ -3545,7 +3563,8 @@ function lerCacheLocal(){
 
 /* ===== COLUNAS QUE VÃO PARA O BANCO ================================ */
 const COLUNAS = {
-  demandas:   ['id','titulo','solicitante','endereco','bairro','cidade','prioridade','status','data','lat','lon'],
+  demandas:   ['id','titulo','solicitante','telefone','endereco','bairro','cidade','categoria','prioridade',
+               'status','data','canal','protocolo','meio','indicacao','enviada','respondida','resposta','lat','lon'],
   apoiadores: ['id','nome','tipo','telefone','bairro','cidade','nasc'],
   eventos:    ['id','titulo','data','hora','local','tipo','convidados'],
   assessores: ['id','nome','funcao','telefone','email'],
@@ -3636,9 +3655,9 @@ function mostrarModo(){
   const el = document.getElementById('appVer');
   if(!el) return;
   el.textContent = ONLINE
-    ? `Conectado · ${usuario?.email || ''} · v13`
-    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v13`
-                   : 'Modo local (só neste navegador) · v13');
+    ? `Conectado · ${usuario?.email || ''} · v14`
+    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v14`
+                   : 'Modo local (só neste navegador) · v14');
 }
 
 /* ===== BAIXAR TUDO DO BANCO ======================================== */
@@ -3676,7 +3695,9 @@ async function baixarTudo(){
 /* Primeiro acesso: banco vazio. Pergunta se quer os dados de exemplo. */
 async function semearSeVazio(exemplo){
   const vazio = !demandas.length && !apoiadores.length && !eventos.length && !assessores.length && !projetos.length;
-  if(!vazio || !ehAdmin()) return;
+  const temExemplo = exemplo && (exemplo.demandas.length || exemplo.apoiadores.length ||
+                                 exemplo.eventos.length || exemplo.assessores.length || exemplo.projetos.length);
+  if(!vazio || !temExemplo || !ehAdmin()) return;
   const querExemplo = confirm(
     'Seu banco de dados está vazio.\n\n' +
     'Quer começar com os DADOS DE EXEMPLO (para conhecer o sistema)?\n\n' +
@@ -4540,45 +4561,20 @@ function paintIcons(root=document){
   });
 }
 
-/* ===== DADOS (demonstração) ===== */
+/* ===== RÓTULOS ===== */
 const PRIO = {urgente:{t:'Urgente',c:'red'}, alta:{t:'Alta',c:'amber'}, media:{t:'Média',c:'blue'}, baixa:{t:'Baixa',c:'green-soft'}};
 const STAT = {pendente:{t:'Pendente',c:'amber',dot:'amber'}, andamento:{t:'Em andamento',c:'blue',dot:'green'}, concluida:{t:'Concluída',c:'green',dot:'green'}};
 
-let demandas = [
-  {titulo:'Solicitação de tapa-buraco', solicitante:'Maria de Fátima', endereco:'Rua Major Gote, 540', bairro:'Centro', cidade:'Patos de Minas', prioridade:'urgente', status:'pendente', data:'07/09 · 17:32'},
-  {titulo:'Remoção de poste', solicitante:'João Batista', endereco:'Rua Uberaba, 100', bairro:'Caiçaras', cidade:'Patos de Minas', prioridade:'media', status:'pendente', data:'06/09 · 23:32'},
-  {titulo:'Reparo de iluminação pública', solicitante:'Cláudia Nunes', endereco:'Av. Getúlio Vargas, 820', bairro:'Cristo Redentor', cidade:'Patos de Minas', prioridade:'media', status:'andamento', data:'06/09 · 22:54'},
-  {titulo:'Solicitação de quebra-molas', solicitante:'Antônio Pereira', endereco:'Rua das Palmeiras, 12', bairro:'Cidade Nova', cidade:'Patos de Minas', prioridade:'alta', status:'pendente', data:'06/09 · 19:36'},
-  {titulo:'Limpeza de terreno baldio', solicitante:'Rosa Lima', endereco:'Rua Bahia, 340', bairro:'Brasil', cidade:'Patos de Minas', prioridade:'media', status:'andamento', data:'05/09 · 14:10'},
-  {titulo:'Coleta de entulho', solicitante:'Sérgio Ramos', endereco:'Rua do Ipê, 88', bairro:'Santa Terezinha', cidade:'Patos de Minas', prioridade:'baixa', status:'concluida', data:'04/09 · 09:20'},
-  {titulo:'Poda de árvore em via pública', solicitante:'Helena Castro', endereco:'Rua das Acácias, 15', bairro:'Jardim Califórnia', cidade:'Patos de Minas', prioridade:'alta', status:'concluida', data:'03/09 · 16:45'}
-];
-
-let apoiadores = [
-  {nome:'Dona Marta Sousa', tipo:'Liderança', telefone:'(34) 98844-1020', bairro:'Cristo Redentor', cidade:'Patos de Minas', nasc:'1968-07-27'},
-  {nome:'Kelvin Robert Alves', tipo:'Apoiador', telefone:'(34) 99120-3344', bairro:'Caiçaras', cidade:'Patos de Minas', nasc:'1997-07-30'},
-  {nome:'Roberto Carlos Dias', tipo:'Voluntário', telefone:'(34) 98700-1122', bairro:'Cidade Nova', cidade:'Patos de Minas', nasc:'1985-08-12'},
-  {nome:'Fernanda Oliveira', tipo:'Liderança', telefone:'(34) 99555-8090', bairro:'Santa Terezinha', cidade:'Patos de Minas', nasc:'1979-08-20'},
-  {nome:'Paulo Henrique Reis', tipo:'Apoiador', telefone:'(34) 98233-4455', bairro:'Centro', cidade:'Patos de Minas', nasc:'1983-09-15'},
-  {nome:'Luciana Martins', tipo:'Voluntário', telefone:'(34) 99871-2210', bairro:'Jardim Califórnia', cidade:'Patos de Minas', nasc:'1990-08-02'}
-];
-
-let eventos = [
-  {id:1, titulo:'Audiência pública — Saúde', data:hojeISO(0), hora:'07:00', local:'Ginásio Esportivo', tipo:'Evento público', convidados:[]},
-  {id:2, titulo:'Reunião com lideranças de bairro', data:hojeISO(1), hora:'09:30', local:'Gabinete — Câmara Municipal', tipo:'Interno', convidados:['assessoria@gabinete.gov.br']},
-  {id:3, titulo:'Visita técnica — Obras da praça', data:hojeISO(3), hora:'14:00', local:'Praça Central, Cruzeiro', tipo:'Externo', convidados:[]},
-  {id:4, titulo:'Sessão ordinária', data:hojeISO(4), hora:'18:00', local:'Plenário da Câmara', tipo:'Evento público', convidados:[]},
-  {id:5, titulo:'Atendimento ao cidadão', data:hojeISO(6), hora:'10:00', local:'Gabinete', tipo:'Interno', convidados:[]}
-];
-
-let assessores = [
-  {nome:'Ana Beatriz Costa', funcao:'Chefe de Gabinete', telefone:'(31) 98811-2020', email:'ana.costa@gabinete.gov.br'},
-  {nome:'Marcos Vinícius Lima', funcao:'Assessor Jurídico', telefone:'(31) 99622-3010', email:'marcos.lima@gabinete.gov.br'},
-  {nome:'Patrícia Gomes', funcao:'Comunicação', telefone:'(31) 98450-7788', email:'patricia.gomes@gabinete.gov.br'},
-  {nome:'Diego Fernandes', funcao:'Atendimento ao cidadão', telefone:'(31) 99130-4455', email:'diego.fernandes@gabinete.gov.br'},
-  {nome:'Juliana Prado', funcao:'Assessora Legislativa', telefone:'(31) 98277-9012', email:'juliana.prado@gabinete.gov.br'},
-  {nome:'Rafael Antunes', funcao:'Mídias Sociais', telefone:'(31) 99988-1234', email:'rafael.antunes@gabinete.gov.br'}
-];
+/* ===== DADOS DO GABINETE =====
+   O sistema nasce vazio. Os dados reais moram no banco (Supabase) e são
+   baixados no login; em modo local, eles são o que o gabinete cadastrar.
+   Nada de exemplo aqui: o arquivo publicado é público, e nome e telefone
+   de quem procura o gabinete não podem sair dele. */
+let demandas = [];
+let apoiadores = [];
+let eventos = [];
+let assessores = [];
+let projetos = [];
 
 /* ===== CRM DE PROJETOS =====
    Cada projeto do mandato é um cartão que caminha por etapas, da conversa
@@ -4619,52 +4615,6 @@ function textoPrazo(iso, etapa){
   return {txt:dt, cls:''};
 }
 
-let projetos = [
-  {titulo:'Revitalização da praça do Cruzeiro',
-   resumo:'Reforma completa da praça: iluminação de LED, playground novo e academia ao ar livre.',
-   etapa:'execucao', prog:75, prioridade:'alta', resp:'Ana Beatriz Costa', bairro:'Cruzeiro',
-   parceiro:'Secretaria Municipal de Obras', contato:'(34) 3822-9000', prazo:hojeISO(45),
-   historico:[{data:marcoHist(96), texto:'Moradores entregaram abaixo-assinado no gabinete.', autor:'Gabinete'},
-              {data:marcoHist(54), texto:'Indicação protocolada na Câmara e encaminhada à Prefeitura.', autor:'Gabinete'},
-              {data:marcoHist(12), texto:'Secretaria confirmou o início da obra, prazo de 60 dias.', autor:'Ana Beatriz Costa'}]},
-
-  {titulo:'Iluminação de LED nos bairros',
-   resumo:'Troca das lâmpadas antigas por LED nas vias mais escuras da região leste.',
-   etapa:'protocolado', prog:50, prioridade:'alta', resp:'Marcos Vinícius Lima', bairro:'Caiçaras',
-   parceiro:'Secretaria de Serviços Urbanos', contato:'(34) 3822-9100', prazo:hojeISO(-6),
-   historico:[{data:marcoHist(70), texto:'Levantamento das ruas sem iluminação feito pela equipe.', autor:'Gabinete'},
-              {data:marcoHist(30), texto:'Indicação protocolada. Aguardando resposta da Secretaria.', autor:'Marcos Vinícius Lima'}]},
-
-  {titulo:'Programa Jovem Aprendiz',
-   resumo:'Parceria com empresas da cidade para o primeiro emprego de jovens de 16 a 18 anos.',
-   etapa:'execucao', prog:90, prioridade:'media', resp:'Juliana Prado', bairro:'Centro',
-   parceiro:'ACIPAM e SENAI', contato:'(34) 3821-4040', prazo:hojeISO(20),
-   historico:[{data:marcoHist(120), texto:'Primeira reunião com a ACIPAM sobre o programa.', autor:'Juliana Prado'},
-              {data:marcoHist(60),  texto:'SENAI topou ceder as salas para a formação.', autor:'Juliana Prado'},
-              {data:marcoHist(8),   texto:'32 vagas confirmadas em 9 empresas. Falta só o lançamento.', autor:'Juliana Prado'}]},
-
-  {titulo:'Mutirão de saúde da mulher',
-   resumo:'Exames preventivos e consultas gratuitas nos postos de saúde dos bairros.',
-   etapa:'entregue', prog:100, prioridade:'media', resp:'Patrícia Gomes', bairro:'Santa Terezinha',
-   parceiro:'Secretaria Municipal de Saúde', contato:'(34) 3822-9200', prazo:hojeISO(-25),
-   historico:[{data:marcoHist(90), texto:'Proposta levada à Secretaria de Saúde.', autor:'Patrícia Gomes'},
-              {data:marcoHist(40), texto:'Datas e postos definidos com a equipe da Secretaria.', autor:'Patrícia Gomes'},
-              {data:marcoHist(25), texto:'Mutirão realizado: 418 atendimentos em 3 postos.', autor:'Patrícia Gomes'}]},
-
-  {titulo:'Feira do produtor local',
-   resumo:'Espaço fixo aos sábados para agricultores familiares venderem direto ao consumidor.',
-   etapa:'articulacao', prog:25, prioridade:'media', resp:'Diego Fernandes', bairro:'Cidade Nova',
-   parceiro:'Secretaria de Agricultura / EMATER', contato:'(34) 3821-7700', prazo:hojeISO(75),
-   historico:[{data:marcoHist(45), texto:'Produtores procuraram o gabinete pedindo um ponto de venda.', autor:'Gabinete'},
-              {data:marcoHist(10), texto:'EMATER topou ajudar na organização. Falta definir o terreno.', autor:'Diego Fernandes'}]},
-
-  {titulo:'Wi-Fi livre nas praças',
-   resumo:'Internet gratuita em quatro pontos de convivência da cidade.',
-   etapa:'ideia', prog:5, prioridade:'baixa', resp:'Rafael Antunes', bairro:'Centro',
-   parceiro:'', contato:'', prazo:'',
-   historico:[{data:marcoHist(5), texto:'Ideia levantada na reunião de equipe. Verificar custo do provedor.', autor:'Rafael Antunes'}]}
-];
-
 /* Produção legislativa real — Vereador José Luiz Borges Júnior (SAPL Câmara de Patos de Minas) */
 const BASE_SAPL='https://sapl.patosdeminas.mg.leg.br';
 const CAMARA_LINK=BASE_SAPL+'/parlamentar/218/materias';
@@ -4675,7 +4625,7 @@ const MAT_GRUPO={IND:'Indicação',PLOL:'Projeto de Lei',PLCL:'Projeto de Lei',P
   PR:'Projeto de Resolução',PELOM:'Emenda à Lei Orgânica',REQ:'Requerimento',MOCA:'Moção',MOA:'Moção',MOCR:'Moção'};
 const MAT_SIT={lei:{t:'Virou lei',c:'green'},aprovado:{t:'Aprovado',c:'green-soft'},tramite:{t:'Em trâmite',c:'amber'},arquivado:{t:'Arquivado',c:'red'}};
 
-let perfil = {nome:'Zé Luiz', cargo:'Vereador', partido:'', cidade:'Ribeirão das Neves', telefone:'(31) 3000-0000'};
+let perfil = {nome:'Zé Luiz', cargo:'Vereador', partido:'', cidade:'Patos de Minas', telefone:''};
 
 function hojeISO(add){ const d=new Date(); d.setDate(d.getDate()+add); return d.toISOString().slice(0,10); }
 const AVA = ['#009B3A','#0B2E6B','#a9820a','#0b7a37','#1e4fb0'];
@@ -4686,8 +4636,15 @@ const AVA = ['#009B3A','#0B2E6B','#a9820a','#0b7a37','#1e4fb0'];
 
 /* ===== RENDER: DASHBOARD ===== */
 function renderDash(){
+  renderBanners();
   document.getElementById('kpiDemandas').textContent = demandas.length;
-  document.getElementById('kpiApoiadores').textContent = 320 + apoiadores.length;
+  document.getElementById('kpiApoiadores').textContent = apoiadores.length;
+  const emAberto = demandas.filter(d=>d.status!=='concluida').length;
+  document.getElementById('kpiDemandasSub').textContent = emAberto
+    ? `${emAberto} ainda em aberto` : 'nenhuma em aberto';
+  const comTel = apoiadores.filter(a=>a.telefone).length;
+  document.getElementById('kpiApoiadoresSub').textContent = comTel
+    ? `${comTel} com telefone` : 'na sua base de contatos';
   const ativosPj = projetos.filter(p=>p.etapa!=='entregue').length;
   const entreguesPj = projetos.length - ativosPj;
   document.getElementById('kpiProjetos').textContent = ativosPj;
@@ -4714,6 +4671,35 @@ function renderDash(){
   }).join('');
   paintIcons(dd);
 }
+/* Os dois avisos do topo falam do dia de hoje — e só dizem o que é verdade. */
+function selo(id, n){
+  const el=document.getElementById(id); if(!el) return;
+  el.hidden=!n; el.textContent=n;
+}
+function renderBanners(){
+  const hoje=hojeISO(0);
+  const niver=apoiadores.filter(a=>a.nasc && a.nasc.slice(5)===hoje.slice(5));
+  const tx=document.getElementById('bannerBdayTexto'), ch=document.getElementById('bannerBdayChip');
+  if(tx){
+    tx.textContent = niver.length
+      ? `${niver.length} ${niver.length===1?'pessoa faz aniversário':'pessoas fazem aniversário'} — não deixe de parabenizar.`
+      : 'Ninguém da sua base faz aniversário hoje.';
+    ch.hidden=!niver.length;
+    if(niver.length) ch.textContent=[niver[0].nome, niver[0].tipo, niver[0].bairro&&('Bairro '+niver[0].bairro)].filter(Boolean).join(' · ')
+      + (niver.length>1 ? ` +${niver.length-1}` : '');
+  }
+  selo('badgeBday', niver.length);
+  const hojeEv=eventos.filter(e=>e.data===hoje).sort((a,b)=>a.hora.localeCompare(b.hora));
+  selo('badgeAgenda', hojeEv.length);
+  const ta=document.getElementById('bannerAgTexto'), ca=document.getElementById('bannerAgChip');
+  if(ta){
+    ta.textContent = hojeEv.length
+      ? `${hojeEv.length} ${hojeEv.length===1?'compromisso agendado':'compromissos agendados'} para hoje.`
+      : 'Nenhum compromisso agendado para hoje.';
+    ca.hidden=!hojeEv.length;
+    if(hojeEv.length) ca.textContent=[hojeEv[0].titulo, hojeEv[0].hora, hojeEv[0].local].filter(Boolean).join(' · ');
+  }
+}
 function labelDia(iso){
   const d=new Date(iso+'T00:00:00'), t=new Date(); t.setHours(0,0,0,0);
   const diff=Math.round((d-t)/864e5);
@@ -4726,6 +4712,8 @@ function renderDemandas(){
   const q=(document.getElementById('fDemandaBusca').value||'').toLowerCase();
   const fs=document.getElementById('fDemandaStatus').value;
   const fp=document.getElementById('fDemandaPrio').value;
+  const ft=document.getElementById('fDemandaTema').value;
+  preencherTemas();
 
   // resumo do topo (sempre sobre o total, não sobre o filtro)
   const c={pendente:0,andamento:0,concluida:0,urgente:0};
@@ -4743,17 +4731,18 @@ function renderDemandas(){
   paintIcons(document.getElementById('demKpis'));
 
   const list=demandas.filter(d=>
-    (!q || (d.titulo+d.bairro+d.solicitante+d.cidade).toLowerCase().includes(q)) &&
-    (!fs || d.status===fs) && (!fp || d.prioridade===fp));
-  const filtrando=!!(q||fs||fp);
+    (!q || (d.titulo+' '+d.bairro+' '+d.solicitante+' '+(d.categoria||'')+' '+(d.protocolo||'')+' '+(d.canal||'')).toLowerCase().includes(q)) &&
+    (!fs || d.status===fs) && (!fp || d.prioridade===fp) && (!ft || d.categoria===ft));
+  const filtrando=!!(q||fs||fp||ft);
   document.getElementById('fDemandaLimpar').hidden=!filtrando;
   document.getElementById('demCount').textContent=filtrando
     ? `${list.length} de ${demandas.length} demandas` : `${demandas.length} demandas`;
   const tb=document.getElementById('tbDemandas');
   tb.innerHTML=list.map((d,i)=>{
     const s=STAT[d.status], p=PRIO[d.prioridade];
-    return `<tr class="row-click" data-detalhe="${d.id}"><td class="td-title"><b>${d.titulo}</b><span>${d.solicitante}</span></td>
-      <td class="td-local"><b>${d.endereco}</b>${d.bairro}, ${d.cidade}</td>
+    const quem=[d.solicitante, d.categoria].filter(Boolean).join(' · ');
+    return `<tr class="row-click" data-detalhe="${d.id}"><td class="td-title"><b>${d.titulo}</b><span>${quem||'—'}</span></td>
+      <td class="td-local">${d.endereco?`<b>${d.endereco}</b>`:''}${d.bairro||'Sem bairro'}${d.bairro?', '+(d.cidade||CIDADE.nome):''}</td>
       <td><span class="tag tag--${p.c}">${p.t}</span></td>
       <td><span class="tag tag--${s.c}">${s.t}</span></td>
       <td class="td-date">${d.data}</td>
@@ -4761,6 +4750,25 @@ function renderDemandas(){
   }).join('');
   document.getElementById('emptyDemandas').hidden = list.length>0;
   paintIcons(tb);
+}
+
+function listaUnica(campo){
+  return [...new Set(demandas.map(d=>(d[campo]||'').trim()).filter(Boolean))]
+    .sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
+let temasConhecidos='';
+function preencherTemas(){
+  const temas=listaUnica('categoria');
+  const assin=temas.join('|');
+  if(assin===temasConhecidos) return;
+  temasConhecidos=assin;
+  const sel=document.getElementById('fDemandaTema'), atual=sel.value;
+  sel.innerHTML='<option value="">Todos os temas</option>'+temas.map(t=>`<option>${t}</option>`).join('');
+  if(temas.includes(atual)) sel.value=atual;
+  const dl=document.getElementById('temasList');
+  if(dl) dl.innerHTML=temas.map(t=>`<option value="${t}">`).join('');
+  const dc=document.getElementById('canaisList');
+  if(dc) dc.innerHTML=listaUnica('canal').map(t=>`<option value="${t}">`).join('');
 }
 
 /* ===== RENDER: APOIADORES ===== */
@@ -4780,7 +4788,7 @@ function renderApoiadores(){
       <span class="pcard__av" style="background:${col}">${ini}</span>
       <div><b>${a.nome}</b><span class="tag tag--${tag}">${a.tipo}</span></div></div>
       <div class="pcard__row"><i data-i="phone"></i>${a.telefone}</div>
-      <div class="pcard__row"><i data-i="pin"></i>${a.bairro}, ${a.cidade}</div></article>`;
+      <div class="pcard__row"><i data-i="pin"></i>${[a.bairro, a.cidade].filter(Boolean).join(', ')}</div></article>`;
   }).join('');
   document.getElementById('emptyApoiadores').hidden = list.length>0;
   paintIcons(g);
@@ -5259,7 +5267,7 @@ function pinAt(item, usados){
   if(item.lat&&item.lon) return [item.lat,item.lon];
   const c=coordsBairro(item.bairro); if(!c) return null;
   const k=norm(item.bairro), i=(usados[k]=(usados[k]||0)+1)-1;
-  const ang=i*2.4, rad=0.0007*Math.sqrt(i);
+  const ang=i*2.4, rad=0.00035*Math.sqrt(i);
   return [c.lat+rad*Math.cos(ang), c.lon+rad*Math.sin(ang)];
 }
 function renderMapa(){
@@ -5302,9 +5310,21 @@ function renderMapaApoiadores(){
   });
   setTimeout(()=>mapaMap.invalidateSize(),120);
 }
+function anoDa(d){ const m=/(\d{4})$/.exec(d.data||''); return m?m[1]:''; }
+let anosMapa='';
+function preencherAnosMapa(){
+  const anos=[...new Set(demandas.map(anoDa).filter(Boolean))].sort((a,b)=>b-a);
+  if(anos.join('|')===anosMapa) return;
+  anosMapa=anos.join('|');
+  const sel=document.getElementById('fMapaAno'), atual=sel.value;
+  sel.innerHTML='<option value="">Todos os anos</option>'+anos.map(a=>`<option>${a}</option>`).join('');
+  if(anos.includes(atual)) sel.value=atual;
+}
 function renderMapaDemandas(){
+  preencherAnosMapa();
   const fp=document.getElementById('fMapaPrio').value, fs=document.getElementById('fMapaStatus').value;
-  const lista=demandas.filter(d=>(!fp||d.prioridade===fp)&&(!fs||d.status===fs));
+  const fa=document.getElementById('fMapaAno').value;
+  const lista=demandas.filter(d=>(!fp||d.prioridade===fp)&&(!fs||d.status===fs)&&(!fa||anoDa(d)===fa));
   const comCoord=lista.filter(d=>(d.lat&&d.lon)||coordsBairro(d.bairro));
   const bairrosUnicos=new Set(comCoord.map(d=>norm(d.bairro)));
   document.getElementById('mapaKpis').innerHTML=[
@@ -5313,7 +5333,7 @@ function renderMapaDemandas(){
     [lista.filter(d=>d.status==='concluida').length,'Concluídas']
   ].map(([v,l])=>`<div class="mapa-kpi"><strong>${v}</strong><span>${l}</span></div>`).join('');
   const cnt={};
-  lista.forEach(d=>{ const b=d.bairro||'Sem bairro'; cnt[b]=(cnt[b]||0)+1; });
+  lista.forEach(d=>{ if(d.bairro) cnt[d.bairro]=(cnt[d.bairro]||0)+1; });
   drawBars('chartBairros', Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,6), 'green');
   document.getElementById('emptyMapa').hidden = comCoord.length>0;
   if(!ensureMap()) return;
@@ -5607,14 +5627,35 @@ function openDetalhe(id){
   detId=id;
   const s=STAT[d.status], p=PRIO[d.prioridade];
   document.getElementById('detTitulo').textContent=d.titulo;
-  document.getElementById('detTags').innerHTML=`<span class="tag tag--${s.c}">${s.t}</span><span class="tag tag--${p.c}">${p.t}</span>`;
-  document.getElementById('detSolic').textContent=d.solicitante||'—';
-  document.getElementById('detLocal').textContent=`${d.endereco} · ${d.bairro}, ${d.cidade||CIDADE.nome}`;
-  document.getElementById('detData').textContent='Registrada em '+d.data;
+  document.getElementById('detTags').innerHTML=`<span class="tag tag--${s.c}">${s.t}</span><span class="tag tag--${p.c}">${p.t}</span>`
+    + (d.categoria?`<span class="tag tag--green-soft">${d.categoria}</span>`:'');
+  document.getElementById('detSolic').textContent=d.solicitante||'Solicitante não informado';
+  document.getElementById('detLocal').textContent=
+    [d.endereco, d.bairro ? `${d.bairro}, ${d.cidade||CIDADE.nome}` : ''].filter(Boolean).join(' · ')
+    || 'Sem endereço (pedido geral do município)';
+  mostraLinha('detTelRow','detTel', d.telefone, 'tel');
+  const tel=(d.telefone||'').replace(/\D/g,''), wa=document.getElementById('detWhats');
+  wa.hidden = tel.length<10;              /* sem DDD não dá para montar o link */
+  if(!wa.hidden) wa.href='https://wa.me/55'+tel;
+  document.getElementById('detData').textContent='Registrada em '+(d.data||'—')
+    + (d.indicacao ? ` · Indicação nº ${d.indicacao}` : '');
+  mostraLinha('detEncRow','detEnc', d.canal && `Encaminhada a ${d.canal}`
+    + (d.enviada ? ` em ${d.enviada}` : ''));
+  mostraLinha('detProtRow','detProt', d.protocolo ? `Protocolo ${d.protocolo}`
+    : (d.meio ? `Enviada por ${d.meio.toLowerCase()}` : ''));
+  mostraLinha('detRetRow','detRet', d.respondida && `Retorno em ${d.respondida}`);
+  const cx=document.getElementById('detRespostaBox');
+  cx.hidden=!d.resposta;
+  document.getElementById('detResposta').textContent=d.resposta||'';
   document.getElementById('detStatus').value=d.status;
   document.getElementById('detPrio').value=d.prioridade;
   paintIcons(document.getElementById('modal-detalhe'));
   openModal('modal-detalhe');
+}
+function mostraLinha(idLinha, idTexto, texto){
+  const l=document.getElementById(idLinha);
+  l.hidden=!texto;
+  if(texto) document.getElementById(idTexto).textContent=texto;
 }
 function salvarDetalhe(){
   const d=demandas.find(x=>x.id===detId); if(!d) return;
@@ -5750,12 +5791,17 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 /* ===== FORMS ===== */
 document.getElementById('formDemanda').addEventListener('submit',async e=>{
   e.preventDefault(); const f=new FormData(e.target);
-  const dem={id:novoId(),titulo:f.get('titulo'),solicitante:f.get('solicitante'),endereco:f.get('endereco'),
-    bairro:f.get('bairro'),cidade:CIDADE.nome,prioridade:f.get('prioridade'),status:f.get('status'),data:agora(),lat:null,lon:null};
+  const lim=k=>(f.get(k)||'').trim();
+  const dem={id:novoId(),titulo:lim('titulo'),solicitante:lim('solicitante'),telefone:lim('telefone'),
+    endereco:lim('endereco'),bairro:lim('bairro'),cidade:CIDADE.nome,categoria:lim('categoria'),
+    prioridade:f.get('prioridade'),status:f.get('status'),data:agora(),
+    canal:lim('canal'),protocolo:lim('protocolo'),meio:'',indicacao:'',
+    enviada:lim('canal')?agora():'',respondida:'',resposta:'',lat:null,lon:null};
   demandas.unshift(dem);
   salvar('demandas',dem); e.target.reset(); closeModal(); renderDemandas(); renderDash();
   const mapaVisivel=()=>document.getElementById('view-mapa').classList.contains('is-visible');
   if(mapaVisivel()) renderMapa();
+  if(!dem.endereco){ toast('Demanda cadastrada!'); return; }
   toast('Demanda cadastrada! Localizando o endereço no mapa…');
   const g=await geocodeEndereco(dem.endereco, dem.bairro);
   if(g){ dem.lat=g.lat; dem.lon=g.lon; salvar('demandas',dem); if(mapaVisivel()) renderMapa();
@@ -5791,14 +5837,14 @@ document.getElementById('formPerfil').addEventListener('submit',e=>{
     partido:f.get('partido').trim(), cidade:f.get('cidade').trim(), telefone:f.get('telefone').trim()};
   salvarPerfil(); applyPerfil(); toast('Perfil do gabinete atualizado!');
 });
-function agora(){ const d=new Date();
-  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' · '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function agora(){ return new Date().toLocaleDateString('pt-BR'); }
 
-['fDemandaBusca','fDemandaStatus','fDemandaPrio'].forEach(id=>document.getElementById(id).addEventListener('input',renderDemandas));
+['fDemandaBusca','fDemandaStatus','fDemandaPrio','fDemandaTema'].forEach(id=>document.getElementById(id).addEventListener('input',renderDemandas));
 document.getElementById('fDemandaLimpar').addEventListener('click',()=>{
   document.getElementById('fDemandaBusca').value='';
   document.getElementById('fDemandaStatus').value='';
   document.getElementById('fDemandaPrio').value='';
+  document.getElementById('fDemandaTema').value='';
   renderDemandas();
 });
 // criação rápida: leva o que foi digitado direto para o formulário
@@ -5813,7 +5859,7 @@ document.getElementById('qaDemandaBtn').addEventListener('click',quickAddDemanda
 document.getElementById('qaDemanda').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); quickAddDemanda(); }});
 ['fApoioBusca','fApoioTipo'].forEach(id=>document.getElementById(id).addEventListener('input',renderApoiadores));
 document.getElementById('fAssessorBusca').addEventListener('input',renderAssessores);
-['fMapaPrio','fMapaStatus'].forEach(id=>document.getElementById(id).addEventListener('change',renderMapa));
+['fMapaPrio','fMapaStatus','fMapaAno'].forEach(id=>document.getElementById(id).addEventListener('change',renderMapa));
 ['fMatBusca','fMatAno','fMatTipo','fMatSit'].forEach(id=>document.getElementById(id).addEventListener('input',filterMat));
 
 // calendário
