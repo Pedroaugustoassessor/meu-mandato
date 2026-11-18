@@ -1128,6 +1128,88 @@ i[data-i]{width:20px;height:20px;display:inline-block;flex:0 0 auto;background:c
 .proj__fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--green),var(--gold))}
 .proj__meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:600;font-family:'Sora'}
 
+/* ===== CRM DE PROJETOS — QUADRO DE ETAPAS ===== */
+.kanban-dica{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.5;color:var(--muted);margin:0 0 12px}
+.kanban-dica i{width:15px;height:15px;margin-top:3px;color:var(--green)}
+.kanban{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(274px,1fr);gap:16px;
+  overflow-x:auto;padding-bottom:12px;align-items:start;scrollbar-width:thin}
+.kanban::-webkit-scrollbar{height:10px}
+.kanban::-webkit-scrollbar-thumb{background:#c4d6c8;border-radius:20px}
+.kanban::-webkit-scrollbar-track{background:#e2e9e2;border-radius:20px}
+.kcol{background:#e7eee8;border:1px solid var(--line);border-radius:15px;padding:13px;transition:.15s}
+.kcol.is-over{background:#dcecdf;border-color:var(--green);box-shadow:inset 0 0 0 2px rgba(0,155,58,.3)}
+.kcol__head{display:flex;align-items:center;gap:9px;padding:3px 5px 2px}
+.kcol__dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.kcol__head b{font-size:13.5px;font-weight:700}
+.kcol__n{margin-left:auto;font-family:'Sora';font-size:11.5px;font-weight:700;color:var(--slate);
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:1px 9px}
+.kcol__sub{font-size:11.5px;color:var(--muted);padding:0 5px 11px}
+.kcol__body{display:flex;flex-direction:column;gap:10px;min-height:46px}
+.kcol__vazio{font-size:12.5px;color:var(--muted);text-align:center;padding:16px 8px;
+  border:1px dashed #c9d8cc;border-radius:11px}
+.pj{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:12px;
+  padding:13px 14px;cursor:pointer;box-shadow:0 2px 8px rgba(16,40,26,.05);transition:.15s}
+.pj:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.pj.is-drag{opacity:.4}
+.pj--alta{border-left-color:var(--red)}
+.pj--media{border-left-color:var(--info)}
+.pj--baixa{border-left-color:var(--green)}
+.pj__top{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.pj__top b{font-size:14px;font-weight:700;line-height:1.3}
+.pj__desc{font-size:12.5px;color:var(--slate);line-height:1.45;margin-bottom:11px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pj__bar{height:6px;background:#eef3ee;border-radius:20px;overflow:hidden;margin-bottom:10px}
+.pj__fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.pj__meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  font-family:'Sora';font-size:11.5px;font-weight:600;color:var(--slate)}
+.pj__av{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  color:#fff;font-size:9px;font-weight:700;font-family:'Sora';flex:0 0 auto}
+.pj__sep{color:var(--line)}
+.pj__semresp{color:var(--muted);font-style:italic;font-weight:500}
+.pj__prazo{margin-left:auto;display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+.pj__prazo i{width:13px;height:13px}
+.pj__prazo--perto{color:var(--amber)}
+.pj__prazo--atraso{color:var(--red)}
+.pj__hist{display:flex;align-items:center;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+  font-size:11.5px;color:var(--muted)}
+.pj__hist i{width:13px;height:13px}
+.prazo--perto{color:var(--amber);font-weight:600}
+.prazo--atraso{color:var(--red);font-weight:600}
+.prog-mini{display:flex;align-items:center;gap:9px;min-width:120px}
+.prog-mini__bar{flex:1;height:6px;background:#eef3ee;border-radius:20px;overflow:hidden}
+.prog-mini__bar i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.prog-mini span{font-family:'Sora';font-size:12px;font-weight:700;color:var(--slate)}
+
+/* ===== FICHA DO PROJETO ===== */
+.modal__box--wide{max-width:680px}
+.pj-desc{font-size:14px;color:var(--slate);margin:-8px 0 16px}
+.pj-pipe{display:flex;gap:5px;margin:0 0 18px}
+.pj-pipe span{flex:1;height:7px;border-radius:20px;background:#e7eee8}
+.pj-pipe span.on{background:linear-gradient(90deg,var(--green),var(--green-600))}
+.pj-prazo-txt{font-weight:600}
+.det__field--full{grid-column:1/-1}
+.range{width:100%;accent-color:var(--green);height:26px;cursor:pointer}
+.pj-hist{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.pj-hist__head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}
+.pj-hist__head h5{font-family:'Sora';font-size:14.5px;font-weight:700}
+.pj-hist__head span{font-size:12px;color:var(--muted);font-family:'Sora';font-weight:600}
+.timeline{list-style:none;max-height:240px;overflow-y:auto;margin-bottom:14px;padding-right:4px}
+.timeline li{position:relative;padding:0 0 16px 20px;border-left:2px solid var(--line)}
+.timeline li:last-child{border-left-color:transparent;padding-bottom:2px}
+.timeline li::before{content:"";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;
+  background:var(--green);border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.timeline time{display:block;font-family:'Sora';font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.3px}
+.timeline p{font-size:13.5px;color:var(--ink);line-height:1.5}
+.timeline__vazio{border-left-color:transparent!important;font-size:13px;color:var(--muted);font-style:italic;line-height:1.5}
+.timeline__vazio::before{display:none}
+.pj-hist__add{display:flex;gap:10px}
+.pj-hist__add input{flex:1;min-width:0;font-family:'Inter';font-size:14px;padding:12px 14px;
+  border:1px solid var(--line);border-radius:11px;background:#f8faf8;color:var(--ink)}
+.pj-hist__add input:focus{outline:none;border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(0,155,58,.12)}
+.field textarea{font-family:'Inter';font-weight:400;font-size:14.5px;padding:12px 14px;border:1px solid var(--line);
+  border-radius:11px;background:#f8faf8;color:var(--ink);resize:vertical}
+.field textarea:focus{outline:none;border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(0,155,58,.12)}
+
 /* ===== MAPA — seletor de modo ===== */
 .seg{display:inline-flex;background:var(--bg-tint);border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}
 .seg button{border:none;background:none;cursor:pointer;font-family:'Sora';font-weight:600;font-size:13.5px;
@@ -1751,6 +1833,30 @@ body.is-locked{overflow:hidden}
 .gate__card .field--dupla input{text-transform:none}
 .gate__card .field--dupla label:last-child input{text-transform:uppercase}
 
+/* ===== CRM DE PROJETOS NO CELULAR =====
+   Fica no fim do arquivo de propósito: assim estas regras vêm depois das
+   do detalhe da demanda e realmente valem na tela pequena. */
+@media(max-width:980px){.kanban{grid-auto-columns:minmax(250px,78vw)}}
+@media(max-width:620px){
+  .pj-hist__add{flex-wrap:wrap}
+  .pj-hist__add .btn{width:100%}
+  #modal-projeto-det .det__edit{grid-template-columns:1fr}
+  #modal-projeto-det .det__row{flex-wrap:wrap}
+  #modal-projeto-det #pjContato{white-space:nowrap}
+  #modal-projeto-det .det__actions{flex-wrap:wrap}
+  #modal-projeto-det .det__actions-right{flex:1;justify-content:flex-end}
+  /* os quatro números lado a lado: o funil é o que interessa, e ele não
+     pode ficar quatro telas abaixo */
+  #projKpis{grid-template-columns:1fr 1fr;gap:12px}
+  #projKpis .stat{padding:14px}
+  #projKpis .stat__ico{width:34px;height:34px;border-radius:10px;margin-bottom:10px}
+  #projKpis .stat__ico i{width:18px;height:18px}
+  #projKpis .stat__info strong{font-size:24px}
+  #projKpis .stat__trend{font-size:11px;line-height:1.35}
+  #view-projetos .search{width:100%}
+  #view-projetos .select{flex:1;min-width:142px}
+}
+
 </style>
 
 
@@ -2048,8 +2154,8 @@ body.is-locked{overflow:hidden}
       <div class="stats">
         <article class="stat"><div class="stat__ico stat__ico--green"><i data-i="file"></i></div><div class="stat__info"><span>Total de demandas</span><strong id="kpiDemandas">0</strong></div><em class="stat__trend up">+4 esta semana</em></article>
         <article class="stat"><div class="stat__ico stat__ico--gold"><i data-i="heart"></i></div><div class="stat__info"><span>Total de apoiadores</span><strong id="kpiApoiadores">0</strong></div><em class="stat__trend up">+12 este mês</em></article>
-        <article class="stat"><div class="stat__ico stat__ico--blue"><i data-i="target"></i></div><div class="stat__info"><span>Projetos ativos</span><strong>9</strong></div><em class="stat__trend">2 em votação</em></article>
-        <article class="stat"><div class="stat__ico stat__ico--green"><i data-i="users"></i></div><div class="stat__info"><span>Assessores</span><strong>6</strong></div><em class="stat__trend">equipe completa</em></article>
+        <article class="stat"><div class="stat__ico stat__ico--blue"><i data-i="target"></i></div><div class="stat__info"><span>Projetos ativos</span><strong id="kpiProjetos">0</strong></div><em class="stat__trend" id="kpiProjetosSub">no funil do mandato</em></article>
+        <article class="stat"><div class="stat__ico stat__ico--green"><i data-i="users"></i></div><div class="stat__info"><span>Assessores</span><strong id="kpiAssessores">0</strong></div><em class="stat__trend">equipe do gabinete</em></article>
       </div>
 
       <div class="cols">
@@ -2184,12 +2290,48 @@ body.is-locked{overflow:hidden}
       <div class="empty" id="emptyAssessores" hidden><i data-i="users"></i><p>Nenhum assessor encontrado.</p></div>
     </section>
 
-    <!-- ============ PROJETOS ============ -->
+    <!-- ============ PROJETOS (CRM) ============ -->
     <section class="view" id="view-projetos">
-      <div class="toolbar">
-        <div class="toolbar__filters"><h3 class="toolbar__title">Projetos do mandato</h3></div>
+      <div class="stats" id="projKpis"></div>
+
+      <div class="toolbar toolbar--sub">
+        <div class="toolbar__filters">
+          <div class="seg" id="projSeg">
+            <button type="button" data-pvista="quadro" class="active">Quadro</button>
+            <button type="button" data-pvista="lista">Lista</button>
+          </div>
+          <label class="search"><i data-i="search"></i><input type="text" id="fProjBusca" placeholder="Buscar projeto, bairro, parceiro…"></label>
+          <select class="select" id="fProjResp"><option value="">Todos os responsáveis</option></select>
+          <select class="select" id="fProjPrio">
+            <option value="">Todas as prioridades</option>
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+          </select>
+          <select class="select" id="fProjPrazo">
+            <option value="">Qualquer prazo</option>
+            <option value="atraso">Fora do prazo</option>
+            <option value="perto">Vencem em 15 dias</option>
+            <option value="sem">Sem prazo</option>
+          </select>
+          <button class="btn-text" id="fProjLimpar" hidden>Limpar filtros</button>
+          <span class="mat-count" id="projCount"></span>
+        </div>
+        <button class="btn btn--primary" data-action="novo-projeto"><i data-i="plus"></i>Novo projeto</button>
       </div>
-      <div class="proj-grid" id="gridProjetos"></div>
+
+      <p class="kanban-dica" id="projDica"><i data-i="target"></i>Arraste um cartão de uma etapa para a outra. No celular, toque no cartão e mude a etapa pela ficha. Role o quadro para o lado para ver todas as etapas.</p>
+      <div class="kanban" id="projBoard"></div>
+
+      <div class="panel panel--flush" id="projLista" hidden>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Projeto</th><th>Etapa</th><th>Responsável</th><th>Prazo</th><th>Progresso</th><th>Prioridade</th><th></th></tr></thead>
+            <tbody id="tbProjetos"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="empty" id="emptyProjetos" hidden><i data-i="target"></i><p>Nenhum projeto encontrado com esses filtros.</p></div>
     </section>
 
     <!-- ============ PROJETOS DE LEI ============ -->
@@ -2617,6 +2759,83 @@ body.is-locked{overflow:hidden}
       <label class="field field--full">E-mail<input name="email" type="email" required placeholder="nome@gabinete.gov.br"></label>
       <div class="form__actions"><button type="button" class="btn btn--ghost" data-close>Cancelar</button><button type="submit" class="btn btn--primary">Salvar assessor</button></div>
     </form>
+  </div>
+</div>
+
+<!-- ===== MODAL: NOVO PROJETO ===== -->
+<div class="modal" id="modal-projeto">
+  <div class="modal__box">
+    <header class="modal__head"><h3>Novo projeto</h3><button class="modal__x" data-close><i data-i="close"></i></button></header>
+    <form class="form" id="formProjeto">
+      <label class="field field--full">Nome do projeto<input name="titulo" required placeholder="Ex.: Revitalização da praça do Cruzeiro"></label>
+      <label class="field field--full">O que é<textarea name="resumo" rows="2" placeholder="Em uma frase: o que este projeto entrega para o bairro"></textarea></label>
+      <label class="field">Etapa de agora<select name="etapa">
+        <option value="ideia" selected>Ideia</option>
+        <option value="articulacao">Articulação</option>
+        <option value="protocolado">Protocolado</option>
+        <option value="execucao">Em execução</option>
+        <option value="entregue">Entregue</option>
+      </select></label>
+      <label class="field">Prioridade<select name="prioridade">
+        <option value="alta">Alta</option>
+        <option value="media" selected>Média</option>
+        <option value="baixa">Baixa</option>
+      </select></label>
+      <label class="field">Responsável no gabinete<input name="resp" list="assessoresList" placeholder="Quem toca o projeto" autocomplete="off"><datalist id="assessoresList"></datalist></label>
+      <label class="field">Bairro atendido<input name="bairro" list="bairrosList" placeholder="Digite ou escolha o bairro" autocomplete="off"></label>
+      <label class="field">Órgão ou parceiro<input name="parceiro" placeholder="Ex.: Secretaria de Obras"></label>
+      <label class="field">Contato<input name="contato" placeholder="(34) 00000-0000"></label>
+      <label class="field field--full">Prazo combinado<input name="prazo" type="date"></label>
+      <p class="field-hint field--full">Depois é só arrastar o cartão de uma etapa para a outra no quadro — e anotar cada conversa no histórico da ficha.</p>
+      <div class="form__actions"><button type="button" class="btn btn--ghost" data-close>Cancelar</button><button type="submit" class="btn btn--primary">Salvar projeto</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== MODAL: FICHA DO PROJETO (CRM) ===== -->
+<div class="modal" id="modal-projeto-det">
+  <div class="modal__box modal__box--wide">
+    <header class="modal__head"><h3>Ficha do projeto</h3><button class="modal__x" data-close><i data-i="close"></i></button></header>
+    <div class="det">
+      <h4 class="det__titulo" id="pjTitulo"></h4>
+      <div class="det__tags" id="pjTags"></div>
+      <p class="pj-desc" id="pjDesc"></p>
+      <div class="pj-pipe" id="pjPipe"></div>
+
+      <div class="det__row"><i data-i="pin"></i><span id="pjLocal"></span></div>
+      <div class="det__row"><i data-i="users"></i><span id="pjParceiro"></span></div>
+      <div class="det__row"><i data-i="phone"></i><span id="pjContato"></span>
+        <a class="btn-text" id="pjWhats" href="#" target="_blank" rel="noopener" hidden>Chamar no WhatsApp</a></div>
+      <div class="det__row"><i data-i="calendar"></i><span id="pjPrazo"></span></div>
+
+      <div class="det__edit">
+        <div class="det__field"><label>Etapa</label><select class="select" id="pjEtapa"></select></div>
+        <div class="det__field"><label>Prioridade</label><select class="select" id="pjPrio">
+          <option value="alta">Alta</option><option value="media">Média</option><option value="baixa">Baixa</option>
+        </select></div>
+        <div class="det__field"><label>Responsável</label><input class="select" id="pjResp" list="assessoresList" autocomplete="off" placeholder="Quem toca o projeto"></div>
+        <div class="det__field"><label>Prazo</label><input class="select" id="pjPrazoIn" type="date"></div>
+        <div class="det__field det__field--full"><label>Progresso — <b id="pjProgTxt">0%</b></label>
+          <input class="range" id="pjProg" type="range" min="0" max="100" step="5"></div>
+      </div>
+
+      <div class="pj-hist">
+        <div class="pj-hist__head"><h5>Histórico de contatos</h5><span id="pjHistCount"></span></div>
+        <ol class="timeline" id="pjHist"></ol>
+        <div class="pj-hist__add">
+          <input type="text" id="pjHistTexto" placeholder="Ex.: falei com o secretário, prometeu visita na terça">
+          <button class="btn btn--gold" id="pjHistBtn"><i data-i="plus"></i>Registrar</button>
+        </div>
+      </div>
+
+      <div class="det__actions">
+        <button class="btn btn--ghost det__del" id="pjExcluir"><i data-i="trash"></i>Excluir</button>
+        <div class="det__actions-right">
+          <button class="btn btn--gold" id="pjAvancar">Avançar etapa</button>
+          <button class="btn btn--primary" id="pjSalvar">Salvar alterações</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3306,7 +3525,7 @@ function ehAdmin(){
    Serve de espelho: abre rápido e continua legível sem internet.
    ================================================================== */
 function cacheLocal(){
-  try{ localStorage.setItem(DB_KEY, JSON.stringify({demandas, apoiadores, eventos, assessores, perfil})); }
+  try{ localStorage.setItem(DB_KEY, JSON.stringify({demandas, apoiadores, eventos, assessores, projetos, perfil})); }
   catch(e){}
 }
 function lerCacheLocal(){
@@ -3318,6 +3537,7 @@ function lerCacheLocal(){
     if(Array.isArray(s.apoiadores)) apoiadores = s.apoiadores;
     if(Array.isArray(s.eventos))    eventos    = s.eventos;
     if(Array.isArray(s.assessores)) assessores = s.assessores;
+    if(Array.isArray(s.projetos))   projetos   = s.projetos;
     if(s.perfil && typeof s.perfil === 'object') perfil = {...perfil, ...s.perfil};
     return true;
   }catch(e){ return false; }
@@ -3328,12 +3548,14 @@ const COLUNAS = {
   demandas:   ['id','titulo','solicitante','endereco','bairro','cidade','prioridade','status','data','lat','lon'],
   apoiadores: ['id','nome','tipo','telefone','bairro','cidade','nasc'],
   eventos:    ['id','titulo','data','hora','local','tipo','convidados'],
-  assessores: ['id','nome','funcao','telefone','email']
+  assessores: ['id','nome','funcao','telefone','email'],
+  projetos:   ['id','titulo','resumo','etapa','prog','prioridade','resp','bairro','parceiro','contato','prazo','historico']
 };
 function paraBanco(tabela, obj){
   const linha = {};
   COLUNAS[tabela].forEach(c => { if(obj[c] !== undefined) linha[c] = obj[c]; });
-  if(tabela === 'eventos') linha.convidados = obj.convidados || [];
+  if(tabela === 'eventos')  linha.convidados = obj.convidados || [];
+  if(tabela === 'projetos') linha.historico  = obj.historico  || [];
   linha.atualizado_em = new Date().toISOString();
   return linha;
 }
@@ -3422,14 +3644,18 @@ function mostrarModo(){
 /* ===== BAIXAR TUDO DO BANCO ======================================== */
 async function baixarTudo(){
   if(!ONLINE || !usuario) return false;
-  const [d, a, e, s, g] = await Promise.all([
+  const [d, a, e, s, p, g] = await Promise.all([
     sb.from('demandas').select('*').order('criado_em', {ascending:false}),
     sb.from('apoiadores').select('*').order('criado_em', {ascending:false}),
     sb.from('eventos').select('*').order('data', {ascending:true}),
     sb.from('assessores').select('*').order('criado_em', {ascending:false}),
+    sb.from('projetos').select('*').order('criado_em', {ascending:false}),
     sb.from('gabinetes').select('*').limit(1).maybeSingle()
   ]);
   if(d.error || a.error || e.error || s.error) return false;
+  /* a tabela de projetos é mais nova: num banco antigo ela ainda não
+     existe, e nesse caso o resto do sistema continua funcionando. */
+  if(!p.error) projetos = (p.data || []).map(x => ({...x, historico: Array.isArray(x.historico) ? x.historico : []}));
 
   demandas   = d.data || [];
   apoiadores = a.data || [];
@@ -3449,7 +3675,7 @@ async function baixarTudo(){
 
 /* Primeiro acesso: banco vazio. Pergunta se quer os dados de exemplo. */
 async function semearSeVazio(exemplo){
-  const vazio = !demandas.length && !apoiadores.length && !eventos.length && !assessores.length;
+  const vazio = !demandas.length && !apoiadores.length && !eventos.length && !assessores.length && !projetos.length;
   if(!vazio || !ehAdmin()) return;
   const querExemplo = confirm(
     'Seu banco de dados está vazio.\n\n' +
@@ -3461,11 +3687,13 @@ async function semearSeVazio(exemplo){
   apoiadores = exemplo.apoiadores.map(x => ({...x, id: novoId()}));
   eventos    = exemplo.eventos.map(x    => ({...x, id: novoId()}));
   assessores = exemplo.assessores.map(x => ({...x, id: novoId()}));
+  projetos   = exemplo.projetos.map(x   => ({...x, id: novoId()}));
   await Promise.all([
     sb.from('demandas').upsert(demandas.map(x   => paraBanco('demandas', x))),
     sb.from('apoiadores').upsert(apoiadores.map(x => paraBanco('apoiadores', x))),
     sb.from('eventos').upsert(eventos.map(x    => paraBanco('eventos', x))),
-    sb.from('assessores').upsert(assessores.map(x => paraBanco('assessores', x)))
+    sb.from('assessores').upsert(assessores.map(x => paraBanco('assessores', x))),
+    sb.from('projetos').upsert(projetos.map(x   => paraBanco('projetos', x)))
   ]);
   cacheLocal();
 }
@@ -3473,7 +3701,7 @@ async function semearSeVazio(exemplo){
 /* Apaga todo o conteúdo do gabinete no banco (só o admin, com dupla confirmação). */
 async function limparBanco(){
   if(!ONLINE || !ehAdmin()) return false;
-  for(const t of ['demandas','apoiadores','eventos','assessores']){
+  for(const t of ['demandas','apoiadores','eventos','assessores','projetos']){
     const { error } = await sb.from(t).delete().not('id','is',null);
     if(error) return false;
   }
@@ -3507,6 +3735,7 @@ function redesenharTudo(){
   if(visivel('view-demandas'))     renderDemandas();
   if(visivel('view-apoiadores'))   renderApoiadores();
   if(visivel('view-assessores'))   renderAssessores();
+  if(visivel('view-projetos'))     renderProjetos();
   if(visivel('view-agenda'))       renderAgenda();
   if(visivel('view-aniversarios')) renderAniversarios();
   if(visivel('view-relatorios'))   renderRelatorios();
@@ -3952,9 +4181,10 @@ async function iniciarSistema(boot){
     demandas:   demandas.slice(),
     apoiadores: apoiadores.slice(),
     eventos:    eventos.slice(),
-    assessores: assessores.slice()
+    assessores: assessores.slice(),
+    projetos:   projetos.slice()
   };
-  demandas = []; apoiadores = []; eventos = []; assessores = [];
+  demandas = []; apoiadores = []; eventos = []; assessores = []; projetos = [];
 
   const gate = document.getElementById('gate');
   gate.hidden = false;
@@ -4350,13 +4580,89 @@ let assessores = [
   {nome:'Rafael Antunes', funcao:'Mídias Sociais', telefone:'(31) 99988-1234', email:'rafael.antunes@gabinete.gov.br'}
 ];
 
-const projetos = [
-  {titulo:'Praça revitalizada — Cruzeiro', desc:'Reforma da praça central com nova iluminação e playground.', prog:75, status:'Em execução'},
-  {titulo:'Iluminação de LED nos bairros', desc:'Troca das lâmpadas por LED em vias públicas.', prog:40, status:'Em andamento'},
-  {titulo:'Programa Jovem Aprendiz', desc:'Parceria com empresas para primeiro emprego.', prog:90, status:'Reta final'},
-  {titulo:'Mutirão de saúde da mulher', desc:'Exames e consultas gratuitas nos postos.', prog:100, status:'Concluído'},
-  {titulo:'Feira do produtor local', desc:'Espaço para agricultores familiares na comunidade.', prog:20, status:'Planejamento'},
-  {titulo:'Wi-Fi livre nas praças', desc:'Internet gratuita em pontos de convivência.', prog:55, status:'Em andamento'}
+/* ===== CRM DE PROJETOS =====
+   Cada projeto do mandato é um cartão que caminha por etapas, da conversa
+   no portão até a entrega. É o mesmo raciocínio de um funil de vendas,
+   só que o que se "vende" aqui é a obra, o convênio, o serviço. */
+const ETAPAS = [
+  {k:'ideia',       t:'Ideia',        sub:'Pedido que chegou',      cor:'#8a968e', tag:'green-soft'},
+  {k:'articulacao', t:'Articulação',  sub:'Falando com quem decide',cor:'#2f5fd0', tag:'blue'},
+  {k:'protocolado', t:'Protocolado',  sub:'Pedido formalizado',     cor:'#d98a15', tag:'amber'},
+  {k:'execucao',    t:'Em execução',  sub:'Saindo do papel',        cor:'#0aa347', tag:'green'},
+  {k:'entregue',    t:'Entregue',     sub:'Pronto para mostrar',    cor:'#063d22', tag:'green'}
+];
+const ETAPA = Object.fromEntries(ETAPAS.map(e=>[e.k,e]));
+const PROG_BASE = {ideia:5, articulacao:25, protocolado:50, execucao:75, entregue:100};
+const PROJ_PRIO = {alta:{t:'Alta',c:'red'}, media:{t:'Média',c:'blue'}, baixa:{t:'Baixa',c:'green-soft'}};
+
+/* carimbo de data para o histórico */
+function marcoHist(diasAtras){
+  const d=new Date(); d.setDate(d.getDate()-(diasAtras||0));
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+/* dias que faltam para o prazo (negativo = atrasado; null = sem prazo) */
+function diasPrazo(iso){
+  if(!iso) return null;
+  const p=new Date(iso+'T00:00:00'); if(isNaN(p)) return null;
+  const h=new Date(); h.setHours(0,0,0,0);
+  return Math.round((p-h)/864e5);
+}
+function textoPrazo(iso, etapa){
+  const n=diasPrazo(iso);
+  if(n===null) return {txt:'Sem prazo', cls:''};
+  const dt=new Date(iso+'T00:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+  /* projeto entregue não cobra prazo: o que passou, passou */
+  if(etapa==='entregue') return {txt:`Entregue · prazo era ${dt}`, cls:''};
+  if(n<0)   return {txt:`${dt} · ${-n} dia(s) de atraso`, cls:'atraso'};
+  if(n===0) return {txt:`${dt} · vence hoje`,             cls:'perto'};
+  if(n<=15) return {txt:`${dt} · faltam ${n} dia(s)`,     cls:'perto'};
+  return {txt:dt, cls:''};
+}
+
+let projetos = [
+  {titulo:'Revitalização da praça do Cruzeiro',
+   resumo:'Reforma completa da praça: iluminação de LED, playground novo e academia ao ar livre.',
+   etapa:'execucao', prog:75, prioridade:'alta', resp:'Ana Beatriz Costa', bairro:'Cruzeiro',
+   parceiro:'Secretaria Municipal de Obras', contato:'(34) 3822-9000', prazo:hojeISO(45),
+   historico:[{data:marcoHist(96), texto:'Moradores entregaram abaixo-assinado no gabinete.', autor:'Gabinete'},
+              {data:marcoHist(54), texto:'Indicação protocolada na Câmara e encaminhada à Prefeitura.', autor:'Gabinete'},
+              {data:marcoHist(12), texto:'Secretaria confirmou o início da obra, prazo de 60 dias.', autor:'Ana Beatriz Costa'}]},
+
+  {titulo:'Iluminação de LED nos bairros',
+   resumo:'Troca das lâmpadas antigas por LED nas vias mais escuras da região leste.',
+   etapa:'protocolado', prog:50, prioridade:'alta', resp:'Marcos Vinícius Lima', bairro:'Caiçaras',
+   parceiro:'Secretaria de Serviços Urbanos', contato:'(34) 3822-9100', prazo:hojeISO(-6),
+   historico:[{data:marcoHist(70), texto:'Levantamento das ruas sem iluminação feito pela equipe.', autor:'Gabinete'},
+              {data:marcoHist(30), texto:'Indicação protocolada. Aguardando resposta da Secretaria.', autor:'Marcos Vinícius Lima'}]},
+
+  {titulo:'Programa Jovem Aprendiz',
+   resumo:'Parceria com empresas da cidade para o primeiro emprego de jovens de 16 a 18 anos.',
+   etapa:'execucao', prog:90, prioridade:'media', resp:'Juliana Prado', bairro:'Centro',
+   parceiro:'ACIPAM e SENAI', contato:'(34) 3821-4040', prazo:hojeISO(20),
+   historico:[{data:marcoHist(120), texto:'Primeira reunião com a ACIPAM sobre o programa.', autor:'Juliana Prado'},
+              {data:marcoHist(60),  texto:'SENAI topou ceder as salas para a formação.', autor:'Juliana Prado'},
+              {data:marcoHist(8),   texto:'32 vagas confirmadas em 9 empresas. Falta só o lançamento.', autor:'Juliana Prado'}]},
+
+  {titulo:'Mutirão de saúde da mulher',
+   resumo:'Exames preventivos e consultas gratuitas nos postos de saúde dos bairros.',
+   etapa:'entregue', prog:100, prioridade:'media', resp:'Patrícia Gomes', bairro:'Santa Terezinha',
+   parceiro:'Secretaria Municipal de Saúde', contato:'(34) 3822-9200', prazo:hojeISO(-25),
+   historico:[{data:marcoHist(90), texto:'Proposta levada à Secretaria de Saúde.', autor:'Patrícia Gomes'},
+              {data:marcoHist(40), texto:'Datas e postos definidos com a equipe da Secretaria.', autor:'Patrícia Gomes'},
+              {data:marcoHist(25), texto:'Mutirão realizado: 418 atendimentos em 3 postos.', autor:'Patrícia Gomes'}]},
+
+  {titulo:'Feira do produtor local',
+   resumo:'Espaço fixo aos sábados para agricultores familiares venderem direto ao consumidor.',
+   etapa:'articulacao', prog:25, prioridade:'media', resp:'Diego Fernandes', bairro:'Cidade Nova',
+   parceiro:'Secretaria de Agricultura / EMATER', contato:'(34) 3821-7700', prazo:hojeISO(75),
+   historico:[{data:marcoHist(45), texto:'Produtores procuraram o gabinete pedindo um ponto de venda.', autor:'Gabinete'},
+              {data:marcoHist(10), texto:'EMATER topou ajudar na organização. Falta definir o terreno.', autor:'Diego Fernandes'}]},
+
+  {titulo:'Wi-Fi livre nas praças',
+   resumo:'Internet gratuita em quatro pontos de convivência da cidade.',
+   etapa:'ideia', prog:5, prioridade:'baixa', resp:'Rafael Antunes', bairro:'Centro',
+   parceiro:'', contato:'', prazo:'',
+   historico:[{data:marcoHist(5), texto:'Ideia levantada na reunião de equipe. Verificar custo do provedor.', autor:'Rafael Antunes'}]}
 ];
 
 /* Produção legislativa real — Vereador José Luiz Borges Júnior (SAPL Câmara de Patos de Minas) */
@@ -4382,6 +4688,12 @@ const AVA = ['#009B3A','#0B2E6B','#a9820a','#0b7a37','#1e4fb0'];
 function renderDash(){
   document.getElementById('kpiDemandas').textContent = demandas.length;
   document.getElementById('kpiApoiadores').textContent = 320 + apoiadores.length;
+  const ativosPj = projetos.filter(p=>p.etapa!=='entregue').length;
+  const entreguesPj = projetos.length - ativosPj;
+  document.getElementById('kpiProjetos').textContent = ativosPj;
+  document.getElementById('kpiProjetosSub').textContent = entreguesPj
+    ? `${entreguesPj} já entregue(s)` : 'no funil do mandato';
+  document.getElementById('kpiAssessores').textContent = assessores.length;
 
   const dd = document.getElementById('dashDemandas');
   dd.innerHTML = demandas.slice(0,4).map(d=>{
@@ -4632,15 +4944,232 @@ function renderAssessores(){
   paintIcons(g);
 }
 
-/* ===== RENDER: PROJETOS ===== */
+/* ===== RENDER: PROJETOS (CRM) ===== */
+let projVista='quadro', pjId=null, pjArrastando=null;
+
+function iniciais(nome){ return (nome||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+function corDe(nome){ return AVA[(nome||'').length % AVA.length]; }
+
+/* o filtro de responsável nasce de quem já aparece nos projetos + a equipe */
+function preencherRespFiltro(){
+  const sel=document.getElementById('fProjResp'); if(!sel) return;
+  const nomes=[...new Set([...projetos.map(p=>p.resp), ...assessores.map(a=>a.nome)].filter(Boolean))].sort();
+  const atual=sel.value;
+  sel.innerHTML='<option value="">Todos os responsáveis</option>'+nomes.map(n=>`<option>${n}</option>`).join('');
+  if(nomes.includes(atual)) sel.value=atual;
+}
+function atualizarAssessoresDatalist(){
+  const dl=document.getElementById('assessoresList'); if(!dl) return;
+  dl.innerHTML=assessores.map(a=>`<option value="${a.nome}">`).join('');
+}
+function projetosFiltrados(){
+  const q=(document.getElementById('fProjBusca').value||'').toLowerCase();
+  const fr=document.getElementById('fProjResp').value;
+  const fp=document.getElementById('fProjPrio').value;
+  const fz=document.getElementById('fProjPrazo').value;
+  return projetos.filter(p=>{
+    const n=diasPrazo(p.prazo);
+    if(q && !(p.titulo+' '+(p.resumo||'')+' '+(p.bairro||'')+' '+(p.parceiro||'')+' '+(p.resp||'')).toLowerCase().includes(q)) return false;
+    if(fr && p.resp!==fr) return false;
+    if(fp && p.prioridade!==fp) return false;
+    if(fz==='atraso' && !(p.etapa!=='entregue' && n!==null && n<0)) return false;
+    if(fz==='perto'  && !(p.etapa!=='entregue' && n!==null && n>=0 && n<=15)) return false;
+    if(fz==='sem'    && p.prazo) return false;
+    return true;
+  });
+}
+
 function renderProjetos(){
-  const g=document.getElementById('gridProjetos');
-  const cor=p=>p>=100?'green':p>=60?'blue':'amber';
-  g.innerHTML=projetos.map(p=>`<article class="proj">
-    <div class="proj__top"><h4>${p.titulo}</h4><span class="tag tag--${cor(p.prog)}">${p.status}</span></div>
-    <p>${p.desc}</p>
-    <div class="proj__bar"><div class="proj__fill" style="width:${p.prog}%"></div></div>
-    <div class="proj__meta"><span>Progresso</span><span>${p.prog}%</span></div></article>`).join('');
+  preencherRespFiltro(); atualizarAssessoresDatalist();
+
+  /* indicadores — sempre sobre o total, não sobre o filtro */
+  const ativos=projetos.filter(p=>p.etapa!=='entregue');
+  const entregues=projetos.length-ativos.length;
+  const atrasados=ativos.filter(p=>{const n=diasPrazo(p.prazo); return n!==null && n<0;}).length;
+  const semanaQueVem=ativos.filter(p=>{const n=diasPrazo(p.prazo); return n!==null && n>=0 && n<=15;}).length;
+  document.getElementById('projKpis').innerHTML=[
+    ['target','blue','Projetos no funil',projetos.length,`${ETAPAS.length} etapas acompanhadas`],
+    ['file','green','Em andamento',ativos.length,`${semanaQueVem} com prazo nos próximos 15 dias`],
+    ['users','green','Entregues',entregues, entregues?'Material pronto para prestação de contas':'Nenhum ainda'],
+    ['bell','gold','Fora do prazo',atrasados, atrasados?'Precisam de uma cobrança':'Tudo em dia 👍']
+  ].map(([ic,cor,lb,v,tr])=>`<article class="stat">
+      <div class="stat__ico stat__ico--${cor}"><i data-i="${ic}"></i></div>
+      <div class="stat__info"><span>${lb}</span><strong>${v}</strong></div>
+      <em class="stat__trend">${tr}</em></article>`).join('');
+  paintIcons(document.getElementById('projKpis'));
+
+  const list=projetosFiltrados();
+  const filtrando=list.length!==projetos.length ||
+    !!(document.getElementById('fProjBusca').value||document.getElementById('fProjResp').value||
+       document.getElementById('fProjPrio').value||document.getElementById('fProjPrazo').value);
+  document.getElementById('fProjLimpar').hidden=!filtrando;
+  document.getElementById('projCount').textContent=filtrando
+    ? `${list.length} de ${projetos.length} projetos` : `${projetos.length} projetos`;
+
+  document.getElementById('projDica').hidden  = projVista!=='quadro';
+  document.getElementById('projBoard').hidden = projVista!=='quadro';
+  document.getElementById('projLista').hidden = projVista!=='lista';
+  if(projVista==='quadro') renderProjQuadro(list); else renderProjLista(list);
+  document.getElementById('emptyProjetos').hidden = list.length>0 || projVista==='quadro';
+}
+
+function cartaoProj(p){
+  const pr=PROJ_PRIO[p.prioridade]||PROJ_PRIO.media;
+  const z=textoPrazo(p.prazo, p.etapa);
+  const n=(p.historico||[]).length;
+  return `<article class="pj pj--${p.prioridade||'media'}" draggable="true" data-proj-card="${p.id}">
+    <div class="pj__top"><b>${p.titulo}</b><span class="tag tag--${pr.c}">${pr.t}</span></div>
+    ${p.resumo?`<p class="pj__desc">${p.resumo}</p>`:''}
+    <div class="pj__bar"><div class="pj__fill" style="width:${p.prog||0}%"></div></div>
+    <div class="pj__meta">
+      ${p.resp?`<span class="pj__av" style="background:${corDe(p.resp)}">${iniciais(p.resp)}</span>${p.resp.split(' ')[0]}`:'<span class="pj__semresp">sem responsável</span>'}
+      ${p.bairro?`<span class="pj__sep">·</span>${p.bairro}`:''}
+      <span class="pj__prazo ${z.cls?'pj__prazo--'+z.cls:''}"><i data-i="calendar"></i>${z.txt}</span>
+    </div>
+    ${n?`<div class="pj__hist"><i data-i="bell"></i>${n} registro(s) · último em ${p.historico[n-1].data}</div>`:''}
+  </article>`;
+}
+
+function renderProjQuadro(list){
+  const b=document.getElementById('projBoard');
+  b.innerHTML=ETAPAS.map(e=>{
+    const cards=list.filter(p=>p.etapa===e.k);
+    return `<section class="kcol" data-etapa-col="${e.k}">
+      <header class="kcol__head"><span class="kcol__dot" style="background:${e.cor}"></span>
+        <b>${e.t}</b><span class="kcol__n">${cards.length}</span></header>
+      <p class="kcol__sub">${e.sub}</p>
+      <div class="kcol__body">${cards.map(cartaoProj).join('') ||
+        '<div class="kcol__vazio">Arraste um cartão para cá</div>'}</div>
+    </section>`;
+  }).join('');
+  paintIcons(b);
+}
+
+function renderProjLista(list){
+  const tb=document.getElementById('tbProjetos');
+  tb.innerHTML=list.map(p=>{
+    const e=ETAPA[p.etapa]||ETAPAS[0], z=textoPrazo(p.prazo, p.etapa), pr=PROJ_PRIO[p.prioridade]||PROJ_PRIO.media;
+    return `<tr class="row-click" data-proj-card="${p.id}">
+      <td class="td-title"><b>${p.titulo}</b><span>${p.bairro||'—'}${p.parceiro?' · '+p.parceiro:''}</span></td>
+      <td><span class="tag tag--${e.tag}">${e.t}</span></td>
+      <td>${p.resp||'—'}</td>
+      <td class="td-date ${z.cls?'prazo--'+z.cls:''}">${z.txt}</td>
+      <td><div class="prog-mini"><div class="prog-mini__bar"><i style="width:${p.prog||0}%"></i></div><span>${p.prog||0}%</span></div></td>
+      <td><span class="tag tag--${pr.c}">${pr.t}</span></td>
+      <td><button class="row-act" data-del-projeto="${p.id}" title="Excluir"><i data-i="trash"></i></button></td></tr>`;
+  }).join('');
+  paintIcons(tb);
+}
+
+/* ===== MOVER DE ETAPA (arrastar ou pelo botão da ficha) ===== */
+function moverProjeto(id, etapa){
+  const p=projetos.find(x=>x.id===id);
+  if(!p || !ETAPA[etapa] || p.etapa===etapa) return;
+  const de=ETAPA[p.etapa]?.t||'—';
+  p.etapa=etapa;
+  if(etapa==='entregue') p.prog=100;
+  else if((p.prog||0)===100 || (p.prog||0)<PROG_BASE[etapa]) p.prog=PROG_BASE[etapa];
+  registrarHist(p, `Etapa mudou de ${de} para ${ETAPA[etapa].t}.`);
+  salvar('projetos',p); renderProjetos(); renderDash();
+  toast(`"${p.titulo}" agora está em ${ETAPA[etapa].t}.`);
+}
+function registrarHist(p, texto){
+  const quem=(typeof quemEstaUsando==='function' && quemEstaUsando()?.nome) || perfil.nome || 'Gabinete';
+  p.historico=[...(p.historico||[]), {data:marcoHist(0), texto, autor:quem}];
+}
+
+/* ===== FICHA DO PROJETO ===== */
+function openProjeto(id){
+  const p=projetos.find(x=>x.id===id); if(!p) return;
+  pjId=id;
+  const e=ETAPA[p.etapa]||ETAPAS[0], pr=PROJ_PRIO[p.prioridade]||PROJ_PRIO.media;
+  document.getElementById('pjTitulo').textContent=p.titulo;
+  document.getElementById('pjTags').innerHTML=
+    `<span class="tag tag--${e.tag}">${e.t}</span><span class="tag tag--${pr.c}">Prioridade ${pr.t.toLowerCase()}</span>`;
+  const d=document.getElementById('pjDesc'); d.textContent=p.resumo||''; d.hidden=!p.resumo;
+
+  const i=ETAPAS.findIndex(x=>x.k===p.etapa);
+  document.getElementById('pjPipe').innerHTML=ETAPAS.map((x,k)=>
+    `<span class="${k<=i?'on':''}" title="${x.t}"></span>`).join('');
+
+  document.getElementById('pjLocal').textContent=p.bairro ? `${p.bairro}, ${CIDADE.nome}` : 'Bairro não informado';
+  document.getElementById('pjParceiro').textContent=p.parceiro || 'Sem órgão ou parceiro definido';
+  document.getElementById('pjContato').textContent=p.contato || 'Sem contato cadastrado';
+  const wa=document.getElementById('pjWhats'), tel=(p.contato||'').replace(/\D/g,'');
+  wa.hidden=tel.length<10;
+  if(!wa.hidden) wa.href=`https://wa.me/55${tel}`;
+  const z=textoPrazo(p.prazo, p.etapa);
+  const pz=document.getElementById('pjPrazo');
+  pz.textContent=p.prazo ? (p.etapa==='entregue' ? z.txt : `Prazo: ${z.txt}`) : 'Sem prazo definido';
+  pz.className='pj-prazo-txt '+(z.cls?'prazo--'+z.cls:'');
+
+  document.getElementById('pjEtapa').innerHTML=ETAPAS.map(x=>`<option value="${x.k}">${x.t}</option>`).join('');
+  document.getElementById('pjEtapa').value=p.etapa;
+  document.getElementById('pjPrio').value=p.prioridade||'media';
+  document.getElementById('pjResp').value=p.resp||'';
+  document.getElementById('pjPrazoIn').value=p.prazo||'';
+  document.getElementById('pjProg').value=p.prog||0;
+  document.getElementById('pjProgTxt').textContent=(p.prog||0)+'%';
+  document.getElementById('pjAvancar').hidden = p.etapa==='entregue';
+
+  renderHist(p);
+  atualizarAssessoresDatalist();
+  paintIcons(document.getElementById('modal-projeto-det'));
+  openModal('modal-projeto-det');
+}
+function renderHist(p){
+  const h=[...(p.historico||[])].reverse();
+  document.getElementById('pjHistCount').textContent=h.length?`${h.length} registro(s)`:'';
+  document.getElementById('pjHist').innerHTML=h.length
+    ? h.map(x=>`<li><time>${x.data}${x.autor?' · '+x.autor:''}</time><p>${x.texto}</p></li>`).join('')
+    : '<li class="timeline__vazio">Nada registrado ainda. Anote abaixo cada conversa, ligação ou resposta recebida.</li>';
+}
+function salvarProjeto(){
+  const p=projetos.find(x=>x.id===pjId); if(!p) return;
+  const novaEtapa=document.getElementById('pjEtapa').value;
+  if(novaEtapa!==p.etapa){
+    registrarHist(p, `Etapa mudou de ${ETAPA[p.etapa]?.t||'—'} para ${ETAPA[novaEtapa].t}.`);
+    p.etapa=novaEtapa;
+  }
+  p.prioridade=document.getElementById('pjPrio').value;
+  p.resp=document.getElementById('pjResp').value.trim();
+  p.prazo=document.getElementById('pjPrazoIn').value;
+  p.prog=+document.getElementById('pjProg').value;
+  if(p.etapa==='entregue') p.prog=100;
+  salvar('projetos',p); renderProjetos(); renderDash(); closeModal(); toast('Projeto atualizado!');
+}
+function avancarProjeto(){
+  const p=projetos.find(x=>x.id===pjId); if(!p) return;
+  const i=ETAPAS.findIndex(x=>x.k===p.etapa);
+  if(i<0 || i>=ETAPAS.length-1) return;
+  moverProjeto(p.id, ETAPAS[i+1].k);
+  openProjeto(p.id);
+}
+function addHistProjeto(){
+  const inp=document.getElementById('pjHistTexto');
+  const txt=inp.value.trim(); if(!txt) return;
+  const p=projetos.find(x=>x.id===pjId); if(!p) return;
+  registrarHist(p, txt);
+  inp.value='';
+  salvar('projetos',p); renderHist(p); renderProjetos(); toast('Contato registrado no histórico.');
+}
+function pedirExcluirProjeto(id){
+  const p=projetos.find(x=>x.id===id); if(!p) return;
+  perguntar({
+    titulo:'Excluir projeto', icone:'target',
+    texto:`"${p.titulo}" sai do funil, junto com todo o histórico de contatos. Esta ação não pode ser desfeita.`,
+    botao:'Excluir projeto',
+    acao:()=>{
+      const i=projetos.findIndex(x=>x.id===id); if(i<0) return;
+      projetos.splice(i,1); apagar('projetos',id); closeModal(); renderProjetos(); renderDash();
+      toast('Projeto excluído.');
+    }
+  });
+}
+function abrirNovoProjeto(){
+  const f=document.getElementById('formProjeto'); f.reset();
+  atualizarAssessoresDatalist(); openModal('modal-projeto');
+  setTimeout(()=>{ try{ f.titulo.focus(); }catch(e){} },80);
 }
 
 /* ===== RENDER: PROJETOS DE LEI (dados reais da Câmara, com filtros) ===== */
@@ -4960,7 +5489,7 @@ const TITLES={
   demandas:['Demandas','Solicitações da população'],
   apoiadores:['Apoiadores','Sua base de contatos'],
   agenda:['Agenda','Compromissos do mandato'],
-  assessores:['Assessores','Equipe do gabinete'], projetos:['Projetos','Iniciativas do mandato'],
+  assessores:['Assessores','Equipe do gabinete'], projetos:['Projetos','Do pedido que chegou até a obra entregue'],
   'projetos-lei':['Projetos de Lei','Propostas legislativas'],
   mapa:['Mapa de demandas','Distribuição por bairro'], relatorios:['Relatórios','Indicadores do mandato'],
   aniversarios:['Aniversários','Não deixe ninguém passar batido'], config:['Configurações','Dados do gabinete e do sistema'],
@@ -5024,10 +5553,11 @@ function toast(msg){
 }
 const ACTIONS={'nova-demanda':()=>openModal('modal-demanda'),'novo-apoiador':()=>openModal('modal-apoiador'),
   'novo-evento':()=>openModal('modal-evento'),'novo-assessor':()=>openModal('modal-assessor'),
+  'novo-projeto':abrirNovoProjeto,
   'export':exportarDados, 'reset':restaurarDados};
 async function exportarDados(){
   const r = await entregarArquivo('mandato-ze-luiz-backup.json',
-    JSON.stringify({demandas,apoiadores,eventos,assessores,perfil},null,2), 'application/json');
+    JSON.stringify({demandas,apoiadores,eventos,assessores,projetos,perfil},null,2), 'application/json');
   if(r === 'ok') toast('Backup exportado com sucesso!');
   else if(r === 'recusado') toast('Download cancelado — nada foi salvo.');
   else toast('Nao foi possivel exportar o backup neste navegador.');
@@ -5057,10 +5587,15 @@ let detId=null, evId=null;
 function ensureIds(){
   const ok = v => typeof v==='string' && v.length>=8;
   let mudou=false;
-  [demandas,apoiadores,eventos,assessores].forEach(lista=>{
+  [demandas,apoiadores,eventos,assessores,projetos].forEach(lista=>{
     lista.forEach(r=>{ if(!ok(r.id)){ r.id=novoId(); mudou=true; } });
   });
   eventos.forEach(e=>{ if(!Array.isArray(e.convidados)) e.convidados=[]; });
+  projetos.forEach(p=>{
+    if(!Array.isArray(p.historico)) p.historico=[];
+    if(!ETAPA[p.etapa]) p.etapa='ideia';
+    if(typeof p.prog!=='number') p.prog=PROG_BASE[p.etapa];
+  });
   if(mudou) cacheLocal();
 }
 function rerenderDemandas(){
@@ -5151,6 +5686,8 @@ document.addEventListener('click', e=>{
   const del=e.target.closest('[data-del-id]');
   const delAp=e.target.closest('[data-del-apoiador]');
   const delAs=e.target.closest('[data-del-assessor]');
+  const delPj=e.target.closest('[data-del-projeto]');
+  const cardPj=e.target.closest('[data-proj-card]');
   const det=e.target.closest('[data-detalhe]');
   if(nav){ e.preventDefault(); go(nav.dataset.view); }
   else if(goEl){ e.preventDefault(); go(goEl.dataset.go); }
@@ -5160,11 +5697,18 @@ document.addEventListener('click', e=>{
   if(del){ e.preventDefault(); e.stopPropagation(); pedirExcluirDemanda(del.dataset.delId); return; }
   if(delAp){ e.preventDefault(); e.stopPropagation(); excluirApoiador(delAp.dataset.delApoiador); return; }
   if(delAs){ e.preventDefault(); e.stopPropagation(); excluirAssessor(delAs.dataset.delAssessor); return; }
+  if(delPj){ e.preventDefault(); e.stopPropagation(); pedirExcluirProjeto(delPj.dataset.delProjeto); return; }
+  if(cardPj){ e.preventDefault(); openProjeto(cardPj.dataset.projCard); return; }
   if(det){ e.preventDefault(); openDetalhe(det.dataset.detalhe); }
   const modo=e.target.closest('[data-modo]');
   if(modo){ mapaModo=modo.dataset.modo;
     document.querySelectorAll('#mapaSeg button').forEach(b=>b.classList.toggle('active', b===modo));
     renderMapa();
+  }
+  const pvista=e.target.closest('[data-pvista]');
+  if(pvista){ projVista=pvista.dataset.pvista;
+    document.querySelectorAll('#projSeg button').forEach(b=>b.classList.toggle('active', b===pvista));
+    renderProjetos();
   }
   const vista=e.target.closest('[data-vista]');
   if(vista){ agendaVista=vista.dataset.vista;
@@ -5302,6 +5846,68 @@ document.getElementById('evExcluir').addEventListener('click',()=>{
       toast('Compromisso excluído.');
     }
   });
+});
+
+/* ===== CRM DE PROJETOS: cliques, arrastar e formulário ===== */
+['fProjBusca','fProjResp','fProjPrio','fProjPrazo'].forEach(id=>
+  document.getElementById(id).addEventListener('input',renderProjetos));
+document.getElementById('fProjLimpar').addEventListener('click',()=>{
+  ['fProjBusca','fProjResp','fProjPrio','fProjPrazo'].forEach(id=>document.getElementById(id).value='');
+  renderProjetos();
+});
+document.getElementById('pjSalvar').addEventListener('click',salvarProjeto);
+document.getElementById('pjAvancar').addEventListener('click',avancarProjeto);
+document.getElementById('pjExcluir').addEventListener('click',()=>pedirExcluirProjeto(pjId));
+document.getElementById('pjHistBtn').addEventListener('click',addHistProjeto);
+document.getElementById('pjHistTexto').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); addHistProjeto(); }
+});
+document.getElementById('pjProg').addEventListener('input',e=>{
+  document.getElementById('pjProgTxt').textContent=e.target.value+'%';
+});
+
+/* arrastar cartão de uma coluna para outra (computador).
+   No celular não existe arrastar: lá o caminho é tocar no cartão e
+   mudar a etapa dentro da ficha, ou usar o botão "Avançar etapa". */
+document.addEventListener('dragstart',e=>{
+  const c=e.target.closest?.('[data-proj-card]'); if(!c) return;
+  pjArrastando=c.dataset.projCard; c.classList.add('is-drag');
+  if(e.dataTransfer){ e.dataTransfer.effectAllowed='move';
+    try{ e.dataTransfer.setData('text/plain', pjArrastando); }catch(err){} }
+});
+document.addEventListener('dragend',()=>{
+  pjArrastando=null;
+  document.querySelectorAll('.pj.is-drag').forEach(c=>c.classList.remove('is-drag'));
+  document.querySelectorAll('.kcol.is-over').forEach(c=>c.classList.remove('is-over'));
+});
+document.addEventListener('dragover',e=>{
+  if(!pjArrastando) return;
+  const col=e.target.closest?.('[data-etapa-col]'); if(!col) return;
+  e.preventDefault();
+  if(e.dataTransfer) e.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.kcol.is-over').forEach(c=>{ if(c!==col) c.classList.remove('is-over'); });
+  col.classList.add('is-over');
+});
+document.addEventListener('drop',e=>{
+  const col=e.target.closest?.('[data-etapa-col]'); if(!col||!pjArrastando) return;
+  e.preventDefault();
+  const id=pjArrastando; pjArrastando=null;
+  document.querySelectorAll('.kcol.is-over').forEach(c=>c.classList.remove('is-over'));
+  moverProjeto(id, col.dataset.etapaCol);
+});
+
+document.getElementById('formProjeto').addEventListener('submit',e=>{
+  e.preventDefault(); const f=new FormData(e.target);
+  const etapa=f.get('etapa')||'ideia';
+  const pj={id:novoId(), titulo:(f.get('titulo')||'').trim(), resumo:(f.get('resumo')||'').trim(),
+    etapa, prog:PROG_BASE[etapa], prioridade:f.get('prioridade')||'media',
+    resp:(f.get('resp')||'').trim(), bairro:(f.get('bairro')||'').trim(),
+    parceiro:(f.get('parceiro')||'').trim(), contato:(f.get('contato')||'').trim(),
+    prazo:f.get('prazo')||'', historico:[]};
+  registrarHist(pj, 'Projeto criado no funil, na etapa '+ETAPA[etapa].t+'.');
+  projetos.unshift(pj);
+  salvar('projetos',pj); e.target.reset(); closeModal(); renderProjetos(); renderDash();
+  toast('Projeto cadastrado no funil!');
 });
 
 /* ===== RELÓGIO ===== */
