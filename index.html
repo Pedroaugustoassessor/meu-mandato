@@ -2097,7 +2097,7 @@ body.is-locked{overflow:hidden}
     <div><strong>Zé Luiz</strong><span>Vereador</span></div>
     <a href="#" class="sidebar__logout" title="Sair"><i data-i="exit"></i></a>
   </div>
-  <div class="app-ver" id="appVer">Login e banco online · v14</div>
+  <div class="app-ver" id="appVer">Login e banco online · v15</div>
 </aside>
 <div class="scrim" id="scrim"></div>
 
@@ -2524,7 +2524,7 @@ body.is-locked{overflow:hidden}
             <label class="field field--full">Nome do parlamentar<input name="nome" required></label>
             <label class="field">Cargo<input name="cargo" required></label>
             <label class="field">Partido<input name="partido" placeholder="Ex.: PT / MDB"></label>
-            <label class="field">Município<input name="cidade" placeholder="Ex.: Ribeirão das Neves"></label>
+            <label class="field">Município<input name="cidade" placeholder="Ex.: Patos de Minas"></label>
             <label class="field">Telefone do gabinete<input name="telefone" placeholder="(00) 0000-0000"></label>
             <div class="form__actions"><button type="submit" class="btn btn--primary">Salvar alterações</button></div>
           </form>
@@ -3655,20 +3655,41 @@ function mostrarModo(){
   const el = document.getElementById('appVer');
   if(!el) return;
   el.textContent = ONLINE
-    ? `Conectado · ${usuario?.email || ''} · v14`
-    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v14`
-                   : 'Modo local (só neste navegador) · v14');
+    ? `Conectado · ${usuario?.email || ''} · v15`
+    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v15`
+                   : 'Modo local (só neste navegador) · v15');
 }
 
-/* ===== BAIXAR TUDO DO BANCO ======================================== */
+/* ===== BAIXAR TUDO DO BANCO ========================================
+   O Supabase devolve no máximo 1.000 linhas por pedido, e cala a boca
+   sobre o resto: um gabinete com quatro anos de demandas via a lista
+   cortada no meio sem nenhum aviso. Por isso buscamos de mil em mil até
+   a página vir incompleta. O desempate por 'id' é obrigatório — muitas
+   demandas têm a mesma data, e sem ele a paginação repete umas e pula
+   outras.
+   ================================================================== */
+const PAGINA = 1000;
+async function baixarTabela(tabela, coluna, crescente){
+  const tudo = [];
+  for(let de = 0; ; de += PAGINA){
+    const r = await sb.from(tabela).select('*')
+      .order(coluna, {ascending: !!crescente})
+      .order('id', {ascending: true})
+      .range(de, de + PAGINA - 1);
+    if(r.error) return { error: r.error };
+    tudo.push(...(r.data || []));
+    if(!r.data || r.data.length < PAGINA) break;
+  }
+  return { data: tudo };
+}
 async function baixarTudo(){
   if(!ONLINE || !usuario) return false;
   const [d, a, e, s, p, g] = await Promise.all([
-    sb.from('demandas').select('*').order('criado_em', {ascending:false}),
-    sb.from('apoiadores').select('*').order('criado_em', {ascending:false}),
-    sb.from('eventos').select('*').order('data', {ascending:true}),
-    sb.from('assessores').select('*').order('criado_em', {ascending:false}),
-    sb.from('projetos').select('*').order('criado_em', {ascending:false}),
+    baixarTabela('demandas',   'criado_em', false),
+    baixarTabela('apoiadores', 'criado_em', false),
+    baixarTabela('eventos',    'data',      true),
+    baixarTabela('assessores', 'criado_em', false),
+    baixarTabela('projetos',   'criado_em', false),
     sb.from('gabinetes').select('*').limit(1).maybeSingle()
   ]);
   if(d.error || a.error || e.error || s.error) return false;
