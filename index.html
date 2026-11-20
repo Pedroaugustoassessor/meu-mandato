@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Mandato — Gabinete Zé Luiz</title>
+<title>Meu Mandato</title>
 <style>
 @font-face {
   font-family: 'Inter';
@@ -1329,7 +1329,11 @@ i[data-i]{width:20px;height:20px;display:inline-block;flex:0 0 auto;background:c
   display:grid;place-items:center;color:var(--slate);transition:.18s}
 .modal__x:hover{border-color:var(--red);color:var(--red)}
 .form{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.field{display:flex;flex-direction:column;gap:6px;font-family:'Sora';font-size:13px;font-weight:600;color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px;font-family:'Sora';font-size:13px;font-weight:600;color:var(--ink);min-width:0}
+/* 'min-width:0' acima e 'width:100%' abaixo: numa grade, o tamanho mínimo
+   de um campo é o do seu conteúdo, e um placeholder comprido empurrava a
+   coluna para fora da caixa no celular. */
+.field input,.field select,.field textarea{min-width:0;max-width:100%}
 .field--full{grid-column:1/-1}
 .field input,.field select{font-family:'Inter';font-weight:400;font-size:14.5px;padding:12px 14px;
   border:1px solid var(--line);border-radius:11px;background:#f8faf8;color:var(--ink);transition:.18s}
@@ -1420,7 +1424,7 @@ i[data-i]{width:20px;height:20px;display:inline-block;flex:0 0 auto;background:c
 
 /* =====================================================================
    PORTA DE ENTRADA
-   A cidade acendendo ao anoitecer: os 80 bairros reais de Patos de Minas
+   A cidade acendendo ao anoitecer: 80 pontos de uma cidade qualquer
    ligam em onda, do Centro para fora. Mesmas coordenadas do Mapa.
    ===================================================================== */
 body.is-locked{overflow:hidden}
@@ -1838,6 +1842,96 @@ body.is-locked{overflow:hidden}
 .gate__card .field--dupla input{text-transform:none}
 .gate__card .field--dupla label:last-child input{text-transform:uppercase}
 
+/* ===== IMPLANTAÇÃO DO GABINETE =====
+   O aviso no painel, a ficha em seções e o assistente de primeiros
+   passos. Tudo isto existe por causa de uma coisa: o sistema é vendido a
+   vereadores de cidades diferentes, e cada um precisa deixá-lo com a
+   própria cara sem pedir ajuda a ninguém. */
+
+/* o aviso no alto do painel, enquanto a ficha não está pronta */
+.implantar{display:flex;align-items:center;gap:18px;margin-bottom:18px;padding:20px 22px;
+  border-radius:var(--r);border:1px solid #d6e7db;
+  background:linear-gradient(135deg,#f4fbf6 0%,#eaf6ee 100%);box-shadow:var(--shadow)}
+.implantar__ico{width:46px;height:46px;flex:0 0 auto;border-radius:14px;display:grid;place-items:center;
+  background:var(--green);color:#fff}
+.implantar__ico i{width:24px;height:24px}
+.implantar__body{flex:1;min-width:0}
+.implantar__body h2{font-size:17px;margin-bottom:3px}
+.implantar__body p{font-size:13.5px;color:var(--slate)}
+
+/* seções dentro da ficha, para não virar um paredão de 18 campos */
+.form__secao{grid-column:1/-1;font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--green-700);border-bottom:1px solid var(--line);padding-bottom:7px;margin-top:10px}
+.form__secao:first-child{margin-top:0}
+.cfg-mapa{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+#cfgCoord{font:400 12.5px/1.45 'Inter',sans-serif;color:var(--muted)}
+#cfgCoord.ok{color:var(--green-700);font-weight:500}
+
+/* notas explicativas (o acervo, os bairros fixos) */
+.cfg-nota{font:400 13.2px/1.6 'Inter',sans-serif;color:var(--slate);background:#f7faf7;
+  border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:10px;
+  padding:13px 15px;margin-bottom:10px}
+.cfg-nota--ok{background:var(--ok-bg);border-color:#cceccf;border-left-color:var(--ok)}
+.cfg-nota strong{font-family:'Sora',sans-serif}
+.cfg-nota em{font-style:normal;font-weight:600;color:var(--ink)}
+
+/* bairros: cadastrar um e ver a lista */
+.panel__botoes{display:flex;gap:8px;flex-wrap:wrap}
+.bairro-add{display:flex;gap:10px;margin:4px 0 14px}
+.bairro-add input{flex:1;font:400 14.5px 'Inter',sans-serif;padding:11px 14px;
+  border:1px solid var(--line);border-radius:12px;background:#f7faf7}
+.bairro-add input:focus{outline:none;border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(0,155,58,.12)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip--bairro{display:inline-flex;align-items:center;gap:6px;background:#eef5ef;color:var(--green-900);
+  border:1px solid #dfeae1}
+.chip--bairro.chip--vazio{background:#fff;color:var(--slate);border-style:dashed}
+.chip--bairro button{border:0;background:transparent;cursor:pointer;color:var(--muted);
+  font-size:15px;line-height:1;padding:0 0 1px}
+.chip--bairro button:hover{color:var(--red)}
+
+/* o mapa quando ainda não sabe de que cidade se fala */
+.mapa-aviso{padding:46px 28px}
+.mapa-aviso h4{font-size:16px;color:var(--ink);margin-bottom:8px}
+.mapa-aviso p{max-width:420px;margin:0 auto 16px}
+
+/* ===== o assistente ===== */
+.imp-sub{font:400 13px/1.5 'Inter',sans-serif;color:var(--slate);margin-top:3px}
+.imp-trilha{display:flex;gap:6px;padding:16px 24px 0;flex-wrap:wrap}
+.imp-ponto{display:flex;align-items:center;gap:7px;font:600 12px 'Sora',sans-serif;color:var(--muted)}
+.imp-ponto b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  background:#eef3ee;color:var(--muted);font-size:11.5px}
+.imp-ponto:not(:last-child)::after{content:'';width:16px;height:1px;background:var(--line);margin-left:3px}
+.imp-ponto em{font-style:normal}
+.imp-ponto.e-agora{color:var(--ink)}
+.imp-ponto.e-agora b{background:var(--green);color:#fff}
+.imp-ponto.e-feito b{background:var(--ok-bg);color:var(--ok)}
+.imp-form{display:block}
+.imp-passo{padding:20px 24px 4px}
+.imp-texto{font:400 13.4px/1.6 'Inter',sans-serif;color:var(--slate);margin-bottom:4px}
+.imp-aviso{font:400 12.8px/1.55 'Inter',sans-serif;color:var(--slate);margin-top:9px}
+.imp-rodape{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 24px 22px;border-top:1px solid var(--line);margin-top:8px;flex-wrap:wrap}
+.imp-botoes{display:flex;gap:10px;margin-left:auto}
+.imp-pronto{padding-bottom:4px}
+.imp-resumo{display:grid;grid-template-columns:118px 1fr;gap:9px 16px;margin-bottom:14px}
+.imp-resumo dt{font:600 12px 'Sora',sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.imp-resumo dd{font:400 13.6px/1.5 'Inter',sans-serif;color:var(--ink)}
+.imp-resumo dd.imp-vazio{color:var(--muted);font-style:italic}
+
+@media(max-width:620px){
+  #formImplantar .imp-passo,#formPerfil{grid-template-columns:1fr}
+  .implantar{flex-wrap:wrap}
+  .implantar__body{flex-basis:100%;order:2}
+  .implantar .btn{width:100%;order:3}
+  .imp-ponto:not(.e-agora) em,.imp-ponto:not(:last-child)::after{display:none}
+  .imp-resumo{grid-template-columns:1fr;gap:2px 0}
+  .imp-resumo dd{margin-bottom:9px}
+  .imp-botoes{width:100%}
+  .imp-botoes .btn{flex:1}
+  .bairro-add{flex-wrap:wrap}
+  .bairro-add .btn{width:100%}
+}
+
 /* ===== CRM DE PROJETOS NO CELULAR =====
    Fica no fim do arquivo de propósito: assim estas regras vêm depois das
    do detalhe da demanda e realmente valem na tela pequena. */
@@ -1868,7 +1962,9 @@ body.is-locked{overflow:hidden}
 <!-- ===== PORTA DE ENTRADA (login) ===== -->
 <div class="gate" id="gate" hidden>
 
-  <!-- A cidade: os 80 bairros reais de Patos de Minas, acendendo do Centro para fora -->
+  <!-- A cidade da porta de entrada: 80 pontos acendendo do Centro para fora.
+       É o desenho de uma cidade qualquer, não de uma cidade específica — o
+       sistema é vendido a câmaras de municípios diferentes. -->
   <section class="gate__cidade" aria-hidden="true">
     <svg class="cons" viewBox="0 0 780 1000" preserveAspectRatio="xMidYMid slice">
     <g class="cons__fios">
@@ -1883,90 +1979,90 @@ body.is-locked{overflow:hidden}
     </g>
     <g class="cons__luzes">
       <circle class="e-centro" cx="331.4" cy="412.6" r="7.5" style="--d:0.45s" data-b="Centro"/>
-      <circle cx="364.0" cy="361.9" r="3.4" style="--d:0.47s" data-b="São Francisco"/>
-      <circle cx="391.9" cy="408.8" r="3.4" style="--d:0.48s" data-b="Jardim Centro"/>
-      <circle cx="386.2" cy="448.6" r="3.4" style="--d:0.50s" data-b="Antônio Caixeta"/>
-      <circle cx="265.7" cy="395.9" r="3.4" style="--d:0.51s" data-b="Sobradinho"/>
-      <circle cx="265.2" cy="368.4" r="3.4" style="--d:0.53s" data-b="Jardim América"/>
-      <circle cx="392.3" cy="360.0" r="3.4" style="--d:0.55s" data-b="Jardim Paraíso"/>
-      <circle cx="418.0" cy="445.2" r="3.4" style="--d:0.56s" data-b="Cidade Jardim"/>
-      <circle cx="347.4" cy="315.9" r="3.4" style="--d:0.58s" data-b="Aurélio Caixeta"/>
-      <circle cx="233.1" cy="404.1" r="3.4" style="--d:0.59s" data-b="Santo Antônio"/>
-      <circle cx="428.3" cy="384.3" r="3.4" style="--d:0.61s" data-b="Valparaíso"/>
-      <circle cx="308.7" cy="314.2" r="3.4" style="--d:0.63s" data-b="Rosário"/>
-      <circle cx="405.1" cy="342.5" r="3.4" style="--d:0.64s" data-b="Jardim Floresta"/>
-      <circle cx="241.8" cy="461.4" r="3.4" style="--d:0.66s" data-b="Várzea"/>
-      <circle cx="257.5" cy="497.5" r="3.4" style="--d:0.67s" data-b="Brasil"/>
-      <circle cx="261.3" cy="324.3" r="3.4" style="--d:0.69s" data-b="Lagoinha"/>
-      <circle cx="233.7" cy="351.2" r="3.4" style="--d:0.71s" data-b="Guanabara"/>
-      <circle cx="446.0" cy="428.2" r="3.4" style="--d:0.72s" data-b="Jardim Recanto"/>
-      <circle cx="284.9" cy="523.3" r="3.4" style="--d:0.74s" data-b="Lagoa Grande"/>
-      <circle cx="407.7" cy="319.6" r="3.4" style="--d:0.75s" data-b="Vila Garcia"/>
-      <circle cx="372.5" cy="528.8" r="3.4" style="--d:0.77s" data-b="Eldorado"/>
-      <circle cx="343.0" cy="535.8" r="3.4" style="--d:0.79s" data-b="Cônego Getúlio"/>
-      <circle cx="432.7" cy="504.8" r="3.4" style="--d:0.80s" data-b="Boa Vista"/>
-      <circle cx="289.0" cy="279.3" r="3.4" style="--d:0.82s" data-b="Nossa Senhora das Graças"/>
-      <circle cx="326.3" cy="271.6" r="3.4" style="--d:0.83s" data-b="Caiçaras"/>
-      <circle cx="461.7" cy="357.4" r="3.4" style="--d:0.85s" data-b="Jardim Califórnia"/>
-      <circle cx="380.2" cy="277.5" r="3.4" style="--d:0.87s" data-b="Abner Afonso"/>
-      <circle cx="474.4" cy="472.4" r="3.4" style="--d:0.88s" data-b="Sebastião Amorim"/>
-      <circle cx="192.4" cy="489.7" r="3.4" style="--d:0.90s" data-b="São José Operário"/>
-      <circle cx="180.2" cy="363.1" r="3.4" style="--d:0.91s" data-b="Copacabana"/>
-      <circle cx="232.9" cy="286.9" r="3.4" style="--d:0.93s" data-b="Cerrado"/>
-      <circle cx="234.0" cy="539.9" r="3.4" style="--d:0.95s" data-b="Santa Terezinha"/>
-      <circle cx="195.5" cy="305.3" r="3.4" style="--d:0.96s" data-b="Laranjeiras"/>
-      <circle cx="283.0" cy="589.3" r="2.6" style="--d:0.98s" data-b="Cristo Redentor"/>
-      <circle cx="507.4" cy="361.1" r="2.6" style="--d:0.99s" data-b="Novo Horizonte"/>
-      <circle cx="165.6" cy="496.8" r="2.6" style="--d:1.01s" data-b="Brasília"/>
-      <circle cx="337.1" cy="219.1" r="2.6" style="--d:1.03s" data-b="Alto dos Caiçaras"/>
-      <circle cx="391.0" cy="597.3" r="2.6" style="--d:1.04s" data-b="Jardim Peluzzo"/>
-      <circle cx="163.1" cy="514.2" r="2.6" style="--d:1.06s" data-b="Nossa Senhora Aparecida"/>
-      <circle cx="210.0" cy="255.0" r="2.6" style="--d:1.07s" data-b="Padre Eustáquio"/>
-      <circle cx="486.6" cy="287.0" r="2.6" style="--d:1.09s" data-b="Nova Floresta"/>
-      <circle cx="350.6" cy="621.7" r="2.6" style="--d:1.11s" data-b="Jardim dos Andrades"/>
-      <circle cx="233.7" cy="599.4" r="2.6" style="--d:1.12s" data-b="Santa Luzia"/>
-      <circle cx="237.0" cy="216.7" r="2.6" style="--d:1.14s" data-b="Caramurú"/>
-      <circle cx="536.6" cy="317.9" r="2.6" style="--d:1.15s" data-b="Jardim Aquários"/>
-      <circle cx="554.1" cy="459.9" r="2.6" style="--d:1.17s" data-b="Jardim Panorâmico"/>
-      <circle cx="481.8" cy="230.8" r="2.6" style="--d:1.19s" data-b="Bela Vista"/>
+      <circle cx="364.0" cy="361.9" r="3.4" style="--d:0.47s" data-b="Centenário"/>
+      <circle cx="391.9" cy="408.8" r="3.4" style="--d:0.48s" data-b="Jardim América"/>
+      <circle cx="386.2" cy="448.6" r="3.4" style="--d:0.50s" data-b="Vila Nova"/>
+      <circle cx="265.7" cy="395.9" r="3.4" style="--d:0.51s" data-b="Boa Vista"/>
+      <circle cx="265.2" cy="368.4" r="3.4" style="--d:0.53s" data-b="São José"/>
+      <circle cx="392.3" cy="360.0" r="3.4" style="--d:0.55s" data-b="Santa Rita"/>
+      <circle cx="418.0" cy="445.2" r="3.4" style="--d:0.56s" data-b="Jardim Primavera"/>
+      <circle cx="347.4" cy="315.9" r="3.4" style="--d:0.58s" data-b="Alto da Serra"/>
+      <circle cx="233.1" cy="404.1" r="3.4" style="--d:0.59s" data-b="Vila Esperança"/>
+      <circle cx="428.3" cy="384.3" r="3.4" style="--d:0.61s" data-b="Nossa Senhora Aparecida"/>
+      <circle cx="308.7" cy="314.2" r="3.4" style="--d:0.63s" data-b="Parque das Palmeiras"/>
+      <circle cx="405.1" cy="342.5" r="3.4" style="--d:0.64s" data-b="São Sebastião"/>
+      <circle cx="241.8" cy="461.4" r="3.4" style="--d:0.66s" data-b="Jardim Europa"/>
+      <circle cx="257.5" cy="497.5" r="3.4" style="--d:0.67s" data-b="Bela Vista"/>
+      <circle cx="261.3" cy="324.3" r="3.4" style="--d:0.69s" data-b="Vila Operária"/>
+      <circle cx="233.7" cy="351.2" r="3.4" style="--d:0.71s" data-b="Santo Antônio"/>
+      <circle cx="446.0" cy="428.2" r="3.4" style="--d:0.72s" data-b="Cidade Nova"/>
+      <circle cx="284.9" cy="523.3" r="3.4" style="--d:0.74s" data-b="Jardim Paraíso"/>
+      <circle cx="407.7" cy="319.6" r="3.4" style="--d:0.75s" data-b="Morada do Sol"/>
+      <circle cx="372.5" cy="528.8" r="3.4" style="--d:0.77s" data-b="São Cristóvão"/>
+      <circle cx="343.0" cy="535.8" r="3.4" style="--d:0.79s" data-b="Vila Rica"/>
+      <circle cx="432.7" cy="504.8" r="3.4" style="--d:0.80s" data-b="Parque Industrial"/>
+      <circle cx="289.0" cy="279.3" r="3.4" style="--d:0.82s" data-b="Jardim Bandeirantes"/>
+      <circle cx="326.3" cy="271.6" r="3.4" style="--d:0.83s" data-b="Santa Luzia"/>
+      <circle cx="461.7" cy="357.4" r="3.4" style="--d:0.85s" data-b="Vila Formosa"/>
+      <circle cx="380.2" cy="277.5" r="3.4" style="--d:0.87s" data-b="Recanto Verde"/>
+      <circle cx="474.4" cy="472.4" r="3.4" style="--d:0.88s" data-b="Jardim das Acácias"/>
+      <circle cx="192.4" cy="489.7" r="3.4" style="--d:0.90s" data-b="São Pedro"/>
+      <circle cx="180.2" cy="363.1" r="3.4" style="--d:0.91s" data-b="Alto Alegre"/>
+      <circle cx="232.9" cy="286.9" r="3.4" style="--d:0.93s" data-b="Vila Belmiro"/>
+      <circle cx="234.0" cy="539.9" r="3.4" style="--d:0.95s" data-b="Parque São Jorge"/>
+      <circle cx="195.5" cy="305.3" r="3.4" style="--d:0.96s" data-b="Jardim Santa Helena"/>
+      <circle cx="283.0" cy="589.3" r="2.6" style="--d:0.98s" data-b="Nova Esperança"/>
+      <circle cx="507.4" cy="361.1" r="2.6" style="--d:0.99s" data-b="Vila Marta"/>
+      <circle cx="165.6" cy="496.8" r="2.6" style="--d:1.01s" data-b="Chácara do Lago"/>
+      <circle cx="337.1" cy="219.1" r="2.6" style="--d:1.03s" data-b="São Judas"/>
+      <circle cx="391.0" cy="597.3" r="2.6" style="--d:1.04s" data-b="Jardim Ipanema"/>
+      <circle cx="163.1" cy="514.2" r="2.6" style="--d:1.06s" data-b="Monte Castelo"/>
+      <circle cx="210.0" cy="255.0" r="2.6" style="--d:1.07s" data-b="Vila Prudente"/>
+      <circle cx="486.6" cy="287.0" r="2.6" style="--d:1.09s" data-b="Residencial das Flores"/>
+      <circle cx="350.6" cy="621.7" r="2.6" style="--d:1.11s" data-b="Santa Mônica"/>
+      <circle cx="233.7" cy="599.4" r="2.6" style="--d:1.12s" data-b="Jardim Alvorada"/>
+      <circle cx="237.0" cy="216.7" r="2.6" style="--d:1.14s" data-b="Vila União"/>
+      <circle cx="536.6" cy="317.9" r="2.6" style="--d:1.15s" data-b="Parque do Sol"/>
+      <circle cx="554.1" cy="459.9" r="2.6" style="--d:1.17s" data-b="São Benedito"/>
+      <circle cx="481.8" cy="230.8" r="2.6" style="--d:1.19s" data-b="Jardim Planalto"/>
       <circle cx="243.1" cy="631.7" r="2.6" style="--d:1.20s" data-b="Vila Rosa"/>
-      <circle cx="533.9" cy="535.4" r="2.6" style="--d:1.22s" data-b="Belvedere"/>
-      <circle cx="538.7" cy="288.6" r="2.6" style="--d:1.23s" data-b="Alto da Colina"/>
-      <circle cx="307.6" cy="656.2" r="2.6" style="--d:1.25s" data-b="Jardim Paulistano"/>
-      <circle cx="439.1" cy="189.9" r="2.6" style="--d:1.27s" data-b="Chácaras Caiçaras"/>
-      <circle cx="577.0" cy="341.2" r="2.6" style="--d:1.28s" data-b="Residencial Monjolo"/>
-      <circle cx="411.7" cy="661.6" r="2.6" style="--d:1.30s" data-b="Jardim Céu Azul"/>
-      <circle cx="330.9" cy="147.9" r="2.6" style="--d:1.31s" data-b="Queiroz de Melo"/>
-      <circle cx="281.4" cy="150.1" r="2.6" style="--d:1.33s" data-b="Jardim Itamaraty"/>
-      <circle cx="218.6" cy="168.6" r="2.6" style="--d:1.35s" data-b="Alvorada"/>
-      <circle cx="335.5" cy="687.5" r="2.6" style="--d:1.36s" data-b="Cidade Nova"/>
-      <circle cx="139.8" cy="198.7" r="2.6" style="--d:1.38s" data-b="Residencial Sorriso"/>
-      <circle cx="594.4" cy="294.8" r="2.6" style="--d:1.39s" data-b="Jardim Esperança"/>
-      <circle cx="582.8" cy="263.7" r="2.6" style="--d:1.41s" data-b="Morada do Sol"/>
-      <circle cx="456.7" cy="681.7" r="2.6" style="--d:1.43s" data-b="Residencial Gramado"/>
-      <circle cx="625.7" cy="474.6" r="2.6" style="--d:1.44s" data-b="Afonso Queiroz"/>
-      <circle cx="166.0" cy="664.2" r="2.6" style="--d:1.46s" data-b="Paranaíba"/>
-      <circle cx="72.0" cy="230.7" r="2.6" style="--d:1.47s" data-b="Jardim Quebec"/>
-      <circle cx="382.5" cy="731.8" r="2.6" style="--d:1.49s" data-b="Ipanema"/>
-      <circle cx="93.9" cy="187.9" r="2.6" style="--d:1.51s" data-b="Coração Eucarístico"/>
-      <circle cx="191.4" cy="105.6" r="2.6" style="--d:1.52s" data-b="Nossa Senhora de Fátima"/>
-      <circle cx="528.1" cy="711.6" r="2.6" style="--d:1.54s" data-b="Campos Elíseos"/>
-      <circle cx="536.3" cy="114.9" r="2.6" style="--d:1.55s" data-b="das Palmeiras"/>
-      <circle cx="618.8" cy="192.3" r="2.6" style="--d:1.57s" data-b="Alto Limoeiro"/>
-      <circle cx="166.4" cy="72.0" r="2.6" style="--d:1.59s" data-b="Residencial Barreiro"/>
-      <circle cx="695.3" cy="281.5" r="2.6" style="--d:1.60s" data-b="Alto da Serra"/>
-      <circle cx="708.0" cy="525.6" r="2.6" style="--d:1.62s" data-b="Morada da Serra"/>
-      <circle cx="559.3" cy="744.7" r="2.6" style="--d:1.63s" data-b="Jardim dos Lagos"/>
-      <circle cx="481.9" cy="828.0" r="2.6" style="--d:1.65s" data-b="Planalto"/>
-      <circle cx="621.8" cy="785.4" r="2.6" style="--d:1.67s" data-b="Distrito Industrial II"/>
-      <circle cx="394.2" cy="912.7" r="2.6" style="--d:1.68s" data-b="Jardim Itália"/>
-      <circle cx="636.5" cy="838.8" r="2.6" style="--d:1.70s" data-b="Distrito Industrial I"/>
-      <circle cx="526.4" cy="928.0" r="2.6" style="--d:1.71s" data-b="Novo Planalto"/>
+      <circle cx="533.9" cy="535.4" r="2.6" style="--d:1.22s" data-b="Serra Verde"/>
+      <circle cx="538.7" cy="288.6" r="2.6" style="--d:1.23s" data-b="Nova Cidade"/>
+      <circle cx="307.6" cy="656.2" r="2.6" style="--d:1.25s" data-b="Jardim Tropical"/>
+      <circle cx="439.1" cy="189.9" r="2.6" style="--d:1.27s" data-b="Vila Carmela"/>
+      <circle cx="577.0" cy="341.2" r="2.6" style="--d:1.28s" data-b="Campo Belo"/>
+      <circle cx="411.7" cy="661.6" r="2.6" style="--d:1.30s" data-b="São Vicente"/>
+      <circle cx="330.9" cy="147.9" r="2.6" style="--d:1.31s" data-b="Jardim Guanabara"/>
+      <circle cx="281.4" cy="150.1" r="2.6" style="--d:1.33s" data-b="Vila Mariana"/>
+      <circle cx="218.6" cy="168.6" r="2.6" style="--d:1.35s" data-b="Pedra Branca"/>
+      <circle cx="335.5" cy="687.5" r="2.6" style="--d:1.36s" data-b="Residencial Primavera"/>
+      <circle cx="139.8" cy="198.7" r="2.6" style="--d:1.38s" data-b="Santa Terezinha"/>
+      <circle cx="594.4" cy="294.8" r="2.6" style="--d:1.39s" data-b="Jardim Panorama"/>
+      <circle cx="582.8" cy="263.7" r="2.6" style="--d:1.41s" data-b="Vila Industrial"/>
+      <circle cx="456.7" cy="681.7" r="2.6" style="--d:1.43s" data-b="Morro Alto"/>
+      <circle cx="625.7" cy="474.6" r="2.6" style="--d:1.44s" data-b="São Lucas"/>
+      <circle cx="166.0" cy="664.2" r="2.6" style="--d:1.46s" data-b="Parque Real"/>
+      <circle cx="72.0" cy="230.7" r="2.6" style="--d:1.47s" data-b="Jardim Eldorado"/>
+      <circle cx="382.5" cy="731.8" r="2.6" style="--d:1.49s" data-b="Vila Progresso"/>
+      <circle cx="93.9" cy="187.9" r="2.6" style="--d:1.51s" data-b="Lagoa Seca"/>
+      <circle cx="191.4" cy="105.6" r="2.6" style="--d:1.52s" data-b="Novo Horizonte"/>
+      <circle cx="528.1" cy="711.6" r="2.6" style="--d:1.54s" data-b="Jardim Brasília"/>
+      <circle cx="536.3" cy="114.9" r="2.6" style="--d:1.55s" data-b="Vila Santana"/>
+      <circle cx="618.8" cy="192.3" r="2.6" style="--d:1.57s" data-b="Alto do Cruzeiro"/>
+      <circle cx="166.4" cy="72.0" r="2.6" style="--d:1.59s" data-b="São Geraldo"/>
+      <circle cx="695.3" cy="281.5" r="2.6" style="--d:1.60s" data-b="Parque das Nações"/>
+      <circle cx="708.0" cy="525.6" r="2.6" style="--d:1.62s" data-b="Jardim Imperial"/>
+      <circle cx="559.3" cy="744.7" r="2.6" style="--d:1.63s" data-b="Vila Aurora"/>
+      <circle cx="481.9" cy="828.0" r="2.6" style="--d:1.65s" data-b="Boa Esperança"/>
+      <circle cx="621.8" cy="785.4" r="2.6" style="--d:1.67s" data-b="Nova Aliança"/>
+      <circle cx="394.2" cy="912.7" r="2.6" style="--d:1.68s" data-b="Jardim Riviera"/>
+      <circle cx="636.5" cy="838.8" r="2.6" style="--d:1.70s" data-b="Distrito Industrial"/>
+      <circle cx="526.4" cy="928.0" r="2.6" style="--d:1.71s" data-b="Portal da Cidade"/>
     </g>    </svg>
 
     <div class="cidade__legenda">
-      <span class="cidade__eyebrow">Patos de Minas · Minas Gerais</span>
-      <p class="cidade__frase">Oitenta bairros.<br><em>Um mandato.</em></p>
+      <span class="cidade__eyebrow">Câmara Municipal · o mandato por dentro</span>
+      <p class="cidade__frase">A cidade inteira.<br><em>Um mandato.</em></p>
       <span class="cidade__bairro" id="gateBairro"></span>
     </div>
   </section>
@@ -1984,7 +2080,7 @@ body.is-locked{overflow:hidden}
           <h1 class="marca__nome">Mandato</h1>
         </span>
       </header>
-      <p class="marca__papel" data-gabinete>Gabinete Zé Luiz</p>
+      <p class="marca__papel" data-gabinete>Gestão de gabinete parlamentar</p>
 
       <!-- verificando sessão -->
       <div class="gate__step" id="gateLoading">
@@ -2024,7 +2120,7 @@ body.is-locked{overflow:hidden}
           </label>
           <div class="field field--dupla" id="campoMunicipio" hidden>
             <label><span>Município</span>
-              <input type="text" name="municipio" autocomplete="address-level2" placeholder="Patos de Minas"></label>
+              <input type="text" name="municipio" autocomplete="address-level2" placeholder="o nome da sua cidade"></label>
             <label><span>UF</span>
               <input type="text" name="uf" maxlength="2" autocomplete="address-level1" placeholder="MG"></label>
           </div>
@@ -2069,7 +2165,7 @@ body.is-locked{overflow:hidden}
     <span class="brand__flag" aria-hidden="true">
       <svg viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#009B3A"/><polygon points="20,6.5 33,15 7,15" fill="#FFDF00"/><rect x="11.5" y="16.6" width="3.4" height="12" fill="#FFFFFF"/><rect x="18.3" y="16.6" width="3.4" height="12" fill="#FFFFFF"/><rect x="25.1" y="16.6" width="3.4" height="12" fill="#FFFFFF"/><rect x="7.5" y="29.4" width="25" height="3.2" rx="1.6" fill="#FFDF00"/></svg>
     </span>
-    <span class="brand__name">MEU<strong>MANDATO</strong><em data-gabinete>Gabinete Zé Luiz</em></span>
+    <span class="brand__name">MEU<strong>MANDATO</strong><em data-gabinete></em></span>
   </div>
 
   <nav class="menu">
@@ -2079,8 +2175,8 @@ body.is-locked{overflow:hidden}
     <a class="menu__item" data-view="assessores" href="#"><i data-i="users"></i>Assessores</a>
     <a class="menu__item" data-view="apoiadores" href="#"><i data-i="heart"></i>Apoiadores</a>
     <a class="menu__item" data-view="projetos" href="#"><i data-i="target"></i>Projetos</a>
-    <a class="menu__item" data-view="projetos-lei" href="#"><i data-i="scale"></i>Projetos de Lei</a>
-    <a class="menu__item" data-view="legis" href="#"><i data-i="search"></i>Inteligência Legislativa</a>
+    <a class="menu__item" data-view="projetos-lei" href="#" id="menuLeis" hidden><i data-i="scale"></i>Projetos de Lei</a>
+    <a class="menu__item" data-view="legis" href="#" id="menuLegis" hidden><i data-i="search"></i>Inteligência Legislativa</a>
 
     <span class="menu__label">Rotina</span>
     <a class="menu__item" data-view="agenda" href="#"><i data-i="calendar"></i>Agenda<span class="menu__badge" id="badgeAgenda" hidden>0</span></a>
@@ -2094,7 +2190,7 @@ body.is-locked{overflow:hidden}
 
   <div class="sidebar__user">
     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
-    <div><strong>Zé Luiz</strong><span>Vereador</span></div>
+    <div><strong>—</strong><span>Gabinete</span></div>
     <a href="#" class="sidebar__logout" title="Sair"><i data-i="exit"></i></a>
   </div>
   <div class="app-ver" id="appVer">Login e banco online · v15</div>
@@ -2124,7 +2220,7 @@ body.is-locked{overflow:hidden}
       <button class="icon-btn has-dot" aria-label="Notificações"><i data-i="bell"></i></button>
       <div class="topbar__me">
         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
-        <div><strong>Zé Luiz</strong><span>Vereador</span></div>
+        <div><strong>—</strong><span>Gabinete</span></div>
       </div>
     </div>
   </header>
@@ -2134,6 +2230,18 @@ body.is-locked{overflow:hidden}
 
     <!-- ============ DASHBOARD ============ -->
     <section class="view is-visible" id="view-dashboard">
+
+      <!-- Enquanto a ficha do gabinete não estiver pronta, é a primeira
+           coisa que o vereador vê. Some sozinho quando ele termina. -->
+      <article class="implantar" id="avisoImplantar" hidden>
+        <div class="implantar__ico"><i data-i="gear"></i></div>
+        <div class="implantar__body">
+          <h2>Seu gabinete em cinco minutos</h2>
+          <p id="avisoImplantarTexto">Falta dizer ao sistema quem você é, de que cidade e como o gabinete atende. Depois disso o mapa, os relatórios e os documentos saem com a sua cara.</p>
+        </div>
+        <button type="button" class="btn btn--primary" onclick="abrirImplantacao()">Começar</button>
+      </article>
+
       <div class="today">
         <article class="banner banner--birthday">
           <div class="banner__ico"><i data-i="cake"></i></div>
@@ -2385,7 +2493,7 @@ body.is-locked{overflow:hidden}
         <div class="toolbar__filters">
           <div class="seg" id="mapaSeg">
             <button type="button" data-modo="demandas" class="active">Demandas</button>
-            <button type="button" data-modo="indicacoes">Indicações</button>
+            <button type="button" data-modo="indicacoes" id="modoIndicacoes" hidden>Indicações</button>
             <button type="button" data-modo="apoiadores">Apoiadores</button>
           </div>
           <select class="select mapa-fdem" id="fMapaPrio">
@@ -2518,23 +2626,86 @@ body.is-locked{overflow:hidden}
     <!-- ============ CONFIGURAÇÕES ============ -->
     <section class="view" id="view-config">
       <div class="cfg">
+
+        <!-- A ficha do gabinete. É daqui que saem o nome no topo, o
+             cabeçalho dos relatórios em PDF, o centro do mapa e o
+             telefone que a equipe passa para o cidadão. -->
         <div class="panel">
-          <header class="panel__head"><div><h3>Perfil do gabinete</h3><p>Estes dados aparecem no topo e no menu do sistema</p></div></header>
+          <header class="panel__head">
+            <div><h3>Ficha do gabinete</h3><p>É daqui que saem o nome no topo, o cabeçalho dos relatórios e o mapa da cidade</p></div>
+            <button type="button" class="btn btn--ghost" id="btnImplantacao">Assistente de implantação</button>
+          </header>
           <form class="form" id="formPerfil">
-            <label class="field field--full">Nome do parlamentar<input name="nome" required></label>
-            <label class="field">Cargo<input name="cargo" required></label>
-            <label class="field">Partido<input name="partido" placeholder="Ex.: PT / MDB"></label>
-            <label class="field">Município<input name="cidade" placeholder="Ex.: Patos de Minas"></label>
-            <label class="field">Telefone do gabinete<input name="telefone" placeholder="(00) 0000-0000"></label>
+
+            <h4 class="form__secao">O parlamentar</h4>
+            <label class="field">Nome do parlamentar<input name="nome" required placeholder="como o eleitor te conhece"></label>
+            <label class="field">Cargo
+              <select name="cargo">
+                <option>Vereador</option><option>Vereadora</option>
+                <option>Presidente da Câmara</option>
+                <option>Deputado Estadual</option><option>Deputada Estadual</option>
+                <option>Prefeito</option><option>Prefeita</option>
+              </select></label>
+            <label class="field">Partido<input name="partido" placeholder="Ex.: MDB"></label>
+            <label class="field">Legislatura<input name="legislatura" placeholder="Ex.: 2025–2028"></label>
+            <label class="field field--full">Nome do gabinete<input name="gabinete" placeholder="em branco, o sistema usa &quot;Gabinete&quot; e o seu nome"></label>
+
+            <h4 class="form__secao">Contato do gabinete</h4>
+            <label class="field">Telefone<input name="telefone" placeholder="(00) 0000-0000"></label>
+            <label class="field">WhatsApp<input name="whatsapp" placeholder="(00) 00000-0000"></label>
+            <label class="field">E-mail<input type="email" name="email" placeholder="gabinete@camara.mg.gov.br"></label>
+            <label class="field">Horário de atendimento<input name="horario" placeholder="Seg a sex, 8h às 17h"></label>
+            <label class="field field--full">Endereço do gabinete<input name="endereco" placeholder="Rua, número, sala"></label>
+            <label class="field">CEP<input name="cep" placeholder="00000-000"></label>
+
+            <h4 class="form__secao">O município</h4>
+            <label class="field">Município<input name="cidade" required placeholder="Ex.: Uberaba"></label>
+            <label class="field">UF<input name="uf" maxlength="2" placeholder="MG" style="text-transform:uppercase"></label>
+            <label class="field field--full">Câmara Municipal<input name="camaraNome" placeholder="Câmara Municipal de ..."></label>
+            <label class="field field--full">Site da Câmara<input name="camaraSite" placeholder="https://"></label>
+            <div class="field field--full cfg-mapa">
+              <button type="button" class="btn btn--ghost" id="btnLocalizarCidade">Localizar a cidade no mapa</button>
+              <small id="cfgCoord">O centro da cidade é o que posiciona o mapa de demandas.</small>
+            </div>
+
+            <h4 class="form__secao">Onde o mandato aparece</h4>
+            <label class="field">Instagram<input name="instagram" placeholder="@seuperfil"></label>
+            <label class="field">Facebook<input name="facebook" placeholder="/suapagina"></label>
+            <label class="field field--full">Site do mandato<input name="site" placeholder="https://"></label>
+
             <div class="form__actions"><button type="submit" class="btn btn--primary">Salvar alterações</button></div>
           </form>
         </div>
 
+        <!-- Os bairros são o esqueleto do mapa e do cadastro de demandas.
+             Cada cidade tem os seus, e é aqui que o gabinete os mantém. -->
         <div class="panel">
-          <header class="panel__head"><div><h3>Dados do sistema</h3><p>Faça backup ou volte aos dados de demonstração</p></div></header>
+          <header class="panel__head">
+            <div><h3>Bairros da cidade</h3><p id="cfgBairrosSub">—</p></div>
+            <div class="panel__botoes">
+              <button type="button" class="btn btn--ghost" id="btnBairrosDasDemandas">Tirar das demandas</button>
+              <button type="button" class="btn btn--ghost" id="btnBuscarBairros">Buscar no OpenStreetMap</button>
+            </div>
+          </header>
+          <form class="bairro-add" id="formBairro">
+            <input name="nome" placeholder="Nome do bairro ou da localidade" autocomplete="off">
+            <button type="submit" class="btn btn--primary">Adicionar</button>
+          </form>
+          <p class="cfg-nota" id="cfgBairrosNota" hidden></p>
+          <div class="chips" id="cfgBairros"></div>
+        </div>
+
+        <!-- O que é do cliente e o que não é. -->
+        <div class="panel" id="panelAcervo">
+          <header class="panel__head"><div><h3>Acervo legislativo</h3><p>A legislação da sua câmara dentro do sistema</p></div></header>
+          <div id="cfgAcervo"></div>
+        </div>
+
+        <div class="panel">
+          <header class="panel__head"><div><h3>Dados do sistema</h3><p>Guarde uma cópia, ou comece do zero</p></div></header>
           <div class="cfg-actions">
             <button class="cfg-action" data-action="export"><span class="cfg-action__ico cfg-action__ico--green"><i data-i="file"></i></span><span><strong>Exportar dados</strong><small>Baixe um arquivo .json com todo o conteúdo do gabinete</small></span></button>
-            <button class="cfg-action cfg-action--danger" data-action="reset"><span class="cfg-action__ico cfg-action__ico--red"><i data-i="trash"></i></span><span><strong>Restaurar dados de exemplo</strong><small>Apaga o que foi cadastrado e volta ao conteúdo inicial</small></span></button>
+            <button class="cfg-action cfg-action--danger" data-action="reset"><span class="cfg-action__ico cfg-action__ico--red"><i data-i="trash"></i></span><span><strong>Apagar os dados do gabinete</strong><small>Demandas, apoiadores, agenda, equipe e projetos. Não tem como desfazer</small></span></button>
           </div>
         </div>
       </div>
@@ -2698,6 +2869,95 @@ body.is-locked{overflow:hidden}
   </div>
 </div>
 
+<!-- ===== MODAL: ASSISTENTE DE IMPLANTAÇÃO =====
+     O primeiro acesso de um cliente novo. Em vez de largar o vereador
+     num sistema vazio e esperar que ele encontre Configurações, o
+     sistema pergunta o que precisa saber, numa pergunta por vez, e já
+     localiza a cidade e os bairros dele no OpenStreetMap.
+     Cada passo é salvo ao avançar: se ele fechar no meio, volta de onde
+     parou. -->
+<div class="modal" id="modal-implantar">
+  <div class="modal__box modal__box--wide">
+    <header class="modal__head">
+      <div>
+        <h3 id="impTitulo">Vamos montar o seu gabinete</h3>
+        <p class="imp-sub" id="impSub">Cinco minutos agora poupam o resto do mandato.</p>
+      </div>
+      <button class="modal__x" data-close><i data-i="close"></i></button>
+    </header>
+
+    <div class="imp-trilha" id="impTrilha"></div>
+
+    <form class="imp-form" id="formImplantar" autocomplete="off">
+
+      <!-- 1. quem é o parlamentar -->
+      <div class="imp-passo form" data-passo="1">
+        <label class="field field--full">Nome do parlamentar
+          <input name="nome" placeholder="como o eleitor te conhece">
+          <small class="field__dica">É este nome que vai no topo do sistema e no cabeçalho dos relatórios.</small></label>
+        <label class="field">Cargo
+          <select name="cargo">
+            <option>Vereador</option><option>Vereadora</option>
+            <option>Presidente da Câmara</option>
+            <option>Deputado Estadual</option><option>Deputada Estadual</option>
+            <option>Prefeito</option><option>Prefeita</option>
+          </select></label>
+        <label class="field">Partido<input name="partido" placeholder="Ex.: MDB"></label>
+        <label class="field">Legislatura<input name="legislatura" placeholder="Ex.: 2025–2028"></label>
+        <label class="field">Nome do gabinete<input name="gabinete" placeholder="opcional"></label>
+      </div>
+
+      <!-- 2. a cidade -->
+      <div class="imp-passo form" data-passo="2" hidden>
+        <label class="field">Município<input name="cidade" placeholder="Ex.: Uberaba"></label>
+        <label class="field">UF<input name="uf" maxlength="2" placeholder="MG" style="text-transform:uppercase"></label>
+        <label class="field field--full">Câmara Municipal<input name="camaraNome" placeholder="Câmara Municipal de ..."></label>
+        <div class="field field--full">
+          <button type="button" class="btn btn--ghost" id="impLocalizar">Localizar a cidade no mapa</button>
+          <p class="imp-aviso" id="impLocalStatus">O sistema procura a sua cidade no OpenStreetMap para saber onde centrar o mapa de demandas.</p>
+        </div>
+      </div>
+
+      <!-- 3. os bairros -->
+      <div class="imp-passo form" data-passo="3" hidden>
+        <p class="imp-texto field--full">Os bairros são o esqueleto do sistema: é por eles que o mapa põe alfinete, que o ranking mostra onde o mandato é mais cobrado e que a equipe cadastra demanda sem errar a grafia.</p>
+        <div class="field field--full">
+          <button type="button" class="btn btn--primary" id="impBuscarBairros">Buscar os bairros da minha cidade</button>
+          <p class="imp-aviso" id="impBairrosStatus"></p>
+        </div>
+        <label class="field field--full">Ou escreva os bairros, um por linha
+          <textarea name="bairrosTexto" rows="5" placeholder="Centro&#10;Jardim América&#10;Vila Nova"></textarea>
+          <small class="field__dica">Serve para a localidade rural que o OpenStreetMap não conhece. Sem coordenada o bairro ainda filtra e conta — só não ganha alfinete no mapa.</small></label>
+        <div class="chips field--full" id="impBairrosLista"></div>
+      </div>
+
+      <!-- 4. o contato -->
+      <div class="imp-passo form" data-passo="4" hidden>
+        <p class="imp-texto field--full">O cidadão liga para o gabinete, não para o sistema. Estes dados aparecem nos relatórios e ficam à mão da equipe.</p>
+        <label class="field">Telefone<input name="telefone" placeholder="(00) 0000-0000"></label>
+        <label class="field">WhatsApp<input name="whatsapp" placeholder="(00) 00000-0000"></label>
+        <label class="field">E-mail<input type="email" name="email" placeholder="gabinete@camara.mg.gov.br"></label>
+        <label class="field">Horário de atendimento<input name="horario" placeholder="Seg a sex, 8h às 17h"></label>
+        <label class="field field--full">Endereço do gabinete<input name="endereco" placeholder="Rua, número, sala"></label>
+        <label class="field">CEP<input name="cep" placeholder="00000-000"></label>
+      </div>
+
+      <!-- 5. pronto -->
+      <div class="imp-passo" data-passo="5" hidden>
+        <div class="imp-pronto" id="impResumo"></div>
+      </div>
+    </form>
+
+    <footer class="imp-rodape">
+      <button type="button" class="gate__link" id="impDepois">Faço isso depois</button>
+      <div class="imp-botoes">
+        <button type="button" class="btn btn--ghost" id="impVoltar" hidden>Voltar</button>
+        <button type="button" class="btn btn--primary" id="impAvancar">Continuar</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
 <!-- ===== MODAL: NOVO APOIADOR ===== -->
 <div class="modal" id="modal-apoiador">
   <div class="modal__box">
@@ -2707,7 +2967,7 @@ body.is-locked{overflow:hidden}
       <label class="field">Telefone / WhatsApp<input name="telefone" required placeholder="(00) 00000-0000"></label>
       <label class="field">Tipo<select name="tipo"><option>Liderança</option><option selected>Apoiador</option><option>Voluntário</option></select></label>
       <label class="field">Bairro<input name="bairro" list="bairrosList" required placeholder="Digite ou escolha o bairro" autocomplete="off"></label>
-      <label class="field">Cidade<input name="cidade" required value="Patos de Minas" placeholder="Ex.: Patos de Minas"></label>
+      <label class="field">Cidade<input name="cidade" required placeholder="a cidade do gabinete"></label>
       <div class="form__actions"><button type="button" class="btn btn--ghost" data-close>Cancelar</button><button type="submit" class="btn btn--primary">Salvar apoiador</button></div>
     </form>
   </div>
@@ -3543,7 +3803,7 @@ function ehAdmin(){
    Serve de espelho: abre rápido e continua legível sem internet.
    ================================================================== */
 function cacheLocal(){
-  try{ localStorage.setItem(DB_KEY, JSON.stringify({demandas, apoiadores, eventos, assessores, projetos, perfil})); }
+  try{ localStorage.setItem(DB_KEY, JSON.stringify({demandas, apoiadores, eventos, assessores, projetos, bairrosGab, perfil})); }
   catch(e){}
 }
 function lerCacheLocal(){
@@ -3556,6 +3816,7 @@ function lerCacheLocal(){
     if(Array.isArray(s.eventos))    eventos    = s.eventos;
     if(Array.isArray(s.assessores)) assessores = s.assessores;
     if(Array.isArray(s.projetos))   projetos   = s.projetos;
+    if(Array.isArray(s.bairrosGab)){ bairrosGab = s.bairrosGab; esquecerCoords(); }
     if(s.perfil && typeof s.perfil === 'object') perfil = {...perfil, ...s.perfil};
     return true;
   }catch(e){ return false; }
@@ -3568,7 +3829,8 @@ const COLUNAS = {
   apoiadores: ['id','nome','tipo','telefone','bairro','cidade','nasc'],
   eventos:    ['id','titulo','data','hora','local','tipo','convidados'],
   assessores: ['id','nome','funcao','telefone','email'],
-  projetos:   ['id','titulo','resumo','etapa','prog','prioridade','resp','bairro','parceiro','contato','prazo','historico']
+  projetos:   ['id','titulo','resumo','etapa','prog','prioridade','resp','bairro','parceiro','contato','prazo','historico'],
+  bairros:    ['id','nome','lat','lon']
 };
 function paraBanco(tabela, obj){
   const linha = {};
@@ -3631,14 +3893,41 @@ async function salvarPerfil(){
   /* Agora cada gabinete é uma linha de 'gabinetes'. Não mandamos o id:
      as regras de acesso do banco só deixam este usuário alterar o
      gabinete dele, então o update acerta a linha certa sozinho. */
-  const linha = {
-    parlamentar: perfil.nome, cargo: perfil.cargo, partido: perfil.partido,
-    municipio: perfil.cidade, telefone: perfil.telefone
-  };
+  const linha = perfilParaBanco();
   if(!gabineteId){ enfileirar({tipo:'salvar', tabela:'gabinetes', id:null, linha}); return; }
   const { error } = await sb.from('gabinetes').update(linha).eq('id', gabineteId);
   if(error) enfileirar({tipo:'salvar', tabela:'gabinetes', id:gabineteId, linha});
 }
+/* A ficha do gabinete, campo por campo, do jeito que o banco espera.
+   Antes daqui só saíam cinco campos — o nome do gabinete e a UF eram
+   digitados na tela e jogados no lixo. 'acervo' e 'implantado' não entram:
+   o primeiro é decisão de quem vende, o segundo tem função própria. */
+function perfilParaBanco(){
+  return {
+    nome: perfil.gabinete || ('Gabinete ' + (perfil.nome || '')).trim(),
+    parlamentar: perfil.nome,   cargo: perfil.cargo,      partido: perfil.partido,
+    legislatura: perfil.legislatura,
+    municipio: perfil.cidade,   uf: (perfil.uf || '').toUpperCase().slice(0,2),
+    telefone: perfil.telefone,  whatsapp: perfil.whatsapp, email: perfil.email,
+    endereco: perfil.endereco,  cep: perfil.cep,           horario: perfil.horario,
+    instagram: perfil.instagram, facebook: perfil.facebook, site: perfil.site,
+    camara_nome: perfil.camaraNome, camara_site: perfil.camaraSite,
+    mapa_lat: perfil.mapaLat ?? null, mapa_lon: perfil.mapaLon ?? null
+  };
+}
+
+/* Fecha a implantação: o assistente de primeiros passos não volta a
+   aparecer, e o gabinete passa a ser um gabinete como os outros. */
+async function marcarImplantado(){
+  perfil.implantado = true;
+  cacheLocal();
+  if(!ONLINE || !usuario || !gabineteId) return;
+  const { error } = await sb.from('gabinetes')
+    .update({...perfilParaBanco(), implantado: true, implantado_em: new Date().toISOString()})
+    .eq('id', gabineteId);
+  if(error) enfileirar({tipo:'salvar', tabela:'gabinetes', id:gabineteId, linha:{implantado:true}});
+}
+
 /* mantido por compatibilidade: grava só o espelho local */
 function saveDB(){ cacheLocal(); }
 
@@ -3655,9 +3944,9 @@ function mostrarModo(){
   const el = document.getElementById('appVer');
   if(!el) return;
   el.textContent = ONLINE
-    ? `Conectado · ${usuario?.email || ''} · v15`
-    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v15`
-                   : 'Modo local (só neste navegador) · v15');
+    ? `Conectado · ${usuario?.email || ''} · v16`
+    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v16`
+                   : 'Modo local (só neste navegador) · v16');
 }
 
 /* ===== BAIXAR TUDO DO BANCO ========================================
@@ -3684,13 +3973,14 @@ async function baixarTabela(tabela, coluna, crescente){
 }
 async function baixarTudo(){
   if(!ONLINE || !usuario) return false;
-  const [d, a, e, s, p, g] = await Promise.all([
+  const [d, a, e, s, p, g, b] = await Promise.all([
     baixarTabela('demandas',   'criado_em', false),
     baixarTabela('apoiadores', 'criado_em', false),
     baixarTabela('eventos',    'data',      true),
     baixarTabela('assessores', 'criado_em', false),
     baixarTabela('projetos',   'criado_em', false),
-    sb.from('gabinetes').select('*').limit(1).maybeSingle()
+    sb.from('gabinetes').select('*').limit(1).maybeSingle(),
+    baixarTabela('bairros',    'nome',      true)
   ]);
   if(d.error || a.error || e.error || s.error) return false;
   /* a tabela de projetos é mais nova: num banco antigo ela ainda não
@@ -3701,16 +3991,32 @@ async function baixarTudo(){
   apoiadores = a.data || [];
   eventos    = (e.data || []).map(x => ({...x, convidados: Array.isArray(x.convidados) ? x.convidados : []}));
   assessores = s.data || [];
-  if(g.data){
-    gabineteId = g.data.id;
-    perfil = {
-      nome: g.data.parlamentar || '', cargo: g.data.cargo || 'Vereador',
-      partido: g.data.partido || '', cidade: g.data.municipio || '',
-      telefone: g.data.telefone || ''
-    };
-  }
+  /* a tabela de bairros também é nova: banco antigo segue funcionando */
+  if(!b.error){ bairrosGab = b.data || []; esquecerCoords(); }
+  if(g.data) perfil = doBanco(g.data);
   cacheLocal();
   return true;
+}
+
+/* A ficha do gabinete como as telas a usam. Campo que o banco ainda não
+   tem (banco antigo) volta vazio, e não 'undefined' aparecendo na tela. */
+function doBanco(g){
+  gabineteId = g.id;
+  return {
+    gabinete: g.nome || '', nome: g.parlamentar || '', cargo: g.cargo || 'Vereador',
+    partido: g.partido || '', legislatura: g.legislatura || '',
+    cidade: g.municipio || '', uf: g.uf || '',
+    telefone: g.telefone || '', whatsapp: g.whatsapp || '', email: g.email || '',
+    endereco: g.endereco || '', cep: g.cep || '', horario: g.horario || '',
+    instagram: g.instagram || '', facebook: g.facebook || '', site: g.site || '',
+    camaraNome: g.camara_nome || '', camaraSite: g.camara_site || '',
+    mapaLat: g.mapa_lat ?? null, mapaLon: g.mapa_lon ?? null,
+    acervo: g.acervo || '',
+    /* banco sem a coluna 'implantado' (antes de 19/11/2026) é banco de
+       gabinete que já estava rodando: não se recebe quem já entrou com
+       um assistente de primeiros passos. */
+    implantado: g.implantado === undefined ? true : !!g.implantado
+  };
 }
 
 /* Primeiro acesso: banco vazio. Pergunta se quer os dados de exemplo. */
@@ -3772,6 +4078,11 @@ function agendarAtualizacao(){
 function redesenharTudo(){
   ensureIds();
   applyPerfil();
+  /* Um colega pode ter cadastrado bairro ou mexido na ficha do gabinete:
+     o autocompletar e a tela de Configurações têm de acompanhar. */
+  if(typeof initBairrosDatalist === 'function') initBairrosDatalist();
+  if(document.getElementById('view-config')?.classList.contains('is-visible') &&
+     typeof fillPerfil === 'function') fillPerfil();
   renderDash();
   const visivel = id => document.getElementById(id)?.classList.contains('is-visible');
   if(visivel('view-demandas'))     renderDemandas();
@@ -4060,6 +4371,7 @@ function entrarNoAppLocal(conta){
   mostrarModo();
   applyPerfil();      // nome, cargo e avatar passam a ser os de quem entrou
   renderAcessos();
+  if(typeof talvezImplantar === 'function') talvezImplantar();
 }
 
 function escapaHtml(t){
@@ -4283,6 +4595,7 @@ async function iniciarSistema(boot){
     boot();
     applyPerfil();      // identifica quem entrou, não o dono do gabinete
     renderAcessos();
+    if(typeof talvezImplantar === 'function') talvezImplantar();
     ligarAoVivo();
     escoarFila();
   };
@@ -4299,9 +4612,11 @@ async function iniciarSistema(boot){
 
 
 /* ===== A CIDADE NA PORTA DE ENTRADA =====
-   Os pontos são os 80 bairros reais de Patos de Minas, nas mesmas
-   coordenadas usadas no Mapa. Aqui eles acendem do Centro para fora e
-   o nome de um deles aparece por vez, junto do seu ponto. */
+   Oitenta pontos acendendo do Centro para fora, com o nome de um
+   aparecendo por vez. O traçado veio de uma cidade real, mas os nomes
+   são genéricos de propósito: o sistema é vendido a vereadores de
+   municípios diferentes, e ninguém deve ser recebido pelo bairro da
+   cidade de outro. */
 let cidadeNoAr = null;
 function animarCidade(){
   const svg = document.querySelector('.gate .cons');
@@ -4428,6 +4743,10 @@ const SITUACOES = {
 function dinheiro(centavos){
   return (centavos / 100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
 }
+const ACERVOS = [
+  ['',              'Nenhum — telas de legislação escondidas'],
+  ['patos-ze-luiz', 'Patos de Minas (13.634 normas)']
+];
 async function renderDono(){
   const box = document.getElementById('listaDono');
   const resumo = document.getElementById('donoResumo');
@@ -4473,6 +4792,13 @@ async function renderDono(){
     const opcoesSit = Object.entries(SITUACOES).map(([k, rot]) =>
       `<option value="${k}" ${k === x.situacao ? 'selected' : ''}>${rot}</option>`
     ).join('');
+    /* O acervo legislativo é a legislação do município dentro do sistema.
+       Montar o de uma câmara nova é trabalho de implantação; aqui só se
+       liga para o cliente certo — e é o que faz as telas de legislação
+       aparecerem no menu dele. */
+    const opcoesAcervo = ACERVOS.map(([cod, rot]) =>
+      `<option value="${cod}" ${cod === (x.acervo || '') ? 'selected' : ''}>${rot}</option>`
+    ).join('');
     return `<article class="dono">
       <div class="dono__topo">
         <div class="dono__quem">
@@ -4488,10 +4814,13 @@ async function renderDono(){
           <select data-gab="${x.id}" data-campo="situacao">${opcoesSit}</select></label>
         <label class="field"><span>Vale até</span>
           <input type="date" data-gab="${x.id}" data-campo="expira_em" value="${x.expira_em || ''}"></label>
+        <label class="field"><span>Acervo legislativo</span>
+          <select data-gab="${x.id}" data-campo="acervo">${opcoesAcervo}</select></label>
       </div>
       <div class="dono__rodape${lotado ? ' dono__rodape--cheio' : ''}">
         ${x.pessoas_com_acesso} de ${x.limite_membros} pessoas com acesso ·
         ${lotado ? 'sem vaga livre — precisa mudar de plano' : vagas + (vagas === 1 ? ' vaga livre' : ' vagas livres')}
+        · ${x.implantado === false ? '<b>implantação não concluída</b>' : 'implantado'}
       </div>
     </article>`;
   }).join('');
@@ -4636,9 +4965,26 @@ function textoPrazo(iso, etapa){
   return {txt:dt, cls:''};
 }
 
-/* Produção legislativa real — Vereador José Luiz Borges Júnior (SAPL Câmara de Patos de Minas) */
+/* ===== ACERVO LEGISLATIVO EMBUTIDO ==================================
+   O sistema nasceu num gabinete e carrega, dentro do próprio arquivo, as
+   394 matérias daquele vereador e as 13.634 normas daquela cidade. Isso é
+   dele. Vendido a um vereador de outra cidade, nada disso pode aparecer:
+   ninguém quer abrir "Projetos de Lei" e ver a produção de outro homem
+   como se fosse a sua.
+   Por isso o gabinete tem um campo 'acervo' no banco. Enquanto ele
+   estiver vazio, as duas telas de legislação ficam escondidas, e a
+   Configuração explica que o acervo da câmara daquele cliente é montado
+   na implantação. No modo local (sem banco) o acervo aparece: ali o
+   sistema está sendo demonstrado, não usado por um cliente.
+   =================================================================== */
+const ACERVO_EMBUTIDO='patos-ze-luiz';
+const ACERVO_CIDADE='Patos de Minas';
 const BASE_SAPL='https://sapl.patosdeminas.mg.leg.br';
 const CAMARA_LINK=BASE_SAPL+'/parlamentar/218/materias';
+function temAcervo(){
+  if(typeof ONLINE !== 'undefined' && !ONLINE) return true;   // demonstração
+  return perfil.acervo === ACERVO_EMBUTIDO;
+}
 const MAT_TIPO={IND:'Indicação',PLOL:'Projeto de Lei Ordinária',PLCL:'Projeto de Lei Complementar',
   PDL:'Decreto Legislativo',PR:'Projeto de Resolução',PELOM:'Emenda à Lei Orgânica',
   REQ:'Requerimento',MOCA:'Moção de Aplausos',MOA:'Moção de Apoio',MOCR:'Moção de Repúdio'};
@@ -4646,7 +4992,21 @@ const MAT_GRUPO={IND:'Indicação',PLOL:'Projeto de Lei',PLCL:'Projeto de Lei',P
   PR:'Projeto de Resolução',PELOM:'Emenda à Lei Orgânica',REQ:'Requerimento',MOCA:'Moção',MOA:'Moção',MOCR:'Moção'};
 const MAT_SIT={lei:{t:'Virou lei',c:'green'},aprovado:{t:'Aprovado',c:'green-soft'},tramite:{t:'Em trâmite',c:'amber'},arquivado:{t:'Arquivado',c:'red'}};
 
-let perfil = {nome:'Zé Luiz', cargo:'Vereador', partido:'', cidade:'Patos de Minas', telefone:''};
+/* ===== A FICHA DO GABINETE =========================================
+   Nasce vazia. Quem preenche é o cliente, no assistente de implantação
+   do primeiro acesso; depois disso ela vem do banco a cada login. Nenhum
+   nome de vereador e nenhuma cidade escritos aqui: o arquivo publicado é
+   o mesmo para todos os gabinetes que compram o sistema.
+   ================================================================== */
+let perfil = {
+  gabinete:'', nome:'', cargo:'Vereador', partido:'', legislatura:'',
+  cidade:'', uf:'', telefone:'', whatsapp:'', email:'',
+  endereco:'', cep:'', horario:'',
+  instagram:'', facebook:'', site:'',
+  camaraNome:'', camaraSite:'',
+  mapaLat:null, mapaLon:null,
+  acervo:'', implantado:false
+};
 
 function hojeISO(add){ const d=new Date(); d.setDate(d.getDate()+add); return d.toISOString().slice(0,10); }
 const AVA = ['#009B3A','#0B2E6B','#a9820a','#0b7a37','#1e4fb0'];
@@ -5205,6 +5565,7 @@ function abrirNovoProjeto(){
 function fmtDataBR(iso){ if(!iso) return '—'; const [a,m,d]=iso.split('-'); return `${d}/${m}/${a}`; }
 let matAnoInit=false;
 function renderLeis(){
+  if(!temAcervo()) return;   // o acervo é de quem o tem; ver aplicarAcervo()
   document.getElementById('camaraLink').href=CAMARA_LINK;
   const ind=MATERIAS.filter(m=>m.sigla==='IND').length;
   const plol=MATERIAS.filter(m=>MAT_GRUPO[m.sigla]==='Projeto de Lei').length;
@@ -5243,42 +5604,113 @@ function filterMat(){
   paintIcons(document.getElementById('matList'));
 }
 
-/* ===== RENDER: MAPA (demandas em Patos de Minas) ===== */
+/* ===== A CIDADE DO CLIENTE =========================================
+   O mapa e o autocompletar de bairro precisam saber de que cidade se
+   está falando. Antes era sempre a mesma, escrita em 'bairros.js'. Agora:
+     · os bairros vêm do banco (tabela 'bairros', cadastrada na
+       implantação a partir do OpenStreetMap ou digitada à mão);
+     · o centro do mapa vem da ficha do gabinete;
+     · a lista embutida só é usada por quem é da cidade que estreou o
+       sistema, e só enquanto ele não cadastrar a própria.
+   Bairro sem coordenada continua valendo para filtrar e contar — apenas
+   não ganha alfinete no mapa. É melhor do que exigir coordenada e deixar
+   o gabinete sem conseguir cadastrar a localidade rural onde mora o
+   solicitante.
+   ================================================================== */
+let bairrosGab = [];
+const semAcento = t => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+function cidadeDoAcervo(){
+  return typeof CIDADE !== 'undefined' && perfil.cidade &&
+         semAcento(perfil.cidade) === semAcento(CIDADE.nome);
+}
+/* onde centrar o mapa: o que o gabinete informou, ou a cidade embutida */
+function cidadeAtual(){
+  if(perfil.mapaLat != null && perfil.mapaLon != null)
+    return {nome:perfil.cidade, uf:perfil.uf, lat:perfil.mapaLat, lon:perfil.mapaLon};
+  if(cidadeDoAcervo()) return CIDADE;
+  return {nome:perfil.cidade||'', uf:perfil.uf||'', lat:null, lon:null};
+}
+/* Os bairros que o gabinete cadastrou MAIS os que vêm com o acervo da
+   cidade. A soma é importante: o gabinete que herdou 80 bairros prontos
+   não pode perdê-los só porque cadastrou uma localidade rural. O que ele
+   cadastrou tem preferência, caso o nome coincida. */
+function listaBairros(){
+  const vistos=new Set(), fora=[];
+  bairrosGab.forEach(b=>{
+    const k=semAcento(b.nome);
+    if(!b.nome || vistos.has(k)) return;
+    vistos.add(k); fora.push({n:b.nome, lat:b.lat, lon:b.lon, id:b.id});
+  });
+  if(cidadeDoAcervo() && typeof BAIRROS!=='undefined') BAIRROS.forEach(b=>{
+    const k=semAcento(b.n);
+    if(vistos.has(k)) return;
+    vistos.add(k); fora.push({n:b.n, lat:b.lat, lon:b.lon, fixo:true});
+  });
+  return fora.sort((a,b)=>a.n.localeCompare(b.n,'pt-BR'));
+}
+function esquecerCoords(){ COORDS=null; }
+
+/* ===== RENDER: MAPA (demandas na cidade do gabinete) ===== */
 const norm=s=>(s||'').toLowerCase().trim();
 const PIN_COR={urgente:'red',alta:'amber',media:'blue',baixa:'green'};
 let COORDS=null, mapaMap=null, mapaLayer=null;
 function coordsBairro(nome){
-  if(!COORDS){ COORDS={}; BAIRROS.forEach(b=>COORDS[norm(b.n)]=b); }
+  if(!COORDS){
+    COORDS={};
+    listaBairros().forEach(b=>{ if(b.lat!=null && b.lon!=null) COORDS[norm(b.n)]=b; });
+  }
   return COORDS[norm(nome)] || null;
 }
 /* geocodifica endereço exato (Nominatim/OpenStreetMap); valida se caiu perto da cidade */
 async function geocodeEndereco(endereco, bairro){
-  const q=`${endereco}, ${bairro}, ${CIDADE.nome}, ${CIDADE.uf}, Brasil`;
+  const C=cidadeAtual();
+  if(!C.nome) return null;                       // sem município na ficha, não há o que consultar
+  const q=`${endereco}, ${bairro}, ${C.nome}, ${C.uf}, Brasil`;
   const url=`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(q)}`;
   try{
     const r=await fetch(url,{headers:{'Accept':'application/json'}});
     const j=await r.json();
     if(j&&j[0]){
       const lat=+j[0].lat, lon=+j[0].lon;
-      if(Math.abs(lat-CIDADE.lat)<0.25 && Math.abs(lon-CIDADE.lon)<0.25) return {lat,lon};
+      /* se a ficha tem o centro da cidade, confere se o ponto caiu perto
+         dele; sem centro, aceita o que o OpenStreetMap devolveu. */
+      if(C.lat==null || (Math.abs(lat-C.lat)<0.25 && Math.abs(lon-C.lon)<0.25)) return {lat,lon};
     }
   }catch(e){}
   return null;
 }
 const PIN_SIT={lei:'green',aprovado:'green',tramite:'amber',arquivado:'red'};
 let mapaModo='demandas';
+function avisoMapa(titulo, texto, botao){
+  document.getElementById('mapaLeaflet').innerHTML =
+    `<div class="empty mapa-aviso"><h4>${titulo}</h4><p>${texto}</p>` +
+    (botao ? `<button class="btn btn--primary" type="button" onclick="abrirImplantacao()">${botao}</button>` : '') +
+    `</div>`;
+}
+/* O mapa precisa saber onde é a cidade. Quem estreou o sistema tem a
+   imagem da cidade embutida (foi feita para rodar sem internet); todo
+   gabinete novo usa o OpenStreetMap centrado no município da ficha. */
 function ensureMap(){
-  if(typeof L==='undefined'){ document.getElementById('mapaLeaflet').innerHTML='<div class="empty" style="padding:40px"><p>Não foi possível carregar o mapa.</p></div>'; return false; }
+  if(typeof L==='undefined'){ avisoMapa('Não foi possível carregar o mapa','Recarregue a página para tentar de novo.'); return false; }
+  const C=cidadeAtual();
+  if(C.lat==null){
+    avisoMapa('O mapa ainda não sabe onde é a sua cidade',
+      'Informe o município do gabinete e o sistema localiza o centro da cidade sozinho. Depois disso cada bairro ganha seu alfinete.',
+      'Completar a implantação');
+    return false;
+  }
   if(!mapaMap){
-    const b=(typeof MAPA_BASE!=='undefined')?L.latLngBounds(MAPA_BASE.bounds):null;
-    mapaMap=L.map('mapaLeaflet',{scrollWheelZoom:false, minZoom:13, maxZoom:17, zoomControl:true});
-    if(typeof MAPA_BASE!=='undefined'){
+    const temImagem = (typeof MAPA_BASE!=='undefined') && cidadeDoAcervo();
+    mapaMap=L.map('mapaLeaflet',{scrollWheelZoom:false, minZoom:11, maxZoom:17, zoomControl:true});
+    if(temImagem){
+      const b=L.latLngBounds(MAPA_BASE.bounds);
       L.imageOverlay(MAPA_BASE.img, MAPA_BASE.bounds, {attribution:'© OpenStreetMap'}).addTo(mapaMap);
       mapaMap.setMaxBounds(b.pad(0.15));
       mapaMap.fitBounds(b);
     } else {
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(mapaMap);
-      mapaMap.setView([CIDADE.lat,CIDADE.lon],13);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {maxZoom:19, attribution:'© OpenStreetMap'}).addTo(mapaMap);
+      mapaMap.setView([C.lat,C.lon],13);
     }
     mapaLayer=L.layerGroup().addTo(mapaMap);
   }
@@ -5396,7 +5828,7 @@ function renderMapaIndicacoes(){
 }
 function initBairrosDatalist(){
   const dl=document.getElementById('bairrosList');
-  if(dl) dl.innerHTML=BAIRROS.map(b=>`<option value="${b.n}">`).join('');
+  if(dl) dl.innerHTML=listaBairros().map(b=>`<option value="${b.n}">`).join('');
 }
 
 /* ===== RENDER: RELATÓRIOS ===== */
@@ -5407,7 +5839,7 @@ function renderRelatorios(){
   const taxa=total?Math.round(conc/total*100):0;
   document.getElementById('repKpis').innerHTML=[
     ['file','green','Demandas registradas',total],
-    ['heart','gold','Apoiadores na base',320+apoiadores.length],
+    ['heart','gold','Apoiadores na base',apoiadores.length],
     ['target','blue','Taxa de resolução',taxa+'%'],
     ['users','green','Pendentes',pend]
   ].map(([ic,c,lb,v])=>`<article class="stat"><div class="stat__ico stat__ico--${c}"><i data-i="${ic}"></i></div>
@@ -5515,13 +5947,46 @@ function applyPerfil(){
   document.querySelector('.topbar__me img').src=avatarURI(nome,'#009B3A','#ffffff');
   const ola=document.getElementById('saudacao');
   if(ola) ola.textContent=`Olá, ${(nome||'').trim().split(/\s+/)[0]} 👋`;
-  /* a marca é do sistema (Meu Mandato); embaixo dela vai o gabinete de quem usa */
-  document.querySelectorAll('[data-gabinete]').forEach(el=>el.textContent='Gabinete '+perfil.nome);
-  document.title='Meu Mandato — Gabinete '+perfil.nome;
+  /* a marca é do sistema (Meu Mandato); embaixo dela vai o gabinete de
+     quem usa. Antes da implantação não há gabinete para mostrar — e aí
+     a linha diz o que o sistema é, não o nome de ninguém. */
+  const casa = nomeGabinete();
+  document.querySelectorAll('[data-gabinete]').forEach(el=>el.textContent=casa);
+  document.title = perfil.nome ? 'Meu Mandato — '+casa : 'Meu Mandato';
+  aplicarAcervo();
+  mostrarAvisoImplantacao();
 }
+/* "Gabinete Zé Luiz", ou o nome que o gabinete escolheu, ou — antes da
+   implantação — o que o sistema é. */
+function nomeGabinete(){
+  if(perfil.gabinete) return perfil.gabinete;
+  if(perfil.nome)     return 'Gabinete ' + perfil.nome;
+  return 'Gestão de gabinete parlamentar';
+}
+const CAMPOS_PERFIL=['gabinete','nome','cargo','partido','legislatura','telefone','whatsapp',
+  'email','horario','endereco','cep','cidade','uf','camaraNome','camaraSite',
+  'instagram','facebook','site'];
 function fillPerfil(){
   const f=document.getElementById('formPerfil');
-  ['nome','cargo','partido','cidade','telefone'].forEach(k=>{ if(f[k]) f[k].value=perfil[k]||''; });
+  if(f) CAMPOS_PERFIL.forEach(k=>{ if(f[k]) f[k].value=perfil[k]||''; });
+  mostrarCoordenada();
+  renderBairrosConfig();
+  renderAcervoConfig();
+}
+/* Diz se o sistema já sabe onde é a cidade — é essa coordenada que faz o
+   mapa funcionar, e sem ela não há alfinete nenhum. */
+function mostrarCoordenada(){
+  const el=document.getElementById('cfgCoord'); if(!el) return;
+  if(perfil.mapaLat!=null && perfil.mapaLon!=null){
+    el.textContent=`Centro da cidade localizado (${(+perfil.mapaLat).toFixed(4)}, ${(+perfil.mapaLon).toFixed(4)}). O mapa de demandas já abre aqui.`;
+    el.classList.add('ok');
+  } else if(cidadeDoAcervo()){
+    el.textContent='A cidade deste acervo já vem com o mapa pronto.';
+    el.classList.add('ok');
+  } else {
+    el.textContent='O mapa de demandas ainda não sabe onde é a sua cidade. Informe o município e clique em localizar.';
+    el.classList.remove('ok');
+  }
 }
 
 /* ===== ROTEAMENTO ENTRE TELAS ===== */
@@ -5539,6 +6004,9 @@ const TITLES={
   legis:['Inteligência Legislativa','13.634 normas de Patos de Minas ao seu alcance']
 };
 function go(view){
+  /* Sem acervo legislativo não há o que mostrar nestas duas telas, e
+     mostrar a produção de outro gabinete seria pior do que nada. */
+  if((view==='projetos-lei' || view==='legis') && !temAcervo()) view='config';
   const known=['dashboard','demandas','apoiadores','agenda','assessores','projetos','projetos-lei','mapa','relatorios','aniversarios','config','acessos','legis','dono'];
   const target=known.includes(view)?view:'soon';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('is-visible'));
@@ -5597,28 +6065,47 @@ const ACTIONS={'nova-demanda':()=>openModal('modal-demanda'),'novo-apoiador':()=
   'novo-projeto':abrirNovoProjeto,
   'export':exportarDados, 'reset':restaurarDados};
 async function exportarDados(){
-  const r = await entregarArquivo('mandato-ze-luiz-backup.json',
-    JSON.stringify({demandas,apoiadores,eventos,assessores,projetos,perfil},null,2), 'application/json');
+  /* o arquivo leva o nome do gabinete de quem exportou, não o do gabinete
+     onde o sistema foi escrito */
+  const apelido=(perfil.nome||'gabinete').toLowerCase().normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const r = await entregarArquivo(`meu-mandato-${apelido}-${new Date().toISOString().slice(0,10)}.json`,
+    JSON.stringify({demandas,apoiadores,eventos,assessores,projetos,bairros:bairrosGab,perfil},null,2), 'application/json');
   if(r === 'ok') toast('Backup exportado com sucesso!');
   else if(r === 'recusado') toast('Download cancelado — nada foi salvo.');
   else toast('Nao foi possivel exportar o backup neste navegador.');
 }
+/* "Restaurar dados de exemplo" era o nome disto quando o sistema nascia
+   com dados de demonstração. Hoje ele nasce vazio e isto apaga o trabalho
+   do gabinete — então o botão diz o que faz, e pergunta duas vezes, com
+   a janela do próprio app (confirm/prompt do navegador não funcionam
+   quando o sistema roda dentro de um quadro). */
 async function restaurarDados(){
   if(!ONLINE){
     perguntar({
-      titulo:'Voltar aos dados de exemplo',
-      texto:'Tudo que foi cadastrado neste navegador — demandas, apoiadores, agenda e equipe — será apagado, e o sistema volta aos dados de exemplo. Esta ação não pode ser desfeita.',
+      titulo:'Apagar os dados deste navegador',
+      texto:'Demandas, apoiadores, agenda, equipe e projetos cadastrados aqui serão apagados. Não tem como desfazer. Exporte um backup antes, se quiser guardar.',
       botao:'Apagar tudo',
       acao:()=>{ localStorage.removeItem(DB_KEY); location.reload(); }
     });
     return;
   }
-  if(!ehAdmin()){ toast('Só o Vereador pode limpar os dados do gabinete.'); return; }
-  if(!confirm('ATENÇÃO: isto apaga demandas, apoiadores, agenda e assessores DO BANCO ONLINE, para todos da equipe.\n\nDeseja continuar?')) return;
-  if(prompt('Para confirmar, digite APAGAR em letras maiúsculas:') !== 'APAGAR'){ toast('Cancelado — nada foi apagado.'); return; }
-  const ok = await limparBanco();
-  if(!ok){ toast('Não foi possível apagar. Tente de novo.'); return; }
-  localStorage.removeItem(DB_KEY); location.reload();
+  if(!ehAdmin()){ toast('Só o Vereador pode apagar os dados do gabinete.'); return; }
+  perguntar({
+    titulo:'Apagar os dados do gabinete',
+    texto:`Isto apaga ${demandas.length} demandas, ${apoiadores.length} apoiadores, a agenda, a equipe e os projetos — no banco, para todo mundo do gabinete. Não tem como desfazer.`,
+    botao:'Continuar',
+    acao:()=>perguntar({
+      titulo:'Tem certeza?',
+      texto:'Última chance de desistir. Depois de confirmar, os dados não voltam nem com backup do sistema — só com o arquivo .json que você exportou.',
+      botao:'Apagar definitivamente',
+      acao:async()=>{
+        const ok = await limparBanco();
+        if(!ok){ toast('Não foi possível apagar. Tente de novo.'); return; }
+        localStorage.removeItem(DB_KEY); location.reload();
+      }
+    })
+  });
 }
 
 /* ===== DETALHE / EDIÇÃO DA DEMANDA ===== */
@@ -5854,9 +6341,16 @@ document.getElementById('formAssessor').addEventListener('submit',e=>{
 });
 document.getElementById('formPerfil').addEventListener('submit',e=>{
   e.preventDefault(); const f=new FormData(e.target);
-  perfil={nome:f.get('nome').trim()||'Vereador', cargo:f.get('cargo').trim()||'Vereador',
-    partido:f.get('partido').trim(), cidade:f.get('cidade').trim(), telefone:f.get('telefone').trim()};
-  salvarPerfil(); applyPerfil(); toast('Perfil do gabinete atualizado!');
+  const antes=perfil.cidade;
+  CAMPOS_PERFIL.forEach(k=>{ if(f.has(k)) perfil[k]=(f.get(k)||'').trim(); });
+  perfil.uf=(perfil.uf||'').toUpperCase().slice(0,2);
+  if(!perfil.nome) perfil.nome='Vereador';
+  if(!perfil.cargo) perfil.cargo='Vereador';
+  /* trocou de cidade: a coordenada antiga não serve mais, e o mapa não
+     pode continuar mostrando o centro da cidade anterior. */
+  if(semAcento(antes)!==semAcento(perfil.cidade)){ perfil.mapaLat=null; perfil.mapaLon=null; derrubarMapa(); }
+  salvarPerfil(); applyPerfil(); fillPerfil(); initBairrosDatalist();
+  toast('Ficha do gabinete atualizada!');
 });
 function agora(){ return new Date().toLocaleDateString('pt-BR'); }
 
@@ -6011,6 +6505,15 @@ function bootApp(){
   renderDash();
   mostrarPendentes();
   mostrarModo();
+}
+/* Gabinete novo: o sistema se apresenta e pergunta o que precisa saber,
+   em vez de deixar o vereador descobrir Configurações por conta. Só
+   depois que alguém entrou — no modo local o sistema é montado ANTES da
+   porta de entrada, e o assistente apareceria por cima da tela de login. */
+function talvezImplantar(){
+  if(perfil.implantado || !souAdminDaqui()) return;
+  if(document.body.classList.contains('is-locked')) return;
+  setTimeout(()=>{ if(!document.body.classList.contains('is-locked')) abrirImplantacao(); }, 700);
 }
 iniciarSistema(bootApp);
 
@@ -6170,7 +6673,7 @@ function relatorioPdf(){
   const pend=demandas.filter(d=>d.status==='pendente').length;
   const taxa=total?Math.round(conc/total*100):0;
   y=pdfSecao(p1,y,'Atendimento ao cidadão','Demandas registradas no gabinete');
-  y=pdfKpis(p1,y,[['Demandas registradas',total],['Apoiadores na base',320+apoiadores.length],
+  y=pdfKpis(p1,y,[['Demandas registradas',total],['Apoiadores na base',apoiadores.length],
                   ['Taxa de resolução',taxa+'%'],['Pendentes',pend]]);
 
   const st={pendente:0,andamento:0,concluida:0};
@@ -6236,6 +6739,464 @@ async function baixarRelatorio(){
 }
 
 document.getElementById('btRelPdf').addEventListener('click',baixarRelatorio);
+
+/* =====================================================================
+   IMPLANTAÇÃO DO GABINETE
+
+   O sistema é vendido a vereadores de cidades diferentes. Antes daqui, um
+   cliente novo entrava num sistema que não sabia o nome dele, não sabia
+   onde era a cidade dele, não tinha os bairros dele — e mostrava, nas
+   telas de legislação, a produção do gabinete que estreou o produto.
+
+   Este trecho resolve isso em três frentes:
+     · o ASSISTENTE, que pergunta ao vereador o que o sistema precisa
+       saber, um passo por vez, no primeiro acesso;
+     · os BAIRROS do gabinete, buscados no OpenStreetMap ou digitados;
+     · o ACERVO legislativo, que só aparece para quem é dele.
+   ===================================================================== */
+
+/* O mapa guarda a cidade onde foi criado. Trocou o município, o mapa
+   antigo não serve mais: é jogado fora para nascer de novo no lugar certo. */
+function derrubarMapa(){
+  if(mapaMap){ try{ mapaMap.remove(); }catch(e){} }
+  mapaMap=null; mapaLayer=null; COORDS=null;
+}
+
+function souAdminDaqui(){
+  return (typeof ehAdmin==='function') ? ehAdmin() : true;
+}
+
+/* ===== ACERVO: esconder o que não é do cliente ===== */
+function aplicarAcervo(){
+  const tem=temAcervo();
+  ['menuLeis','menuLegis'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.hidden=!tem;
+  });
+  const ind=document.getElementById('modoIndicacoes');
+  if(ind) ind.hidden=!tem;
+  if(tem && typeof NORMAS_RAW!=='undefined')
+    TITLES.legis[1]=`${NORMAS_RAW.length.toLocaleString('pt-BR')} normas de ${ACERVO_CIDADE} ao seu alcance`;
+}
+
+function renderAcervoConfig(){
+  const box=document.getElementById('cfgAcervo'); if(!box) return;
+  if(temAcervo()){
+    const n=(typeof NORMAS_RAW!=='undefined') ? NORMAS_RAW.length.toLocaleString('pt-BR') : '—';
+    const m=(typeof MATERIAS!=='undefined') ? MATERIAS.length : '—';
+    const demo = (typeof ONLINE!=='undefined' && !ONLINE)
+      ? `<p class="cfg-nota">Este navegador está em <strong>modo de demonstração</strong>, sem banco de dados.
+         Por isso o acervo aparece mesmo em outra cidade. No sistema contratado, cada gabinete vê o acervo
+         da própria câmara — e nenhum outro.</p>` : '';
+    box.innerHTML=`<p class="cfg-nota cfg-nota--ok"><strong>Acervo de ${ACERVO_CIDADE} ativo.</strong>
+      ${n} normas municipais e ${m} matérias do gabinete. É o que alimenta as telas
+      <em>Projetos de Lei</em> e <em>Inteligência Legislativa</em>, no menu.</p>${demo}`;
+  } else {
+    const camara=perfil.camaraNome || (perfil.cidade ? 'Câmara Municipal de '+perfil.cidade : 'sua câmara');
+    box.innerHTML=`<p class="cfg-nota"><strong>Ainda não há acervo da ${camara}.</strong>
+      O acervo é a legislação do município e as matérias do seu mandato trazidas para dentro
+      do sistema — é o que faz a <em>Inteligência Legislativa</em> saber se uma ideia sua já
+      virou lei na cidade. Ele é montado na implantação, a partir do portal da sua câmara,
+      e varia de câmara para câmara. Enquanto não existir, as duas telas de legislação ficam
+      fora do menu: é melhor não existirem do que mostrarem a produção de outro gabinete.</p>
+      <p class="cfg-nota">Informe o <strong>site da Câmara</strong> acima — é por ele que o acervo é levantado.</p>`;
+  }
+}
+
+/* ===== AVISO NO DASHBOARD ===== */
+function faltaNaFicha(){
+  const f=[];
+  if(!perfil.nome)    f.push('o seu nome');
+  if(!perfil.cidade)  f.push('o município');
+  if(!perfil.telefone && !perfil.whatsapp) f.push('um telefone de contato');
+  if(!listaBairros().length) f.push('os bairros da cidade');
+  return f;
+}
+function mostrarAvisoImplantacao(){
+  const el=document.getElementById('avisoImplantar'); if(!el) return;
+  el.hidden = !!perfil.implantado || !souAdminDaqui();
+  if(el.hidden) return;
+  const falta=faltaNaFicha();
+  const tx=document.getElementById('avisoImplantarTexto');
+  if(tx) tx.textContent = falta.length
+    ? `Falta ${listaEmTexto(falta)}. Depois disso o mapa, os relatórios e os documentos saem com a sua cara.`
+    : 'A ficha está preenchida. Dê uma última olhada e conclua a implantação.';
+}
+function listaEmTexto(a){
+  if(a.length===1) return a[0];
+  return a.slice(0,-1).join(', ')+' e '+a[a.length-1];
+}
+
+/* ===== BAIRROS DO GABINETE ===== */
+async function addBairro(nome, lat, lon){
+  nome=(nome||'').trim().replace(/\s+/g,' ');
+  if(!nome) return false;
+  if(listaBairros().some(b=>semAcento(b.n)===semAcento(nome))) return false;
+  const b={id:novoId(), nome, lat:(lat==null?null:+lat), lon:(lon==null?null:+lon)};
+  bairrosGab.push(b);
+  esquecerCoords();
+  if(typeof salvar==='function') salvar('bairros', b);
+  return true;
+}
+function removerBairro(id){
+  const b=bairrosGab.find(x=>x.id===id); if(!b) return;
+  perguntar({
+    titulo:'Remover o bairro',
+    texto:`"${b.nome}" sai da lista do mapa e do autocompletar. As demandas já cadastradas nele continuam como estão.`,
+    botao:'Remover',
+    acao:()=>{
+      bairrosGab=bairrosGab.filter(x=>x.id!==id);
+      esquecerCoords();
+      if(typeof apagar==='function') apagar('bairros', id);
+      renderBairrosConfig(); initBairrosDatalist(); derrubarMapa();
+      toast('Bairro removido.');
+    }
+  });
+}
+function renderBairrosConfig(){
+  const box=document.getElementById('cfgBairros'); if(!box) return;
+  const lista=listaBairros();
+  const sub=document.getElementById('cfgBairrosSub');
+  const semCoord=lista.filter(b=>b.lat==null).length;
+  if(sub) sub.textContent = lista.length
+    ? `${lista.length} ${lista.length===1?'bairro':'bairros'} na lista`
+      + (semCoord ? ` · ${semCoord} sem coordenada (não aparecem no mapa)` : ' · todos no mapa')
+    : 'Nenhum bairro cadastrado — o mapa e o autocompletar de demandas ficam vazios';
+  const nota=document.getElementById('cfgBairrosNota');
+  if(nota){
+    const fixos=lista.filter(b=>b.fixo).length;
+    nota.hidden=!fixos;
+    if(fixos) nota.textContent=`${fixos} vêm com o acervo da cidade e não podem ser removidos aqui.`;
+  }
+  box.innerHTML = lista.map(b=>{
+    const semC = b.lat==null ? ' chip--vazio' : '';
+    return b.fixo
+      ? `<span class="chip chip--bairro${semC}">${escapaHtml(b.n)}</span>`
+      : `<span class="chip chip--bairro${semC}">${escapaHtml(b.n)}<button type="button" title="Remover" onclick="removerBairro('${b.id}')">×</button></span>`;
+  }).join('');
+}
+
+/* ===== OPENSTREETMAP: achar a cidade e os bairros dela =================
+   O gabinete não vai digitar coordenada nenhuma. O sistema pergunta ao
+   OpenStreetMap onde é a cidade e quais bairros ela tem. É consulta
+   pública e anônima — vai o nome do município, nada do gabinete. Se a
+   consulta falhar (rede, serviço fora), há sempre o caminho de digitar.
+   ===================================================================== */
+async function localizarCidade(cidade, uf){
+  if(!cidade) return null;
+  const q=[cidade, uf, 'Brasil'].filter(Boolean).join(', ');
+  const url='https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q='+encodeURIComponent(q);
+  try{
+    const r=await fetch(url,{headers:{'Accept':'application/json'}});
+    const j=await r.json();
+    if(!j || !j[0]) return null;
+    return {lat:+j[0].lat, lon:+j[0].lon, osmType:j[0].osm_type, osmId:j[0].osm_id,
+            onde:(j[0].display_name||'').split(',').slice(0,3).join(',')};
+  }catch(e){ return null; }
+}
+/* O Overpass público vive ocupado: devolve 502 ou 429 no meio do dia com
+   frequência, e um cliente que tentasse uma vez só concluiria que o
+   sistema não funciona. Por isso tentamos três servidores espelho, com
+   uma segunda chance em cada um. Falhando todos, sobra o caminho de
+   escrever os bairros — que nunca depende de ninguém. */
+const OVERPASS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter'
+];
+async function bairrosDoOSM(local){
+  const dentroDeArea = local.osmType==='relation';
+  const area = dentroDeArea ? `area(${3600000000+Number(local.osmId)})->.a;` : '';
+  const alvo = dentroDeArea ? '(area.a)' : `(around:14000,${local.lat},${local.lon})`;
+  const q=`[out:json][timeout:40];${area}
+(node["place"~"^(suburb|neighbourhood|quarter|village|hamlet)$"]${alvo};
+ way["place"~"^(suburb|neighbourhood|quarter)$"]${alvo};
+ relation["place"~"^(suburb|neighbourhood|quarter)$"]${alvo};
+);
+out center tags;`;
+  const corpo='data='+encodeURIComponent(q);
+  /* Cada servidor ganha 20 segundos e uma chance. Não vale fazer o
+     vereador esperar dois minutos olhando para uma frase: na pior das
+     hipóteses ele escreve os bairros, e isso leva menos tempo. */
+  for(const servidor of OVERPASS){
+    const corta=new AbortController();
+    const relogio=setTimeout(()=>corta.abort(), 20000);
+    try{
+      const r=await fetch(servidor,{method:'POST', signal:corta.signal,
+        headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:corpo});
+      if(!r.ok) continue;
+      const j=await r.json();
+      return arrumarBairros(j.elements||[]);
+    }catch(e){ /* ocupado, fora do ar ou demorado: tenta o próximo */ }
+    finally{ clearTimeout(relogio); }
+  }
+  return null;
+}
+function arrumarBairros(elementos){
+  const vistos=new Set(), fora=[];
+  elementos.forEach(e=>{
+    const n=((e.tags&&e.tags.name)||'').trim();
+    if(!n) return;
+    const k=semAcento(n);
+    if(vistos.has(k)) return;
+    vistos.add(k);
+    const la = e.lat != null ? e.lat : (e.center && e.center.lat);
+    const lo = e.lon != null ? e.lon : (e.center && e.center.lon);
+    fora.push({nome:n, lat:la==null?null:+la, lon:lo==null?null:+lo});
+  });
+  return fora.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+}
+
+/* ===== O ASSISTENTE DE IMPLANTAÇÃO ==================================
+   Cinco passos, um de cada vez, e cada um gravado ao avançar: se o
+   vereador fechar no meio, volta de onde parou. Nada aqui é obrigatório —
+   um gabinete pode entrar, usar e preencher depois. O que o assistente
+   faz é não deixar que "depois" seja nunca.
+   ==================================================================== */
+const IMP_PASSOS=[
+  ['Parlamentar', 'Quem é o parlamentar',      'O nome que vai no topo do sistema, nos relatórios e nos ofícios.'],
+  ['Município',   'De que cidade é o mandato', 'É o município que posiciona o mapa e dá nome à câmara.'],
+  ['Bairros',     'Os bairros da cidade',      'O esqueleto do mapa de demandas e do cadastro da equipe.'],
+  ['Contato',     'Como o gabinete atende',    'O telefone, o endereço e o horário que a equipe informa ao cidadão.'],
+  ['Pronto',      'Seu gabinete está pronto',  'Confira e conclua. Dá para mudar tudo depois, em Configurações.']
+];
+let impPasso=1;
+let impAchados=[];          // o que a busca no OpenStreetMap trouxe
+
+function abrirImplantacao(){
+  impPasso=1; impAchados=[];
+  const f=document.getElementById('formImplantar');
+  CAMPOS_PERFIL.forEach(k=>{ if(f[k]) f[k].value=perfil[k]||''; });
+  f.bairrosTexto.value='';
+  document.getElementById('impLocalStatus').textContent = (perfil.mapaLat!=null)
+    ? `Cidade já localizada (${(+perfil.mapaLat).toFixed(4)}, ${(+perfil.mapaLon).toFixed(4)}).`
+    : 'O sistema procura a sua cidade no OpenStreetMap para saber onde centrar o mapa de demandas.';
+  document.getElementById('impBairrosStatus').textContent='';
+  document.getElementById('impBairrosLista').innerHTML='';
+  impMostrar();
+  openModal('modal-implantar');
+}
+
+function impMostrar(){
+  const [,titulo,sub]=IMP_PASSOS[impPasso-1];
+  document.getElementById('impTitulo').textContent=titulo;
+  document.getElementById('impSub').textContent=sub;
+  document.querySelectorAll('#formImplantar .imp-passo').forEach(el=>{
+    el.hidden = +el.dataset.passo !== impPasso;
+  });
+  document.getElementById('impTrilha').innerHTML=IMP_PASSOS.map(([curto],i)=>{
+    const n=i+1, cls = n===impPasso ? ' e-agora' : (n<impPasso ? ' e-feito' : '');
+    return `<span class="imp-ponto${cls}"><b>${n<impPasso?'✓':n}</b><em>${curto}</em></span>`;
+  }).join('');
+  document.getElementById('impVoltar').hidden = impPasso===1;
+  document.getElementById('impAvancar').textContent = impPasso===IMP_PASSOS.length ? 'Concluir implantação' : 'Continuar';
+  document.getElementById('impDepois').hidden = impPasso===IMP_PASSOS.length;
+  if(impPasso===3) impPintarBairros();
+  if(impPasso===IMP_PASSOS.length) impResumo();
+}
+
+/* lê do formulário do assistente só os campos do passo que está na tela */
+function impGravarPasso(){
+  const f=document.getElementById('formImplantar');
+  document.querySelectorAll(`#formImplantar .imp-passo[data-passo="${impPasso}"] [name]`).forEach(el=>{
+    if(el.name==='bairrosTexto') return;
+    if(CAMPOS_PERFIL.includes(el.name)) perfil[el.name]=(el.value||'').trim();
+  });
+  perfil.uf=(perfil.uf||'').toUpperCase().slice(0,2);
+  if(impPasso===2 && !perfil.camaraNome && perfil.cidade)
+    perfil.camaraNome='Câmara Municipal de '+perfil.cidade;
+  if(f.camaraNome && impPasso===2) f.camaraNome.value=perfil.camaraNome;
+  salvarPerfil();
+  applyPerfil();
+}
+
+async function impAvancarPasso(){
+  const bt=document.getElementById('impAvancar');
+  impGravarPasso();
+  if(impPasso===3){
+    bt.disabled=true;
+    await impGravarBairros();
+    bt.disabled=false;
+  }
+  if(impPasso===IMP_PASSOS.length){ await impConcluir(); return; }
+  impPasso++;
+  impMostrar();
+}
+
+/* grava o que a busca trouxe e o que foi digitado à mão */
+async function impGravarBairros(){
+  const f=document.getElementById('formImplantar');
+  const digitados=(f.bairrosTexto.value||'').split(/[\n;]+/).map(x=>x.trim()).filter(Boolean);
+  let n=0;
+  for(const b of impAchados)  { if(await addBairro(b.nome, b.lat, b.lon)) n++; }
+  for(const nome of digitados){ if(await addBairro(nome, null, null))     n++; }
+  impAchados=[]; f.bairrosTexto.value='';
+  if(n){
+    esquecerCoords(); initBairrosDatalist(); derrubarMapa();
+    toast(`${n} ${n===1?'bairro cadastrado':'bairros cadastrados'}.`);
+  }
+  impPintarBairros();
+}
+
+function impPintarBairros(){
+  const box=document.getElementById('impBairrosLista');
+  const jaTem=listaBairros();
+  const mostrar = impAchados.length ? impAchados.map(b=>({n:b.nome})) : jaTem;
+  box.innerHTML = mostrar.slice(0,120).map(b=>`<span class="chip chip--bairro">${escapaHtml(b.n||b.nome)}</span>`).join('')
+    + (mostrar.length>120 ? `<span class="chip">+${mostrar.length-120}</span>` : '');
+  if(!impAchados.length && jaTem.length){
+    document.getElementById('impBairrosStatus').textContent =
+      `${jaTem.length} ${jaTem.length===1?'bairro já cadastrado':'bairros já cadastrados'}.`;
+  }
+}
+
+function impResumo(){
+  const C=cidadeAtual();
+  const linhas=[
+    ['Parlamentar', [perfil.nome, perfil.cargo, perfil.partido].filter(Boolean).join(' · ')],
+    ['Gabinete',    nomeGabinete()],
+    ['Município',   [perfil.cidade, perfil.uf].filter(Boolean).join(' / ') + (C.lat!=null ? ' · localizado no mapa' : ' · sem localização no mapa')],
+    ['Câmara',      perfil.camaraNome],
+    ['Bairros',     listaBairros().length ? listaBairros().length+' cadastrados' : 'nenhum'],
+    ['Contato',     [perfil.telefone, perfil.whatsapp, perfil.email].filter(Boolean).join(' · ')],
+    ['Atendimento', [perfil.endereco, perfil.horario].filter(Boolean).join(' · ')]
+  ];
+  document.getElementById('impResumo').innerHTML =
+    `<dl class="imp-resumo">` + linhas.map(([r,v])=>
+      `<dt>${r}</dt><dd class="${v?'':'imp-vazio'}">${escapaHtml(v||'em branco — dá para preencher depois')}</dd>`).join('') +
+    `</dl><p class="imp-aviso">Ao concluir, o aviso de implantação sai do painel. Tudo isto continua editável em <strong>Configurações</strong>, e a sua equipe entra pela tela <strong>Acessos</strong>, com o código de convite que você gera lá.</p>`;
+}
+
+async function impConcluir(){
+  const bt=document.getElementById('impAvancar');
+  bt.disabled=true;
+  try{
+    if(typeof marcarImplantado==='function') await marcarImplantado();
+    else { perfil.implantado=true; salvarPerfil(); }
+  }finally{ bt.disabled=false; }
+  closeModal();
+  applyPerfil(); initBairrosDatalist(); derrubarMapa();
+  renderDash();
+  toast('Gabinete configurado. Bom mandato!');
+}
+
+/* ===== os botões ===== */
+document.getElementById('impAvancar').addEventListener('click',impAvancarPasso);
+document.getElementById('impVoltar').addEventListener('click',()=>{ impGravarPasso(); impPasso--; impMostrar(); });
+document.getElementById('impDepois').addEventListener('click',()=>{ impGravarPasso(); closeModal(); mostrarAvisoImplantacao(); });
+document.getElementById('btnImplantacao').addEventListener('click',abrirImplantacao);
+
+document.getElementById('impLocalizar').addEventListener('click',async e=>{
+  const f=document.getElementById('formImplantar');
+  const st=document.getElementById('impLocalStatus');
+  const cidade=(f.cidade.value||'').trim(), uf=(f.uf.value||'').trim();
+  if(!cidade){ st.textContent='Escreva o nome do município primeiro.'; return; }
+  e.target.disabled=true; st.textContent='Procurando no OpenStreetMap…';
+  const r=await localizarCidade(cidade, uf);
+  e.target.disabled=false;
+  if(!r){ st.textContent='Não encontrei essa cidade. Confira o nome e a UF, ou siga adiante — o mapa pode ser ajustado depois.'; return; }
+  perfil.mapaLat=r.lat; perfil.mapaLon=r.lon;
+  impGravarPasso();
+  st.textContent=`Encontrei: ${r.onde}. O mapa de demandas vai abrir aqui.`;
+});
+
+document.getElementById('impBuscarBairros').addEventListener('click',async e=>{
+  const st=document.getElementById('impBairrosStatus');
+  if(!perfil.cidade){ st.textContent='Volte um passo e informe o município.'; return; }
+  e.target.disabled=true; st.textContent='Procurando os bairros no OpenStreetMap… isso pode levar meio minuto.';
+  let local = (perfil.mapaLat!=null)
+    ? {lat:perfil.mapaLat, lon:perfil.mapaLon, osmType:'node'}
+    : null;
+  const achado = await localizarCidade(perfil.cidade, perfil.uf);
+  if(achado){ local=achado; perfil.mapaLat=achado.lat; perfil.mapaLon=achado.lon; }
+  if(!local){ e.target.disabled=false; st.textContent='Não consegui localizar a cidade. Escreva os bairros abaixo, um por linha.'; return; }
+  const lista=await bairrosDoOSM(local);
+  e.target.disabled=false;
+  if(!lista){ st.textContent='O serviço do OpenStreetMap não respondeu agora. Tente de novo em um minuto, ou escreva os bairros abaixo.'; return; }
+  const novos=lista.filter(b=>!listaBairros().some(x=>semAcento(x.n)===semAcento(b.nome)));
+  impAchados=novos;
+  st.textContent = novos.length
+    ? `Encontrei ${novos.length} ${novos.length===1?'bairro':'bairros'}. Confira abaixo — ao continuar, eles entram na lista do gabinete.`
+    : 'O OpenStreetMap não trouxe bairro novo para esta cidade. Escreva os que faltam abaixo, um por linha.';
+  impPintarBairros();
+});
+
+/* Muitos gabinetes chegam com uma planilha de demandas de anos. Os
+   bairros deles estão ali dentro, escritos pela própria equipe — melhor
+   do que qualquer serviço externo, e sem depender de rede nenhuma. */
+function bairrosDosDados(){
+  const vistos=new Set(listaBairros().map(b=>semAcento(b.n)));
+  const achados=[];
+  [...demandas, ...apoiadores].forEach(x=>{
+    const n=(x.bairro||'').trim();
+    if(!n) return;
+    const k=semAcento(n);
+    if(vistos.has(k)) return;
+    vistos.add(k); achados.push(n);
+  });
+  return achados.sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
+
+/* ===== bairros na tela de Configurações ===== */
+document.getElementById('formBairro').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const inp=e.target.nome, nome=(inp.value||'').trim();
+  if(!nome) return;
+  const ok=await addBairro(nome, null, null);
+  if(!ok){ toast('Esse bairro já está na lista.'); return; }
+  inp.value='';
+  renderBairrosConfig(); initBairrosDatalist(); derrubarMapa();
+  toast('Bairro adicionado.');
+});
+
+document.getElementById('btnLocalizarCidade').addEventListener('click',async e=>{
+  const f=document.getElementById('formPerfil');
+  const cidade=(f.cidade.value||'').trim(), uf=(f.uf.value||'').trim();
+  const el=document.getElementById('cfgCoord');
+  if(!cidade){ el.textContent='Escreva o município primeiro.'; return; }
+  e.target.disabled=true; el.textContent='Procurando no OpenStreetMap…';
+  const r=await localizarCidade(cidade, uf);
+  e.target.disabled=false;
+  if(!r){ el.textContent='Não encontrei essa cidade. Confira o nome e a UF.'; return; }
+  perfil.cidade=cidade; perfil.uf=uf.toUpperCase().slice(0,2);
+  perfil.mapaLat=r.lat; perfil.mapaLon=r.lon;
+  salvarPerfil(); derrubarMapa(); mostrarCoordenada();
+  toast('Cidade localizada: '+r.onde);
+});
+
+document.getElementById('btnBairrosDasDemandas').addEventListener('click',async ()=>{
+  const achados=bairrosDosDados();
+  if(!achados.length){ toast('Nenhum bairro novo nas demandas e nos apoiadores.'); return; }
+  perguntar({
+    titulo:'Aproveitar os bairros já cadastrados',
+    texto:`Encontrei ${achados.length} ${achados.length===1?'bairro':'bairros'} escritos nas demandas e nos apoiadores que ainda não estão na lista. Eles entram sem coordenada — contam e filtram, mas só ganham alfinete no mapa depois da busca no OpenStreetMap.`,
+    botao:'Adicionar',
+    icone:'pin', tom:'neutro',
+    acao:async()=>{
+      let n=0;
+      for(const nome of achados){ if(await addBairro(nome, null, null)) n++; }
+      renderBairrosConfig(); initBairrosDatalist(); derrubarMapa();
+      toast(`${n} ${n===1?'bairro adicionado':'bairros adicionados'}.`);
+    }
+  });
+});
+
+document.getElementById('btnBuscarBairros').addEventListener('click',async e=>{
+  const f=document.getElementById('formPerfil');
+  const cidade=(f.cidade.value||'').trim(), uf=(f.uf.value||'').trim();
+  const sub=document.getElementById('cfgBairrosSub');
+  if(!cidade){ toast('Informe o município na ficha do gabinete primeiro.'); return; }
+  e.target.disabled=true; sub.textContent='Procurando os bairros no OpenStreetMap…';
+  const local=await localizarCidade(cidade, uf);
+  if(!local){ e.target.disabled=false; renderBairrosConfig(); toast('Não consegui localizar essa cidade.'); return; }
+  perfil.mapaLat=local.lat; perfil.mapaLon=local.lon; salvarPerfil();
+  const lista=await bairrosDoOSM(local);
+  e.target.disabled=false;
+  if(!lista){ renderBairrosConfig(); toast('O OpenStreetMap não respondeu agora. Tente de novo em um minuto.'); return; }
+  let n=0;
+  for(const b of lista){ if(await addBairro(b.nome, b.lat, b.lon)) n++; }
+  renderBairrosConfig(); initBairrosDatalist(); mostrarCoordenada(); derrubarMapa();
+  toast(n ? `${n} ${n===1?'bairro adicionado':'bairros adicionados'}.` : 'Nenhum bairro novo encontrado.');
+});
 
 </script>
 
