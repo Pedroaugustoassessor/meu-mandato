@@ -1215,8 +1215,11 @@ i[data-i]{width:20px;height:20px;display:inline-block;flex:0 0 auto;background:c
 .seg button{border:none;background:none;cursor:pointer;font-family:'Sora';font-weight:600;font-size:13.5px;
   color:var(--slate);padding:9px 18px;border-radius:8px;transition:.15s}
 .seg button.active{background:var(--green);color:#fff;box-shadow:0 2px 6px rgba(0,155,58,.3)}
-/* por padrão (modo demandas): mostra só a legenda de demandas */
-.mapa-legend--ind,.mapa-legend--apo,.mapa-fapo{display:none}
+/* por padrão (modo demandas): mostra só a legenda de demandas.
+   Precisa do #view-mapa na frente: sem ele a regra .mapa-legend mais
+   abaixo (display:flex) ganhava por vir depois, e as três legendas
+   apareciam empilhadas ao mesmo tempo. */
+#view-mapa .mapa-legend--ind,#view-mapa .mapa-legend--apo,#view-mapa .mapa-fapo{display:none}
 /* modo indicações */
 #view-mapa.modo-ind .mapa-legend--dem,#view-mapa.modo-ind .mapa-legend--apo{display:none}
 #view-mapa.modo-ind .mapa-legend--ind{display:flex}
@@ -1932,6 +1935,38 @@ body.is-locked{overflow:hidden}
   .bairro-add .btn{width:100%}
 }
 
+/* ===== UM PONTO POR LUGAR, E O GOOGLE MAPS NO BALÃO =====
+   O número dentro do pino é quantos registros há naquele lugar. Passando
+   de 99 o pino vira pastilha, senão o número não cabe no bico. */
+.pin__n{position:absolute;left:2px;top:0;width:22px;height:22px;display:flex;align-items:center;
+  justify-content:center;font:700 10.5px/1 'Inter',sans-serif;color:#fff;pointer-events:none;
+  letter-spacing:-.2px}
+.pin--largo{width:38px}
+.pin--largo .pin__b{width:34px;height:22px;border-radius:11px 11px 11px 3px;transform:none;left:2px;top:0}
+.pin--largo .pin__n{width:34px;font-size:11px}
+
+.pop{min-width:200px}
+.pop__t{display:block;font-family:'Sora',sans-serif;font-size:14px;line-height:1.3;color:var(--ink)}
+.pop__n{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.pop__lista{list-style:none;margin:9px 0 0;padding:0;max-height:124px;overflow:auto;display:grid;gap:7px}
+.pop__lista li{display:grid;gap:2px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.pop__lista li:last-child{border-bottom:0;padding-bottom:0}
+.pop__lista a,.pop__lista span{font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none;line-height:1.35}
+.pop__lista a{cursor:pointer}
+.pop__lista a:hover{color:var(--green);text-decoration:underline}
+.pop__lista em{font-style:normal;font-size:11px;color:var(--muted)}
+.pop__mais{margin:8px 0 0}
+.pop__link{background:none;border:0;padding:0;font:600 11.5px 'Inter',sans-serif;color:var(--green);
+  cursor:pointer;text-align:left}
+.pop__link:hover{text-decoration:underline}
+
+.pop-gmaps{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px}
+.pop-gmaps a{font:600 11.5px 'Inter',sans-serif;text-decoration:none;padding:5px 9px;border-radius:9px;
+  border:1px solid var(--line);color:var(--slate);background:var(--bg);transition:.15s}
+.pop-gmaps a:hover{border-color:var(--green);color:var(--green);background:#fff}
+.det__gmaps{margin:2px 0 4px 26px}
+.det__gmaps .pop-gmaps{border-top:0;padding-top:0;margin-top:0}
+
 /* ===== CRM DE PROJETOS NO CELULAR =====
    Fica no fim do arquivo de propósito: assim estas regras vêm depois das
    do detalhe da demanda e realmente valem na tela pequena. */
@@ -2193,7 +2228,7 @@ body.is-locked{overflow:hidden}
     <div><strong>—</strong><span>Gabinete</span></div>
     <a href="#" class="sidebar__logout" title="Sair"><i data-i="exit"></i></a>
   </div>
-  <div class="app-ver" id="appVer">Login e banco online · v15</div>
+  <div class="app-ver" id="appVer">Login e banco online · v17</div>
 </aside>
 <div class="scrim" id="scrim"></div>
 
@@ -2523,18 +2558,19 @@ body.is-locked{overflow:hidden}
             <span><i class="dot dot--amber"></i>Alta</span>
             <span><i class="dot dot--blue"></i>Média</span>
             <span><i class="dot dot--green"></i>Baixa</span>
+            <span class="mapa-legend__hint">Um ponto por lugar — a cor é a prioridade mais alta ali</span>
           </div>
           <div class="mapa-legend mapa-legend--ind">
             <span><i class="dot dot--green"></i>Aprovada / virou lei</span>
             <span><i class="dot dot--amber"></i>Em trâmite</span>
             <span><i class="dot dot--red"></i>Arquivada</span>
-            <span class="mapa-legend__hint">Clique no pino para abrir a matéria na Câmara</span>
+            <span class="mapa-legend__hint">Um ponto por bairro — clique para ver as indicações e abrir no Google Maps</span>
           </div>
           <div class="mapa-legend mapa-legend--apo">
             <span><i class="dot dot--green"></i>Liderança</span>
             <span><i class="dot dot--blue"></i>Voluntário</span>
             <span><i class="dot dot--amber"></i>Apoiador</span>
-            <span class="mapa-legend__hint">Cada pino é um apoiador, no bairro onde mora</span>
+            <span class="mapa-legend__hint">Um ponto por bairro — o número é quanta gente mora ali</span>
           </div>
         </div>
 
@@ -2999,6 +3035,7 @@ body.is-locked{overflow:hidden}
       <div class="det__tags" id="detTags"></div>
       <div class="det__row"><i data-i="users"></i><span id="detSolic"></span></div>
       <div class="det__row"><i data-i="pin"></i><span id="detLocal"></span></div>
+      <div class="det__gmaps" id="detGmaps" hidden></div>
       <div class="det__row" id="detTelRow"><i data-i="phone"></i><span id="detTel"></span>
         <a class="btn-text" id="detWhats" href="#" target="_blank" rel="noopener" hidden>Chamar no WhatsApp</a></div>
       <div class="det__row"><i data-i="calendar"></i><span id="detData"></span></div>
@@ -3944,9 +3981,9 @@ function mostrarModo(){
   const el = document.getElementById('appVer');
   if(!el) return;
   el.textContent = ONLINE
-    ? `Conectado · ${usuario?.email || ''} · v16`
-    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v16`
-                   : 'Modo local (só neste navegador) · v16');
+    ? `Conectado · ${usuario?.email || ''} · v17`
+    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v17`
+                   : 'Modo local (só neste navegador) · v17');
 }
 
 /* ===== BAIXAR TUDO DO BANCO ========================================
@@ -5123,7 +5160,7 @@ function renderDemandas(){
     const s=STAT[d.status], p=PRIO[d.prioridade];
     const quem=[d.solicitante, d.categoria].filter(Boolean).join(' · ');
     return `<tr class="row-click" data-detalhe="${d.id}"><td class="td-title"><b>${d.titulo}</b><span>${quem||'—'}</span></td>
-      <td class="td-local">${d.endereco?`<b>${d.endereco}</b>`:''}${d.bairro||'Sem bairro'}${d.bairro?', '+(d.cidade||CIDADE.nome):''}</td>
+      <td class="td-local">${d.endereco?`<b>${d.endereco}</b>`:''}${d.bairro||'Sem bairro'}${d.bairro&&cidadeDe(d)?', '+cidadeDe(d):''}</td>
       <td><span class="tag tag--${p.c}">${p.t}</span></td>
       <td><span class="tag tag--${s.c}">${s.t}</span></td>
       <td class="td-date">${d.data}</td>
@@ -5481,7 +5518,8 @@ function openProjeto(id){
   document.getElementById('pjPipe').innerHTML=ETAPAS.map((x,k)=>
     `<span class="${k<=i?'on':''}" title="${x.t}"></span>`).join('');
 
-  document.getElementById('pjLocal').textContent=p.bairro ? `${p.bairro}, ${CIDADE.nome}` : 'Bairro não informado';
+  document.getElementById('pjLocal').textContent=p.bairro
+    ? [p.bairro, cidadeAtual().nome].filter(Boolean).join(', ') : 'Bairro não informado';
   document.getElementById('pjParceiro').textContent=p.parceiro || 'Sem órgão ou parceiro definido';
   document.getElementById('pjContato').textContent=p.contato || 'Sem contato cadastrado';
   const wa=document.getElementById('pjWhats'), tel=(p.contato||'').replace(/\D/g,'');
@@ -5705,7 +5743,7 @@ function ensureMap(){
     if(temImagem){
       const b=L.latLngBounds(MAPA_BASE.bounds);
       L.imageOverlay(MAPA_BASE.img, MAPA_BASE.bounds, {attribution:'© OpenStreetMap'}).addTo(mapaMap);
-      mapaMap.setMaxBounds(b.pad(0.15));
+      mapaMap.setMaxBounds(b.pad(0.45));   /* folga para o balão caber na tela */
       mapaMap.fitBounds(b);
     } else {
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -5716,12 +5754,99 @@ function ensureMap(){
   }
   return true;
 }
-function pinAt(item, usados){
-  if(item.lat&&item.lon) return [item.lat,item.lon];
-  const c=coordsBairro(item.bairro); if(!c) return null;
-  const k=norm(item.bairro), i=(usados[k]=(usados[k]||0)+1)-1;
-  const ang=i*2.4, rad=0.00035*Math.sqrt(i);
-  return [c.lat+rad*Math.cos(ang), c.lon+rad*Math.sin(ang)];
+/* ===== UM PONTO POR LUGAR =====
+   Antes cada registro virava um alfinete, e os que só tinham bairro
+   eram espalhados em espiral em volta do centro dele: um bairro com 300
+   pedidos virava uma nuvem de 300 pinos em endereços que não existem.
+   Agora cada lugar é UM ponto, com o número de registros dentro, e o que
+   está ali se lê no balão. Quem tem endereço exato (geocodificado no
+   cadastro) ganha ponto próprio; o resto se junta no centro do bairro. */
+function ondeFica(item){
+  if(item.lat!=null && item.lat!=='' && item.lon!=null && item.lon!=='')
+    return {pos:[+item.lat, +item.lon], exato:true};
+  const c=coordsBairro(item.bairro);
+  return c ? {pos:[c.lat, c.lon], exato:false} : null;
+}
+function agruparPontos(itens){
+  const grupos=new Map();
+  itens.forEach(it=>{
+    const o=ondeFica(it); if(!o) return;
+    const chave = o.exato ? `p:${o.pos[0].toFixed(5)},${o.pos[1].toFixed(5)}`
+                          : `b:${norm(it.bairro)}`;
+    let g=grupos.get(chave);
+    if(!g){ g={pos:o.pos, exato:o.exato, bairro:it.bairro||'', itens:[]}; grupos.set(chave,g); }
+    g.itens.push(it);
+  });
+  return [...grupos.values()];
+}
+/* a cor do ponto é a do item que mais pede atenção ali */
+function corDoGrupo(itens, campo, ordem, cores, padrao){
+  for(const chave of ordem) if(itens.some(i=>(i[campo]||'')===chave)) return cores[chave]||padrao;
+  return padrao;
+}
+function pinoDoGrupo(cor, quantos){
+  const largo = quantos>99;
+  const n = quantos>1 ? `<b class="pin__n">${quantos>999?'999+':quantos}</b>` : '';
+  return L.divIcon({className:'',
+    html:`<div class="pin pin--${cor}${largo?' pin--largo':''}"><div class="pin__b"></div>${n}</div>`,
+    iconSize:[largo?38:26,26], iconAnchor:[largo?19:13,24]});
+}
+
+/* ===== LIGAÇÃO COM O GOOGLE MAPS =====
+   O mapa daqui mostra ONDE é; o Google mostra COMO é. Por isso três
+   atalhos em todo balão: abrir o lugar, descer na rua (Street View) e
+   traçar a rota. Havendo endereço escrito, a busca vai pelo texto — o
+   Google acerta mais pelo nome da rua do que pela coordenada do centro
+   do bairro. O Street View é o único que exige coordenada. */
+function enderecoDoItem(it){
+  const C=cidadeAtual();
+  return [it.endereco, it.bairro, it.cidade||C.nome, C.uf].filter(Boolean).join(', ');
+}
+/* a cidade do registro, com recuo para a do gabinete — nunca a do acervo */
+function cidadeDe(it){ return it.cidade || cidadeAtual().nome || ''; }
+function lugarDoGrupo(g){
+  const C=cidadeAtual();
+  if(g.exato && g.itens[0] && g.itens[0].endereco) return enderecoDoItem(g.itens[0]);
+  if(g.bairro) return [g.bairro, C.nome, C.uf].filter(Boolean).join(', ');
+  return '';
+}
+function googleHtml(pos, busca){
+  if(!pos && !busca) return '';
+  const q=encodeURIComponent(busca || `${pos[0]},${pos[1]}`);
+  const rua = pos ? `<a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${pos[0]},${pos[1]}" target="_blank" rel="noopener">Ver a rua</a>` : '';
+  return `<div class="pop-gmaps">`
+    + `<a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Abrir no Google Maps</a>`
+    + rua
+    + `<a href="https://www.google.com/maps/dir/?api=1&destination=${q}" target="_blank" rel="noopener">Como chegar</a>`
+    + `</div>`;
+}
+/* O balão: o lugar, o resumo, uma amostra e os atalhos do Google.
+   Curto de propósito — num bairro com 130 pedidos a lista inteira só
+   empurraria os botões para fora do mapa. Quem quer a lista inteira
+   clica em "ver todas", que leva à tela de demandas já filtrada. */
+const POP_MAX=6;
+/* sem maxHeight: ele rolaria o balão inteiro e esconderia justamente os
+   botões do Google lá embaixo. Quem rola é só a lista, pelo CSS. */
+const POP_OPC={maxWidth:300, minWidth:240, autoPanPadding:[18,18], keepInView:true};
+function balao(g, titulo, resumo, linhas, rodape){
+  const t=g.itens.length;
+  return `<div class="pop"><b class="pop__t">${escapaHtml(titulo)}</b>`
+    + `<span class="pop__n">${escapaHtml(resumo)}</span>`
+    + `<ul class="pop__lista">${linhas.slice(0,POP_MAX).join('')}</ul>`
+    + (t>POP_MAX ? `<p class="pop__mais">${rodape||`e mais ${t-POP_MAX}…`}</p>` : (rodape||''))
+    + googleHtml(g.pos, lugarDoGrupo(g)) + `</div>`;
+}
+const plural=(n,um,muitos)=>`${n} ${n===1?um:muitos}`;
+/* o balão fica por cima do mapa: fecha antes de abrir a ficha */
+function abrirDoMapa(id){
+  if(mapaMap) mapaMap.closePopup();
+  openDetalhe(id);
+}
+function verBairroNasDemandas(bairro){
+  if(mapaMap) mapaMap.closePopup();
+  const b=document.getElementById('fDemandaBusca');
+  if(b){ b.value=bairro; }
+  go('demandas');
 }
 function renderMapa(){
   const v=document.getElementById('view-mapa');
@@ -5753,13 +5878,17 @@ function renderMapaApoiadores(){
   document.getElementById('emptyMapa').hidden = loc.length>0;
   if(!ensureMap()) return;
   mapaLayer.clearLayers();
-  const usados={};
-  loc.forEach(a=>{
-    const pos=pinAt(a,usados); if(!pos) return;
-    const cor=PIN_TIPO_APO[a.tipo]||'amber';
-    const icon=L.divIcon({className:'',html:`<div class="pin pin--${cor}"><div class="pin__b"></div></div>`,iconSize:[26,26],iconAnchor:[13,24]});
-    L.marker(pos,{icon}).addTo(mapaLayer)
-      .bindTooltip(`<b>${a.nome}</b><br>${a.tipo} · ${a.bairro}<br>${a.telefone||''}`);
+  agruparPontos(loc).forEach(g=>{
+    const cor=corDoGrupo(g.itens,'tipo',['Liderança','Voluntário','Apoiador'],PIN_TIPO_APO,'amber');
+    const titulo=g.bairro||'Sem bairro';
+    const lids=g.itens.filter(a=>a.tipo==='Liderança').length;
+    const resumo=[plural(g.itens.length,'apoiador','apoiadores'),
+      lids?`${lids} liderança${lids>1?'s':''}`:''].filter(Boolean).join(' · ');
+    const linhas=g.itens.map(a=>`<li><span>${escapaHtml(a.nome)}</span>`
+      + `<em>${escapaHtml(a.tipo||'Apoiador')}${a.telefone?' · '+escapaHtml(a.telefone):''}</em></li>`);
+    L.marker(g.pos,{icon:pinoDoGrupo(cor,g.itens.length)}).addTo(mapaLayer)
+      .bindTooltip(`<b>${escapaHtml(titulo)}</b><br>${g.itens.length} ${g.itens.length===1?'apoiador':'apoiadores'}`)
+      .bindPopup(balao(g,titulo,resumo,linhas),POP_OPC);
   });
   setTimeout(()=>mapaMap.invalidateSize(),120);
 }
@@ -5791,12 +5920,25 @@ function renderMapaDemandas(){
   document.getElementById('emptyMapa').hidden = comCoord.length>0;
   if(!ensureMap()) return;
   mapaLayer.clearLayers();
-  const usados={};
-  comCoord.forEach(d=>{
-    const pos=pinAt(d,usados); if(!pos) return;
-    const cor=PIN_COR[d.prioridade]||'blue';
-    const icon=L.divIcon({className:'',html:`<div class="pin pin--${cor}"><div class="pin__b"></div></div>`,iconSize:[26,26],iconAnchor:[13,24]});
-    L.marker(pos,{icon}).addTo(mapaLayer).bindTooltip(`<b>${d.titulo}</b><br>${d.bairro}`).on('click',()=>openDetalhe(d.id));
+  agruparPontos(comCoord).forEach(g=>{
+    const cor=corDoGrupo(g.itens,'prioridade',['urgente','alta','media','baixa'],PIN_COR,'blue');
+    const titulo=(g.exato && g.itens[0].endereco) ? g.itens[0].endereco : (g.bairro||'Sem bairro');
+    const linhas=g.itens.map(d=>`<li><a href="#" onclick="abrirDoMapa('${d.id}');return false">${escapaHtml(d.titulo)}</a>`
+      + `<em>${escapaHtml((PRIO[d.prioridade]||{}).t||'')} · ${escapaHtml((STAT[d.status]||{}).t||'')}`
+      + `${d.data?' · '+escapaHtml(d.data):''}</em></li>`);
+    const urgentes=g.itens.filter(d=>d.prioridade==='urgente').length;
+    const abertas=g.itens.filter(d=>d.status!=='concluida').length;
+    const resumo=[plural(g.itens.length,'demanda','demandas'),
+      abertas?`${abertas} em aberto`:'todas concluídas',
+      urgentes?`${urgentes} urgente${urgentes>1?'s':''}`:''].filter(Boolean).join(' · ');
+    /* escapa para JS primeiro, depois para HTML: um bairro com apóstrofo
+       (Sant'Ana) quebraria o onclick se a ordem fosse ao contrário */
+    const rodape = g.bairro
+      ? `<button type="button" class="pop__link" onclick="verBairroNasDemandas('${escapaHtml(g.bairro.replace(/\\/g,'\\\\').replace(/'/g,"\\'"))}')">Ver as ${g.itens.length} demandas deste bairro</button>`
+      : '';
+    L.marker(g.pos,{icon:pinoDoGrupo(cor,g.itens.length)}).addTo(mapaLayer)
+      .bindTooltip(`<b>${escapaHtml(titulo)}</b><br>${g.itens.length} ${g.itens.length===1?'demanda':'demandas'}`)
+      .bindPopup(balao(g,titulo,resumo,linhas,rodape),POP_OPC);
   });
   setTimeout(()=>mapaMap.invalidateSize(),120);
 }
@@ -5815,14 +5957,17 @@ function renderMapaIndicacoes(){
   document.getElementById('emptyMapa').hidden = loc.length>0;
   if(!ensureMap()) return;
   mapaLayer.clearLayers();
-  const usados={};
-  loc.forEach(m=>{
-    const pos=pinAt(m,usados); if(!pos) return;
-    const cor=PIN_SIT[m.sit]||'amber';
-    const icon=L.divIcon({className:'',html:`<div class="pin pin--${cor}"><div class="pin__b"></div></div>`,iconSize:[26,26],iconAnchor:[13,24]});
-    L.marker(pos,{icon}).addTo(mapaLayer)
-      .bindTooltip(`<b>IND ${m.num}/${m.ano}</b><br>${m.ementa.slice(0,70)}…`)
-      .on('click',()=>window.open(`${BASE_SAPL}/materia/${m.id}`,'_blank'));
+  agruparPontos(loc).forEach(g=>{
+    const cor=corDoGrupo(g.itens,'sit',['tramite','lei','aprovado','arquivado'],PIN_SIT,'amber');
+    const titulo=g.bairro||'Sem bairro';
+    const ok=g.itens.filter(m=>m.sit==='lei'||m.sit==='aprovado').length;
+    const resumo=[plural(g.itens.length,'indicação','indicações'),
+      ok?`${ok} aprovada${ok>1?'s':''}`:''].filter(Boolean).join(' · ');
+    const linhas=g.itens.map(m=>`<li><a href="${BASE_SAPL}/materia/${m.id}" target="_blank" rel="noopener">IND ${m.num}/${m.ano}</a>`
+      + `<em>${escapaHtml((m.ementa||'').slice(0,90))}…</em></li>`);
+    L.marker(g.pos,{icon:pinoDoGrupo(cor,g.itens.length)}).addTo(mapaLayer)
+      .bindTooltip(`<b>${escapaHtml(titulo)}</b><br>${g.itens.length} ${g.itens.length===1?'indicação':'indicações'}`)
+      .bindPopup(balao(g,titulo,resumo,linhas),POP_OPC);
   });
   setTimeout(()=>mapaMap.invalidateSize(),120);
 }
@@ -6139,8 +6284,15 @@ function openDetalhe(id){
     + (d.categoria?`<span class="tag tag--green-soft">${d.categoria}</span>`:'');
   document.getElementById('detSolic').textContent=d.solicitante||'Solicitante não informado';
   document.getElementById('detLocal').textContent=
-    [d.endereco, d.bairro ? `${d.bairro}, ${d.cidade||CIDADE.nome}` : ''].filter(Boolean).join(' · ')
+    [d.endereco, d.bairro ? [d.bairro, cidadeDe(d)].filter(Boolean).join(', ') : ''].filter(Boolean).join(' · ')
     || 'Sem endereço (pedido geral do município)';
+  /* o Google é o complemento: a ficha diz o que é, o Google mostra a rua */
+  const gm=document.getElementById('detGmaps');
+  const onde=ondeFica(d);
+  const busca=d.endereco ? enderecoDoItem(d)
+    : (d.bairro ? [d.bairro, cidadeDe(d), cidadeAtual().uf].filter(Boolean).join(', ') : '');
+  gm.innerHTML = googleHtml(onde && onde.pos, busca);
+  gm.hidden = !gm.innerHTML;
   mostraLinha('detTelRow','detTel', d.telefone, 'tel');
   const tel=(d.telefone||'').replace(/\D/g,''), wa=document.getElementById('detWhats');
   wa.hidden = tel.length<10;              /* sem DDD não dá para montar o link */
@@ -6301,7 +6453,7 @@ document.getElementById('formDemanda').addEventListener('submit',async e=>{
   e.preventDefault(); const f=new FormData(e.target);
   const lim=k=>(f.get(k)||'').trim();
   const dem={id:novoId(),titulo:lim('titulo'),solicitante:lim('solicitante'),telefone:lim('telefone'),
-    endereco:lim('endereco'),bairro:lim('bairro'),cidade:CIDADE.nome,categoria:lim('categoria'),
+    endereco:lim('endereco'),bairro:lim('bairro'),cidade:cidadeAtual().nome,categoria:lim('categoria'),
     prioridade:f.get('prioridade'),status:f.get('status'),data:agora(),
     canal:lim('canal'),protocolo:lim('protocolo'),meio:'',indicacao:'',
     enviada:lim('canal')?agora():'',respondida:'',resposta:'',lat:null,lon:null};
