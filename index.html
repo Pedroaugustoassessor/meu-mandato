@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://nominatim.openstreetmap.org https://overpass-api.de https://overpass.kumi.systems https://overpass.private.coffee; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <title>Meu Mandato</title>
 <style>
 @font-face {
@@ -2228,7 +2229,7 @@ body.is-locked{overflow:hidden}
     <div><strong>—</strong><span>Gabinete</span></div>
     <a href="#" class="sidebar__logout" title="Sair"><i data-i="exit"></i></a>
   </div>
-  <div class="app-ver" id="appVer">Login e banco online · v17</div>
+  <div class="app-ver" id="appVer">Login e banco online · v18</div>
 </aside>
 <div class="scrim" id="scrim"></div>
 
@@ -3981,9 +3982,9 @@ function mostrarModo(){
   const el = document.getElementById('appVer');
   if(!el) return;
   el.textContent = ONLINE
-    ? `Conectado · ${usuario?.email || ''} · v17`
-    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v17`
-                   : 'Modo local (só neste navegador) · v17');
+    ? `Conectado · ${usuario?.email || ''} · v18`
+    : (sessaoLocal ? `Modo local · ${sessaoLocal.email} · v18`
+                   : 'Modo local (só neste navegador) · v18');
 }
 
 /* ===== BAIXAR TUDO DO BANCO ========================================
@@ -4173,8 +4174,8 @@ function renderAcessos(){
     return `<div class="acesso${m.aprovado ? '' : ' acesso--pendente'}">
       <img src="${avatarURI(m.nome || m.email, m.aprovado ? '#009B3A' : '#a9820a', '#ffffff')}" alt="">
       <div class="acesso__quem">
-        <strong>${m.nome || '(sem nome)'}${eu ? ' <span class="acesso__eu">você</span>' : ''}</strong>
-        <small>${m.email}</small>
+        <strong>${escapaHtml(m.nome) || '(sem nome)'}${eu ? ' <span class="acesso__eu">você</span>' : ''}</strong>
+        <small>${escapaHtml(m.email)}</small>
       </div>
       <span class="tag tag--${m.papel === 'admin' ? 'blue' : (m.aprovado ? 'green' : 'amber')}">
         ${m.papel === 'admin' ? 'Vereador' : (m.aprovado ? 'Liberado' : 'Aguardando')}
@@ -4823,36 +4824,41 @@ async function renderDono(){
   box.innerHTML = gabs.map(x => {
     const vagas = x.vagas_livres;
     const lotado = vagas <= 0;
+    /* ATENÇÃO: cada 'x' aqui é um gabinete de OUTRO cliente, e o nome e o
+       município foram digitados por ele. Esta tela é a do dono da
+       plataforma — um texto não escapado aqui roda com a SESSÃO DO DONO,
+       que enxerga todos os gabinetes. É o pior lugar do sistema para
+       esquecer um escapaHtml(). */
     const opcoesPlano = planos.map(pl =>
-      `<option value="${pl.codigo}" ${pl.codigo === x.plano_codigo ? 'selected' : ''}>${pl.nome} — ${dinheiro(pl.preco_mensal_centavos)}/mês · ${pl.limite_membros} pessoas</option>`
+      `<option value="${escapaHtml(pl.codigo)}" ${pl.codigo === x.plano_codigo ? 'selected' : ''}>${escapaHtml(pl.nome)} — ${dinheiro(pl.preco_mensal_centavos)}/mês · ${pl.limite_membros} pessoas</option>`
     ).join('');
     const opcoesSit = Object.entries(SITUACOES).map(([k, rot]) =>
-      `<option value="${k}" ${k === x.situacao ? 'selected' : ''}>${rot}</option>`
+      `<option value="${escapaHtml(k)}" ${k === x.situacao ? 'selected' : ''}>${escapaHtml(rot)}</option>`
     ).join('');
     /* O acervo legislativo é a legislação do município dentro do sistema.
        Montar o de uma câmara nova é trabalho de implantação; aqui só se
        liga para o cliente certo — e é o que faz as telas de legislação
        aparecerem no menu dele. */
     const opcoesAcervo = ACERVOS.map(([cod, rot]) =>
-      `<option value="${cod}" ${cod === (x.acervo || '') ? 'selected' : ''}>${rot}</option>`
+      `<option value="${escapaHtml(cod)}" ${cod === (x.acervo || '') ? 'selected' : ''}>${escapaHtml(rot)}</option>`
     ).join('');
     return `<article class="dono">
       <div class="dono__topo">
         <div class="dono__quem">
-          <strong>${x.nome || '(sem nome)'}</strong>
-          <small>${x.parlamentar || ''}${x.municipio ? ' · ' + x.municipio : ''}${x.uf ? '/' + x.uf : ''}</small>
+          <strong>${escapaHtml(x.nome) || '(sem nome)'}</strong>
+          <small>${escapaHtml(x.parlamentar)}${x.municipio ? ' · ' + escapaHtml(x.municipio) : ''}${x.uf ? '/' + escapaHtml(x.uf) : ''}</small>
         </div>
-        <span class="tag tag--${x.situacao === 'ativo' ? 'green' : x.situacao === 'teste' ? 'amber' : 'red'}">${SITUACOES[x.situacao] || x.situacao}</span>
+        <span class="tag tag--${x.situacao === 'ativo' ? 'green' : x.situacao === 'teste' ? 'amber' : 'red'}">${escapaHtml(SITUACOES[x.situacao] || x.situacao)}</span>
       </div>
       <div class="dono__campos">
         <label class="field"><span>Plano</span>
-          <select data-gab="${x.id}" data-campo="plano_codigo">${opcoesPlano}</select></label>
+          <select data-gab="${escapaHtml(x.id)}" data-campo="plano_codigo">${opcoesPlano}</select></label>
         <label class="field"><span>Situação</span>
-          <select data-gab="${x.id}" data-campo="situacao">${opcoesSit}</select></label>
+          <select data-gab="${escapaHtml(x.id)}" data-campo="situacao">${opcoesSit}</select></label>
         <label class="field"><span>Vale até</span>
-          <input type="date" data-gab="${x.id}" data-campo="expira_em" value="${x.expira_em || ''}"></label>
+          <input type="date" data-gab="${escapaHtml(x.id)}" data-campo="expira_em" value="${escapaHtml(x.expira_em)}"></label>
         <label class="field"><span>Acervo legislativo</span>
-          <select data-gab="${x.id}" data-campo="acervo">${opcoesAcervo}</select></label>
+          <select data-gab="${escapaHtml(x.id)}" data-campo="acervo">${opcoesAcervo}</select></label>
       </div>
       <div class="dono__rodape${lotado ? ' dono__rodape--cheio' : ''}">
         ${x.pessoas_com_acesso} de ${x.limite_membros} pessoas com acesso ·
@@ -5074,18 +5080,18 @@ function renderDash(){
   dd.innerHTML = demandas.slice(0,4).map(d=>{
     const s=STAT[d.status], p=PRIO[d.prioridade];
     return `<li class="demand row-click" data-detalhe="${d.id}"><span class="demand__dot demand__dot--${s.dot}"></span>
-      <div class="demand__main"><div class="demand__top"><b>${d.titulo}</b>
+      <div class="demand__main"><div class="demand__top"><b>${escapaHtml(d.titulo)}</b>
       <span class="tag tag--${s.c}">${s.t}</span><span class="tag tag--${p.c}">${p.t}</span></div>
-      <p><i data-i="pin"></i>${d.endereco} · ${d.bairro}, ${d.cidade}</p></div>
-      <time>${d.data}</time></li>`;
+      <p><i data-i="pin"></i>${escapaHtml(d.endereco)} · ${escapaHtml(d.bairro)}, ${escapaHtml(d.cidade)}</p></div>
+      <time>${escapaHtml(d.data)}</time></li>`;
   }).join('');
 
   const da = document.getElementById('dashAgenda');
   da.innerHTML = eventos.slice(0,3).map(ev=>{
     const {dia,rot}=labelDia(ev.data);
     const tag = ev.tipo==='Interno'?'blue':'green-soft';
-    return `<li class="appt"><div class="appt__date"><strong>${rot||dia}</strong><span>${ev.hora}</span></div>
-      <div class="appt__body"><b>${ev.titulo}</b><span class="tag tag--${tag}">${ev.tipo}</span></div></li>`;
+    return `<li class="appt"><div class="appt__date"><strong>${escapaHtml(rot||dia)}</strong><span>${escapaHtml(ev.hora)}</span></div>
+      <div class="appt__body"><b>${escapaHtml(ev.titulo)}</b><span class="tag tag--${tag}">${escapaHtml(ev.tipo)}</span></div></li>`;
   }).join('');
   paintIcons(dd);
 }
@@ -5159,12 +5165,12 @@ function renderDemandas(){
   tb.innerHTML=list.map((d,i)=>{
     const s=STAT[d.status], p=PRIO[d.prioridade];
     const quem=[d.solicitante, d.categoria].filter(Boolean).join(' · ');
-    return `<tr class="row-click" data-detalhe="${d.id}"><td class="td-title"><b>${d.titulo}</b><span>${quem||'—'}</span></td>
-      <td class="td-local">${d.endereco?`<b>${d.endereco}</b>`:''}${d.bairro||'Sem bairro'}${d.bairro&&cidadeDe(d)?', '+cidadeDe(d):''}</td>
+    return `<tr class="row-click" data-detalhe="${escapaHtml(d.id)}"><td class="td-title"><b>${escapaHtml(d.titulo)}</b><span>${escapaHtml(quem)||'—'}</span></td>
+      <td class="td-local">${d.endereco?`<b>${escapaHtml(d.endereco)}</b>`:''}${escapaHtml(d.bairro)||'Sem bairro'}${d.bairro&&cidadeDe(d)?', '+escapaHtml(cidadeDe(d)):''}</td>
       <td><span class="tag tag--${p.c}">${p.t}</span></td>
       <td><span class="tag tag--${s.c}">${s.t}</span></td>
-      <td class="td-date">${d.data}</td>
-      <td><button class="row-act" data-del-id="${d.id}" title="Excluir"><i data-i="trash"></i></button></td></tr>`;
+      <td class="td-date">${escapaHtml(d.data)}</td>
+      <td><button class="row-act" data-del-id="${escapaHtml(d.id)}" title="Excluir"><i data-i="trash"></i></button></td></tr>`;
   }).join('');
   document.getElementById('emptyDemandas').hidden = list.length>0;
   paintIcons(tb);
@@ -5181,12 +5187,12 @@ function preencherTemas(){
   if(assin===temasConhecidos) return;
   temasConhecidos=assin;
   const sel=document.getElementById('fDemandaTema'), atual=sel.value;
-  sel.innerHTML='<option value="">Todos os temas</option>'+temas.map(t=>`<option>${t}</option>`).join('');
+  sel.innerHTML='<option value="">Todos os temas</option>'+temas.map(t=>`<option>${escapaHtml(t)}</option>`).join('');
   if(temas.includes(atual)) sel.value=atual;
   const dl=document.getElementById('temasList');
-  if(dl) dl.innerHTML=temas.map(t=>`<option value="${t}">`).join('');
+  if(dl) dl.innerHTML=temas.map(t=>`<option value="${escapaHtml(t)}">`).join('');
   const dc=document.getElementById('canaisList');
-  if(dc) dc.innerHTML=listaUnica('canal').map(t=>`<option value="${t}">`).join('');
+  if(dc) dc.innerHTML=listaUnica('canal').map(t=>`<option value="${escapaHtml(t)}">`).join('');
 }
 
 /* ===== RENDER: APOIADORES ===== */
@@ -5201,12 +5207,12 @@ function renderApoiadores(){
     const col=AVA[a.nome.length%AVA.length];
     const tag=a.tipo==='Liderança'?'green':a.tipo==='Voluntário'?'blue':'green-soft';
     return `<article class="pcard">
-      <button class="pcard__del" data-del-apoiador="${a.id}" title="Excluir apoiador"><i data-i="trash"></i></button>
+      <button class="pcard__del" data-del-apoiador="${escapaHtml(a.id)}" title="Excluir apoiador"><i data-i="trash"></i></button>
       <div class="pcard__head">
-      <span class="pcard__av" style="background:${col}">${ini}</span>
-      <div><b>${a.nome}</b><span class="tag tag--${tag}">${a.tipo}</span></div></div>
-      <div class="pcard__row"><i data-i="phone"></i>${a.telefone}</div>
-      <div class="pcard__row"><i data-i="pin"></i>${[a.bairro, a.cidade].filter(Boolean).join(', ')}</div></article>`;
+      <span class="pcard__av" style="background:${col}">${escapaHtml(ini)}</span>
+      <div><b>${escapaHtml(a.nome)}</b><span class="tag tag--${tag}">${escapaHtml(a.tipo)}</span></div></div>
+      <div class="pcard__row"><i data-i="phone"></i>${escapaHtml(a.telefone)}</div>
+      <div class="pcard__row"><i data-i="pin"></i>${escapaHtml([a.bairro, a.cidade].filter(Boolean).join(', '))}</div></article>`;
   }).join('');
   document.getElementById('emptyApoiadores').hidden = list.length>0;
   paintIcons(g);
@@ -5232,9 +5238,9 @@ function renderAgendaLista(){
   wrap.innerHTML=Object.keys(byDay).map(iso=>{
     const d=new Date(iso+'T00:00:00');
     const {rot}=labelDia(iso);
-    const items=byDay[iso].map(ev=>`<div class="ev" data-evento="${ev.id}"><span class="ev__time">${ev.hora}</span>
-        <div class="ev__info"><b>${ev.titulo}</b><span>${ev.local}${ev.convidados&&ev.convidados.length?` · ${ev.convidados.length} convidado(s)`:''}</span></div>
-        <span class="ev__tag tag tag--${evTagCor(ev.tipo)}">${ev.tipo}</span></div>`).join('');
+    const items=byDay[iso].map(ev=>`<div class="ev" data-evento="${escapaHtml(ev.id)}"><span class="ev__time">${escapaHtml(ev.hora)}</span>
+        <div class="ev__info"><b>${escapaHtml(ev.titulo)}</b><span>${escapaHtml(ev.local)}${ev.convidados&&ev.convidados.length?` · ${ev.convidados.length} convidado(s)`:''}</span></div>
+        <span class="ev__tag tag tag--${evTagCor(ev.tipo)}">${escapaHtml(ev.tipo)}</span></div>`).join('');
     return `<div class="agenda-day"><div class="agenda-day__date">
       <div class="agenda-day__num">${d.toLocaleDateString('pt-BR',{day:'2-digit'})}</div>
       <div class="agenda-day__mon">${d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</div>
@@ -5256,7 +5262,7 @@ function renderAgendaMes(){
     const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const fora=d.getMonth()!==mes, hj=d.getTime()===hoje.getTime();
     const evs=(porDia[iso]||[]).sort((a,b)=>a.hora.localeCompare(b.hora));
-    const chips=evs.slice(0,3).map(e=>`<div class="cal-ev cal-ev--${evCalCor(e.tipo)}" data-evento="${e.id}">${e.hora} ${e.titulo}</div>`).join('');
+    const chips=evs.slice(0,3).map(e=>`<div class="cal-ev cal-ev--${evCalCor(e.tipo)}" data-evento="${escapaHtml(e.id)}">${escapaHtml(e.hora)} ${escapaHtml(e.titulo)}</div>`).join('');
     const mais=evs.length>3?`<div class="cal-more">+${evs.length-3} mais</div>`:'';
     html+=`<div class="cal-day ${fora?'cal-day--out':''} ${hj?'cal-day--today':''}" data-diaiso="${iso}">
       <span class="cal-day__n">${d.getDate()}</span>${chips}${mais}</div>`;
@@ -5266,7 +5272,7 @@ function renderAgendaMes(){
 }
 function atualizarEmailsDatalist(){
   const set=new Set(); eventos.forEach(e=>(e.convidados||[]).forEach(c=>set.add(c)));
-  document.getElementById('emailsList').innerHTML=[...set].map(e=>`<option value="${e}">`).join('');
+  document.getElementById('emailsList').innerHTML=[...set].map(e=>`<option value="${escapaHtml(e)}">`).join('');
 }
 /* ===== CALENDÁRIO / CONVITES ===== */
 const pad2=n=>String(n).padStart(2,'0');
@@ -5331,7 +5337,7 @@ function baixarIcs(ev){
 function openEventoDet(id){
   const ev=eventos.find(e=>e.id===id); if(!ev) return; evId=id;
   document.getElementById('evTitulo').textContent=ev.titulo;
-  document.getElementById('evTag').innerHTML=`<span class="tag tag--${evTagCor(ev.tipo)}">${ev.tipo}</span>`;
+  document.getElementById('evTag').innerHTML=`<span class="tag tag--${evTagCor(ev.tipo)}">${escapaHtml(ev.tipo)}</span>`;
   const d=new Date(ev.data+'T00:00:00');
   document.getElementById('evQuando').textContent=`${d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})} · ${ev.hora}`;
   document.getElementById('evLocal').textContent=ev.local||'—';
@@ -5359,12 +5365,12 @@ function renderAssessores(){
     const ini=a.nome.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();
     const col=AVA[a.nome.length%AVA.length];
     return `<article class="pcard">
-      <button class="pcard__del" data-del-assessor="${a.id}" title="Excluir assessor"><i data-i="trash"></i></button>
+      <button class="pcard__del" data-del-assessor="${escapaHtml(a.id)}" title="Excluir assessor"><i data-i="trash"></i></button>
       <div class="pcard__head">
-      <span class="pcard__av" style="background:${col}">${ini}</span>
-      <div><b>${a.nome}</b><span class="tag tag--green-soft">${a.funcao}</span></div></div>
-      <div class="pcard__row"><i data-i="phone"></i>${a.telefone}</div>
-      <div class="pcard__row"><i data-i="file"></i>${a.email}</div></article>`;
+      <span class="pcard__av" style="background:${col}">${escapaHtml(ini)}</span>
+      <div><b>${escapaHtml(a.nome)}</b><span class="tag tag--green-soft">${escapaHtml(a.funcao)}</span></div></div>
+      <div class="pcard__row"><i data-i="phone"></i>${escapaHtml(a.telefone)}</div>
+      <div class="pcard__row"><i data-i="file"></i>${escapaHtml(a.email)}</div></article>`;
   }).join('');
   document.getElementById('emptyAssessores').hidden = list.length>0;
   paintIcons(g);
@@ -5381,12 +5387,12 @@ function preencherRespFiltro(){
   const sel=document.getElementById('fProjResp'); if(!sel) return;
   const nomes=[...new Set([...projetos.map(p=>p.resp), ...assessores.map(a=>a.nome)].filter(Boolean))].sort();
   const atual=sel.value;
-  sel.innerHTML='<option value="">Todos os responsáveis</option>'+nomes.map(n=>`<option>${n}</option>`).join('');
+  sel.innerHTML='<option value="">Todos os responsáveis</option>'+nomes.map(n=>`<option>${escapaHtml(n)}</option>`).join('');
   if(nomes.includes(atual)) sel.value=atual;
 }
 function atualizarAssessoresDatalist(){
   const dl=document.getElementById('assessoresList'); if(!dl) return;
-  dl.innerHTML=assessores.map(a=>`<option value="${a.nome}">`).join('');
+  dl.innerHTML=assessores.map(a=>`<option value="${escapaHtml(a.nome)}">`).join('');
 }
 function projetosFiltrados(){
   const q=(document.getElementById('fProjBusca').value||'').toLowerCase();
@@ -5443,16 +5449,16 @@ function cartaoProj(p){
   const pr=PROJ_PRIO[p.prioridade]||PROJ_PRIO.media;
   const z=textoPrazo(p.prazo, p.etapa);
   const n=(p.historico||[]).length;
-  return `<article class="pj pj--${p.prioridade||'media'}" draggable="true" data-proj-card="${p.id}">
-    <div class="pj__top"><b>${p.titulo}</b><span class="tag tag--${pr.c}">${pr.t}</span></div>
-    ${p.resumo?`<p class="pj__desc">${p.resumo}</p>`:''}
-    <div class="pj__bar"><div class="pj__fill" style="width:${p.prog||0}%"></div></div>
+  return `<article class="pj pj--${escapaHtml(p.prioridade||'media')}" draggable="true" data-proj-card="${escapaHtml(p.id)}">
+    <div class="pj__top"><b>${escapaHtml(p.titulo)}</b><span class="tag tag--${pr.c}">${pr.t}</span></div>
+    ${p.resumo?`<p class="pj__desc">${escapaHtml(p.resumo)}</p>`:''}
+    <div class="pj__bar"><div class="pj__fill" style="width:${Number(p.prog)||0}%"></div></div>
     <div class="pj__meta">
-      ${p.resp?`<span class="pj__av" style="background:${corDe(p.resp)}">${iniciais(p.resp)}</span>${p.resp.split(' ')[0]}`:'<span class="pj__semresp">sem responsável</span>'}
-      ${p.bairro?`<span class="pj__sep">·</span>${p.bairro}`:''}
-      <span class="pj__prazo ${z.cls?'pj__prazo--'+z.cls:''}"><i data-i="calendar"></i>${z.txt}</span>
+      ${p.resp?`<span class="pj__av" style="background:${corDe(p.resp)}">${escapaHtml(iniciais(p.resp))}</span>${escapaHtml(p.resp.split(' ')[0])}`:'<span class="pj__semresp">sem responsável</span>'}
+      ${p.bairro?`<span class="pj__sep">·</span>${escapaHtml(p.bairro)}`:''}
+      <span class="pj__prazo ${z.cls?'pj__prazo--'+z.cls:''}"><i data-i="calendar"></i>${escapaHtml(z.txt)}</span>
     </div>
-    ${n?`<div class="pj__hist"><i data-i="bell"></i>${n} registro(s) · último em ${p.historico[n-1].data}</div>`:''}
+    ${n?`<div class="pj__hist"><i data-i="bell"></i>${n} registro(s) · último em ${escapaHtml(p.historico[n-1].data)}</div>`:''}
   </article>`;
 }
 
@@ -5475,14 +5481,14 @@ function renderProjLista(list){
   const tb=document.getElementById('tbProjetos');
   tb.innerHTML=list.map(p=>{
     const e=ETAPA[p.etapa]||ETAPAS[0], z=textoPrazo(p.prazo, p.etapa), pr=PROJ_PRIO[p.prioridade]||PROJ_PRIO.media;
-    return `<tr class="row-click" data-proj-card="${p.id}">
-      <td class="td-title"><b>${p.titulo}</b><span>${p.bairro||'—'}${p.parceiro?' · '+p.parceiro:''}</span></td>
+    return `<tr class="row-click" data-proj-card="${escapaHtml(p.id)}">
+      <td class="td-title"><b>${escapaHtml(p.titulo)}</b><span>${escapaHtml(p.bairro)||'—'}${p.parceiro?' · '+escapaHtml(p.parceiro):''}</span></td>
       <td><span class="tag tag--${e.tag}">${e.t}</span></td>
-      <td>${p.resp||'—'}</td>
-      <td class="td-date ${z.cls?'prazo--'+z.cls:''}">${z.txt}</td>
-      <td><div class="prog-mini"><div class="prog-mini__bar"><i style="width:${p.prog||0}%"></i></div><span>${p.prog||0}%</span></div></td>
+      <td>${escapaHtml(p.resp)||'—'}</td>
+      <td class="td-date ${z.cls?'prazo--'+z.cls:''}">${escapaHtml(z.txt)}</td>
+      <td><div class="prog-mini"><div class="prog-mini__bar"><i style="width:${Number(p.prog)||0}%"></i></div><span>${Number(p.prog)||0}%</span></div></td>
       <td><span class="tag tag--${pr.c}">${pr.t}</span></td>
-      <td><button class="row-act" data-del-projeto="${p.id}" title="Excluir"><i data-i="trash"></i></button></td></tr>`;
+      <td><button class="row-act" data-del-projeto="${escapaHtml(p.id)}" title="Excluir"><i data-i="trash"></i></button></td></tr>`;
   }).join('');
   paintIcons(tb);
 }
@@ -5548,7 +5554,7 @@ function renderHist(p){
   const h=[...(p.historico||[])].reverse();
   document.getElementById('pjHistCount').textContent=h.length?`${h.length} registro(s)`:'';
   document.getElementById('pjHist').innerHTML=h.length
-    ? h.map(x=>`<li><time>${x.data}${x.autor?' · '+x.autor:''}</time><p>${x.texto}</p></li>`).join('')
+    ? h.map(x=>`<li><time>${escapaHtml(x.data)}${x.autor?' · '+escapaHtml(x.autor):''}</time><p>${escapaHtml(x.texto)}</p></li>`).join('')
     : '<li class="timeline__vazio">Nada registrado ainda. Anote abaixo cada conversa, ligação ou resposta recebida.</li>';
 }
 function salvarProjeto(){
@@ -5632,9 +5638,9 @@ function filterMat(){
   document.getElementById('matCount').textContent=`${list.length} ${list.length===1?'matéria':'matérias'}`;
   document.getElementById('matList').innerHTML=list.map(m=>{
     const s=MAT_SIT[m.sit];
-    return `<a class="mat" href="${BASE_SAPL}/materia/${m.id}" target="_blank" rel="noopener">
-      <div class="mat__num">${m.sigla}<span>${m.num}/${m.ano}</span></div>
-      <div class="mat__body"><p>${m.ementa}</p><small>${MAT_TIPO[m.sigla]||m.sigla} · ${fmtDataBR(m.data)}</small></div>
+    return `<a class="mat" href="${BASE_SAPL}/materia/${encodeURIComponent(m.id)}" target="_blank" rel="noopener">
+      <div class="mat__num">${escapaHtml(m.sigla)}<span>${escapaHtml(m.num)}/${escapaHtml(m.ano)}</span></div>
+      <div class="mat__body"><p>${escapaHtml(m.ementa)}</p><small>${escapaHtml(MAT_TIPO[m.sigla]||m.sigla)} · ${escapaHtml(fmtDataBR(m.data))}</small></div>
       <span class="tag tag--${s.c} mat__tag">${s.t}</span>
       <i class="mat__ext" data-i="external"></i></a>`;
   }).join('');
@@ -5687,6 +5693,31 @@ function listaBairros(){
   return fora.sort((a,b)=>a.n.localeCompare(b.n,'pt-BR'));
 }
 function esquecerCoords(){ COORDS=null; }
+
+/* ===== O SISTEMA NÃO ABRE DENTRO DE OUTRA PÁGINA =====
+   O GitHub Pages não deixa mandar cabeçalho HTTP, e o 'frame-ancestors'
+   da política de segurança só vale em cabeçalho — num <meta> o navegador
+   ignora. Sem essa trava, um site qualquer embute o sistema num quadro
+   transparente por cima de botões falsos e faz o vereador clicar em
+   "Excluir" achando que clica em outra coisa.
+   A demonstração publicada como Artifact roda legitimamente dentro de um
+   quadro, e lá existe o window.claude — por isso a exceção. */
+if(window.top !== window.self && !DENTRO_ARTIFACT){
+  try{ window.top.location = window.self.location; }
+  catch(e){
+    document.documentElement.innerHTML =
+      '<body style="font:16px/1.5 sans-serif;padding:48px;color:#122019">' +
+      '<b>O Meu Mandato não abre dentro de outra página.</b>' +
+      '<p>Entre pelo endereço do sistema.</p></body>';
+  }
+}
+
+/* ===== TEXTO DIGITADO NUNCA VIRA HTML =====
+   Tudo que alguém escreveu — nome de apoiador, título de demanda, bairro,
+   nome de gabinete — passa por escapaHtml() antes de entrar numa string
+   de HTML. Sem isso um nome como <img onerror=...> vira CÓDIGO rodando na
+   tela de quem abrir, com a sessão dessa pessoa na mão. escapaHtml() mora
+   no dados.js, que carrega antes deste arquivo. */
 
 /* ===== RENDER: MAPA (demandas na cidade do gabinete) ===== */
 const norm=s=>(s||'').toLowerCase().trim();
@@ -5973,7 +6004,7 @@ function renderMapaIndicacoes(){
 }
 function initBairrosDatalist(){
   const dl=document.getElementById('bairrosList');
-  if(dl) dl.innerHTML=listaBairros().map(b=>`<option value="${b.n}">`).join('');
+  if(dl) dl.innerHTML=listaBairros().map(b=>`<option value="${escapaHtml(b.n)}">`).join('');
 }
 
 /* ===== RENDER: RELATÓRIOS ===== */
@@ -6029,7 +6060,7 @@ function renderRelatorios(){
 function drawBars(id, pairs, color){
   const max=Math.max(1,...pairs.map(p=>p[1]));
   document.getElementById(id).innerHTML=pairs.map(([lb,v])=>`<div class="bar">
-    <span class="bar__label">${lb}</span>
+    <span class="bar__label">${escapaHtml(lb)}</span>
     <div class="bar__track"><div class="bar__fill bar__fill--${color}" style="width:${Math.round(v/max*100)}%"></div></div>
     <span class="bar__val">${v}</span></div>`).join('');
 }
@@ -6061,10 +6092,10 @@ function renderAniversarios(){
       const tel=a.telefone.replace(/\D/g,'');
       const msg=encodeURIComponent(`Olá, ${a.nome.split(' ')[0]}! 🎉 Em nome do mandato do Vereador ${perfil.nome}, desejamos um feliz aniversário e muitas felicidades!`);
       return `<article class="bcard ${bk.today?'bcard--today':''}"><div class="bcard__head">
-        <span class="bcard__av" style="background:${col}">${ini}</span>
-        <div><b>${a.nome}</b><span>${a.tipo} · ${a.bairro}</span></div></div>
-        <div class="bcard__when"><i data-i="cake"></i>${quando}</div>
-        <a class="btn btn--wa" href="https://wa.me/55${tel}?text=${msg}" target="_blank"><i data-i="phone"></i>Parabenizar no WhatsApp</a></article>`;
+        <span class="bcard__av" style="background:${col}">${escapaHtml(ini)}</span>
+        <div><b>${escapaHtml(a.nome)}</b><span>${escapaHtml(a.tipo)} · ${escapaHtml(a.bairro)}</span></div></div>
+        <div class="bcard__when"><i data-i="cake"></i>${escapaHtml(quando)}</div>
+        <a class="btn btn--wa" href="https://wa.me/55${tel}?text=${msg}" target="_blank" rel="noopener"><i data-i="phone"></i>Parabenizar no WhatsApp</a></article>`;
     }).join('');
     return `<div class="bday-group"><div class="bday-group__title">${bk.t}<span class="pill">${items.length}</span></div>
       <div class="card-grid">${cards}</div></div>`;
@@ -6202,7 +6233,11 @@ document.getElementById('confirmaOk').addEventListener('click',()=>{
 });
 function toast(msg){
   const t=document.getElementById('toast');
-  t.innerHTML=`<i data-i="bell"></i>${msg}`; paintIcons(t); t.classList.add('show');
+  /* a mensagem quase sempre carrega texto digitado ("Fulano saiu da
+     lista"): entra como TEXTO, nunca como HTML. */
+  t.innerHTML='<i data-i="bell"></i><span class="toast__txt"></span>';
+  t.querySelector('.toast__txt').textContent=msg;
+  paintIcons(t); t.classList.add('show');
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),3200);
 }
 const ACTIONS={'nova-demanda':()=>openModal('modal-demanda'),'novo-apoiador':()=>openModal('modal-apoiador'),
@@ -6281,7 +6316,7 @@ function openDetalhe(id){
   const s=STAT[d.status], p=PRIO[d.prioridade];
   document.getElementById('detTitulo').textContent=d.titulo;
   document.getElementById('detTags').innerHTML=`<span class="tag tag--${s.c}">${s.t}</span><span class="tag tag--${p.c}">${p.t}</span>`
-    + (d.categoria?`<span class="tag tag--green-soft">${d.categoria}</span>`:'');
+    + (d.categoria?`<span class="tag tag--green-soft">${escapaHtml(d.categoria)}</span>`:'');
   document.getElementById('detSolic').textContent=d.solicitante||'Solicitante não informado';
   document.getElementById('detLocal').textContent=
     [d.endereco, d.bairro ? [d.bairro, cidadeDe(d)].filter(Boolean).join(', ') : ''].filter(Boolean).join(' · ')
